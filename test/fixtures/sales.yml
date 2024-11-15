@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sale_date: 2024-11-14
+  payment_method: MyString
+  total_price: 1
+
+two:
+  sale_date: 2024-11-14
+  payment_method: MyString
+  total_price: 1

@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  order_date: 2024-11-14
+  expected_delivery_date: 2024-11-14
+  total_price: 1
+
+two:
+  order_date: 2024-11-14
+  expected_delivery_date: 2024-11-14
+  total_price: 1
