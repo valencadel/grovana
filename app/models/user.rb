@@ -1,12 +1,11 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  has_many :companies
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
   validates :first_name, :last_name, presence: true
-  validates :email, presence: true, uniqueness: { scope: :company_id }
-  validates :phone, format: { with: /\A\+?[\d\s-]{8,}\z/ }, allow_blank: true
-  validates :role, inclusion: { in: %w[admin staff] }, allow_blank: true
-  validates :status, inclusion: { in: %w[active inactive] }
+  validates :phone, format: { with: /\A[0-9]+\z/, message: "solo permite números" }, allow_blank: true
 end
