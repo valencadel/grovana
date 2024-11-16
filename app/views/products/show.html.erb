@@ -1,0 +1,12 @@
+<h1><%= @product.name %></h1>
+
+<p><strong>SKU:</strong> <%= @product.sku %></p>
+<p><strong>Descripción:</strong> <%= @product.description %></p>
+<p><strong>Categoría:</strong> <%= @product.category %></p>
+<p><strong>Stock:</strong> <%= @product.stock %></p>
+<p><strong>Stock Mínimo:</strong> <%= @product.min_stock %></p>
+<p><strong>Marca:</strong> <%= @product.brand %></p>
+<p><strong>Estado:</strong> <%= @product.status ? 'Activo' : 'Inactivo' %></p>
+
+<%= link_to 'Editar', edit_product_path(@product), class: 'btn btn-warning' if policy(@product).edit? %>
+<%= link_to 'Volver', products_path, class: 'btn btn-secondary' %>
