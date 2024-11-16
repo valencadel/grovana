@@ -1,0 +1,27 @@
+<h1>Productos</h1>
+
+<%= link_to 'Nuevo Producto', new_product_path, class: 'btn btn-primary' %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>SKU</th>
+      <th>Stock</th>
+      <th>Opciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @products.each do |product| %>
+      <tr>
+        <td><%= product.name %></td>
+        <td><%= product.sku %></td>
+        <td><%= product.stock %></td>
+        <td>
+          <%= link_to 'Ver', product_path(product), class: 'btn btn-info' %>
+          <%= link_to 'Editar', edit_product_path(product), class: 'btn btn-warning' if policy(product).edit? %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

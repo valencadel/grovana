@@ -5,10 +5,26 @@ class Product < ApplicationRecord
   has_many :sale_details
   has_many :sales, through: :sale_details
 
-  validates :name, presence: true
-  validates :sku, presence: true, uniqueness: { scope: :company_id }
-  validates :min_stock, numericality: { greater_than_or_equal_to: 0 }
-  validates :stock, numericality: { greater_than_or_equal_to: 0 }
+  validates :name, presence: { message: "no puede estar en blanco" }
+  validates :sku, presence: { message: "no puede estar en blanco" },
+                 uniqueness: { scope: :company_id, message: "ya existe para esta compañía" }
+
+  validates :min_stock,
+            presence: { message: "no puede estar en blanco" },
+            numericality: {
+              greater_than: 0,
+              message: "debe ser mayor que 0",
+              allow_blank: false
+            }
+
+  validates :stock, 
+            presence: { message: "no puede estar en blanco" },
+            numericality: {
+              greater_than: 0,
+              message: "debe ser mayor que 0",
+              allow_blank: false
+            }
+
   validate :stock_must_not_be_less_than_minimum_stock
 
   private
