@@ -79,3 +79,4 @@ gem "kaminari"
 gem "bootstrap4-kaminari-views"
 
 gem 'cocoon'
+gem 'pundit'
