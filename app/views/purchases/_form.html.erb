@@ -1,0 +1,31 @@
+<%= simple_form_for @purchase do |f| %>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :order_date, as: :date %>
+      <%= f.input :expected_delivery_date, as: :date %>
+      <%= f.association :supplier, 
+                       label_method: :company_name,
+                       prompt: "Seleccionar proveedor" %>
+    </div>
+  </div>
+
+  <div class="purchase-details">
+    <h3>Detalles de Productos</h3>
+    <%= f.simple_fields_for :purchase_details do |detail| %>
+      <%= render 'purchase_detail_fields', f: detail %>
+    <% end %>
+    
+    <div class="links">
+      <%= link_to_add_association 'Agregar Producto', f, :purchase_details, 
+          class: 'btn btn-success mt-2',
+          partial: 'purchase_detail_fields' %>
+    </div>
+  </div>
+
+  <%= f.input :total_price %>
+
+  <div class="form-actions mt-3">
+    <%= f.button :submit, class: 'btn btn-primary' %>
+    <%= link_to 'Cancelar', purchases_path, class: 'btn btn-secondary' %>
+  </div>
+<% end %> 

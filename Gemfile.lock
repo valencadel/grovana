@@ -115,6 +115,7 @@ GEM
       faraday-follow_redirects (~> 0.3.0)
       faraday-multipart (~> 1.0, >= 1.0.4)
       ostruct
+    cocoon (1.2.15)
     concurrent-ruby (1.3.4)
     connection_pool (2.4.1)
     crass (1.0.6)
@@ -416,6 +417,7 @@ DEPENDENCIES
   brakeman
   capybara
   cloudinary
+  cocoon
   debug
   devise
   dotenv-rails

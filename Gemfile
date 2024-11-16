@@ -77,3 +77,5 @@ gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
 gem "kaminari"
 gem "bootstrap4-kaminari-views"
+
+gem 'cocoon'
