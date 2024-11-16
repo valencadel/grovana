@@ -5,7 +5,7 @@ class Purchase < ApplicationRecord
 
   validates :order_date, presence: true
   validates :total_price, numericality: { greater_than: 0 }
-  validate :expected_delivery_date_after_order_date, presence: true
+  validate :expected_delivery_date_after_order_date
 end
 
 def expected_delivery_date_after_order_date
