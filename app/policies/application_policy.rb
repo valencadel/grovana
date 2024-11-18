@@ -37,9 +37,12 @@ class ApplicationPolicy
   end
 
   class Scope
-    def initialize(user, scope)
+    attr_reader :user, :scope, :context
+
+    def initialize(user, scope, context = {})
       @user = user
       @scope = scope
+      @context = context
     end
 
     def resolve
@@ -48,6 +51,6 @@ class ApplicationPolicy
 
     private
 
-    attr_reader :user, :scope
+    attr_reader :user, :scope, :context
   end
 end
