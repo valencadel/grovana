@@ -44,8 +44,8 @@ end
 puts "Creando empleados..."
 employees = [
   { first_name: "Carlos", last_name: "Pérez", password: "123456", status: "active", company_id: created_companies[0].id, email: "carlos@example.com", role: "Manager" },
-  { first_name: "Ana", last_name: "López", password: "123456", status: "active", company_id: created_companies[1].id, email: "ana@example.com", role: "Developer" },
-  { first_name: "Luis", last_name: "Martínez", password: "123456", status: "active", company_id: created_companies[2].id, email: "luis@example.com", role: "Designer" }  # Empleado adicional
+  { first_name: "Ana", last_name: "López", password: "123456", status: "active", company_id: created_companies[1].id, email: "ana@example.com", role: "Employee" },
+  { first_name: "Luis", last_name: "Martínez", password: "123456", status: "active", company_id: created_companies[2].id, email: "luis@example.com", role: "Employee" }  # Empleado adicional
 ]
 
 employees.each do |employee_params|
