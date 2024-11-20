@@ -16,7 +16,8 @@ Rails.application.routes.draw do
   end
 
   # Otros recursos
-  resources :products, except: [ :destroy ]
+  resources :products, except: [:destroy]
+  resources :suppliers, except: [:destroy]
   resources :purchases
   resources :sales
 

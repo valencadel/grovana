@@ -14,7 +14,7 @@ Company.destroy_all
 User.destroy_all
 Employee.destroy_all
 Product.destroy_all
-Customer.destroy_all
+Supplier.destroy_all
 
 # Creando usuarios
 puts "Creando usuarios..."
@@ -67,13 +67,79 @@ end
 # Creando clientes
 puts "Creando clientes..."
 customers = [
-  { first_name: "Maria", last_name: "Sánchez", email: "maria@example.com", phone: "123456789", address: "Calle Falsa 123", tax_id: "ABCD1234" },
-  { first_name: "Pedro", last_name: "González", email: "pedro@example.com", phone: "987654321", address: "Calle Real 456", tax_id: "EFGH5678" },
-  { first_name: "Laura", last_name: "Ramírez", email: "laura@example.com", phone: "112233445", address: "Avenida Central 789", tax_id: "IJKL9101" }  # Cliente adicional
+  { first_name: "Maria", last_name: "Sánchez", email: "maria@example.com", phone: "123456789", address: "Avenida Callao 2578, Recoleta", tax_id: "ABCD1234" },
+  { first_name: "Pedro", last_name: "González", email: "pedro@example.com", phone: "987654321", address: "Av. del Libertador 4096, Palermo", tax_id: "EFGH5678" },
+  { first_name: "Laura", last_name: "Ramírez", email: "laura@example.com", phone: "112233445", address: "Guatemala 4699, Palermo", tax_id: "IJKL9101" }  # Cliente adicional
 ]
 
 customers.each do |customer_params|
   Customer.create!(customer_params)
+end
+
+# Creando suppliers
+puts "Creando suppliers..."
+suppliers = [
+  # Suppliers para TechCorp
+  {
+    company_name: "TechSupplies Argentina",
+    contact_name: "Juan Pérez",
+    email: "juan@techsupplies.com",
+    phone: "11-4567-8901",
+    address: "Armenia 1680, Palermo",
+    tax_id: "30-12345678-9",
+    company_id: created_companies[0].id  # TechCorp
+  },
+  {
+    company_name: "Electrónica Mayorista",
+    contact_name: "María García",
+    email: "maria@electronica.com",
+    phone: "11-2345-6789",
+    address: "Av. Cabildo 2345, CABA",
+    tax_id: "30-98765432-1",
+    company_id: created_companies[0].id  # TechCorp
+  },
+
+  # Suppliers para DesignCo
+  {
+    company_name: "Materiales de Diseño SA",
+    contact_name: "Carlos Rodríguez",
+    email: "carlos@materialesdisenio.com",
+    phone: "11-3456-7890",
+    address: "Lascano 2257, Villa del Parque",
+    tax_id: "30-45678901-2",
+    company_id: created_companies[1].id
+  },
+  {
+    company_name: "Importadora TecnoPartes",
+    contact_name: "Roberto González",
+    email: "roberto@tecnopartes.com",
+    phone: "11-6789-0123",
+    address: "Av. Scalabrini Ortiz 3456, Palermo",
+    tax_id: "30-34567890-2",
+    company_id: created_companies[0].id
+  },
+  {
+    company_name: "Soluciones Empresariales",
+    contact_name: "Valeria Torres",
+    email: "valeria@solucionesempr.com",
+    phone: "11-1234-5678",
+    address: "Tucumán 1171, San Nicolás",
+    tax_id: "30-01234567-8",
+    company_id: created_companies[2].id
+  },
+  {
+    company_name: "Insumos Innovadores SRL",
+    contact_name: "Laura Martínez",
+    email: "laura@insumosinnovadores.com",
+    phone: "11-5678-9012",
+    address: "Junín 1760, Recoleta",
+    tax_id: "30-78901234-3",
+    company_id: created_companies[2].id
+  }
+]
+
+suppliers.each do |supplier_params|
+  Supplier.create!(supplier_params)
 end
 
 puts "Datos de seed completos."

@@ -1,5 +1,6 @@
 class Supplier < ApplicationRecord
   has_many :purchases
+  belongs_to :company
 
   validates :company_name, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
