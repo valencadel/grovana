@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   before_action :authenticate_any!
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
 
   protected
 
@@ -16,6 +18,10 @@ class ApplicationController < ActionController::Base
 
   def pundit_user
     current_user || current_employee
+  end
+
+  def after_sign_in_path_for(resource)
+    dashboard_path
   end
 
   def policy_scope(scope)
