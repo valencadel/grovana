@@ -1,0 +1,51 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-3xl mx-auto">
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+      <div class="px-4 py-5 sm:px-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">
+          Información del Empleado
+        </h3>
+      </div>
+      <div class="border-t border-gray-200">
+        <dl>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Nombre completo</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2"><%= @employee.full_name %></dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Email</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2"><%= @employee.email %></dd>
+          </div>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Rol</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">
+              <span class="capitalize"><%= @employee.role %></span>
+            </dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Estado</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <%= @employee.active? ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+                <%= @employee.status == 'active' ? 'Activo' : 'Inactivo' %>
+              </span>
+            </dd>
+          </div>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Empresa</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2"><%= @employee.company.name %></dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Fecha de registro</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">
+              <%= @employee.created_at.strftime("%d/%m/%Y %H:%M") %>
+            </dd>
+          </div>
+        </dl>
+      </div>
+      <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+        <%= link_to 'Editar', edit_employee_path(@employee), class: 'btn btn-primary mr-2' %>
+        <%= link_to 'Volver', employees_path, class: 'btn btn-secondary' %>
+      </div>
+    </div>
+  </div>
+</div>

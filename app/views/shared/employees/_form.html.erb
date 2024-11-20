@@ -1,0 +1,45 @@
+<%= simple_form_for @employee do |f| %>
+  <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+    <%= f.input :first_name,
+                required: true,
+                label: 'Nombre',
+                input_html: { class: 'form-input' } %>
+
+    <%= f.input :last_name,
+                required: true,
+                label: 'Apellido',
+                input_html: { class: 'form-input' } %>
+
+    <%= f.input :email,
+                required: true,
+                input_html: { class: 'form-input' } %>
+
+    <%= f.input :role,
+                collection: ['Manager', 'Employee'],
+                label: 'Rol',
+                include_blank: false,
+                input_html: { class: 'form-select' } %>
+
+    <%= f.input :status,
+                collection: Employee::VALID_STATUSES,
+                label: 'Estado',
+                label_method: ->(status) { status == 'active' ? 'Activo' : 'Inactivo' },
+                include_blank: false,
+                input_html: { class: 'form-select' } %>
+
+    <% if @employee.new_record? %>
+      <%= f.input :password,
+                  required: true,
+                  input_html: { class: 'form-input' } %>
+
+      <%= f.input :password_confirmation,
+                  required: true,
+                  input_html: { class: 'form-input' } %>
+    <% end %>
+  </div>
+
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <%= link_to 'Cancelar', employees_path, class: "btn btn-secondary" %>
+    <%= f.submit 'Guardar', class: "btn btn-primary", data: { disable_with: 'Guardando...' } %>
+  </div>
+<% end %>
