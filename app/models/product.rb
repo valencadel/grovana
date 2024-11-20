@@ -27,6 +27,10 @@ class Product < ApplicationRecord
 
   validate :stock_must_not_be_less_than_minimum_stock
 
+  def available_stock
+    stock
+  end
+
   private
 
   def stock_must_not_be_less_than_minimum_stock
