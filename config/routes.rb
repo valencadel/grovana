@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   # Rutas de devise
   devise_for :users
-  devise_for :employees, path: 'employees', path_names: {
-    sign_in: 'login',
-    sign_out: 'logout'
+  devise_for :employees, path: "employees", path_names: {
+    sign_in: "login",
+    sign_out: "logout"
   }
 
   # Recursos y rutas personalizadas para empleados
@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
   # Otros recursos
   resources :products, except: [:destroy]
-  resources :suppliers, except: [:destroy]  # Agregada la ruta de suppliers
+  resources :suppliers, except: [:destroy]
   resources :purchases
   resources :sales
 
@@ -28,4 +28,5 @@ Rails.application.routes.draw do
 
   # Ruta raíz
   root to: "pages#home"
+  get "dashboard", to: "pages#dashboard", as: :dashboard
 end
