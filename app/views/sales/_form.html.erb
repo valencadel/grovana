@@ -2,6 +2,9 @@
   <div class="row">
     <div class="col-md-6">
       <%= f.input :sale_date, as: :date %>
+      <%= f.input :payment_method, 
+                  collection: %w[Efectivo tarjeta_credito transferencia],
+                  prompt: "Seleccionar método de pago" %>
       <%= f.association :customer,
                        label_method: lambda { |c| "#{c.first_name} #{c.last_name}" },
                        prompt: "Seleccionar cliente" %>
