@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   # Otros recursos
   resources :products, except: [:destroy]
+  resources :suppliers, except: [:destroy]  # Agregada la ruta de suppliers
   resources :purchases
   resources :sales
 
