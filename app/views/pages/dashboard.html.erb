@@ -1,54 +1,6 @@
-<div class="sidebar">
-  <ul class="nav flex-column">
-    <li class="nav-item">
-      <%= link_to dashboard_path, class: "nav-link" do %>
-        <i class="fas fa-tachometer-alt"></i> Dashboard
-      <% end %>
-    </li>
-    <li class="nav-item">
-      <%= link_to purchases_path, class: "nav-link" do %>
-        <i class="fa-solid fa-store"></i> Purchase Orders
-      <% end %>
-    </li>
-    <li class="nav-item">
-      <%= link_to sales_path, class: "nav-link" do %>
-        <i class="fas fa-cogs"></i> Sales Orders
-      <% end %>
-    </li>
-    <li class="nav-item">
-      <%= link_to suppliers_path, class: "nav-link" do %>
-        <i class="fa-solid fa-warehouse"></i> Suppliers
-      <% end %>
-    </li>
-    <li class="nav-item">
-      <%= link_to products_path, class: "nav-link" do %>
-        <i class="fa-brands fa-product-hunt"></i> Products
-      <% end %>
-    </li>
-    <li class="nav-item">
-      <%= link_to products_path, class: "nav-link" do %>
-        <i class="fa-solid fa-person"></i> Customers
-      <% end %>
-    </li>
-    <li class="nav-item">
-      <% if user_signed_in?%>
-        <%= link_to employees_path, class: "nav-link" do %>
-          <i class="fas fa-users"></i> Employees
-        <% end %>
-      <% elsif employee_signed_in? && current_employee.role == 'Manager' %>
-          <%= link_to employees_path, class: "nav-link" do %>
-           <i class="fas fa-users"></i> Employees
-          <% end %>
-      <% else %>
-        <%= link_to employees_path, class: "nav-link" do %>
-          <i class="fa-solid fa-user"></i> My profile
-        <% end %>
-      <% end %>
-    </li>
-
-  </ul>
-</div>
+<%= turbo_frame_tag :sidebar do %>
 <div class="content">
   <!-- Your dashboard content goes here -->
   <h1>Dashboard</h1>
 </div>
+<% end %>
