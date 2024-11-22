@@ -1,4 +1,5 @@
-<div class="container mt-4">
+<%= turbo_frame_tag :purchase do %>
+<div class="content">
   <div class="card">
     <div class="card-header">
       <h2>Nueva Compra</h2>
@@ -7,4 +8,5 @@
       <%= render 'form', purchase: @purchase %>
     </div>
   </div>
-</div> 
+</div>
+<% end %>
