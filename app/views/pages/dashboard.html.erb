@@ -1,39 +1,49 @@
 <div class="sidebar">
   <ul class="nav flex-column">
     <li class="nav-item">
-      <a class="nav-link active" href="#">
+      <%= link_to dashboard_path, class: "nav-link" do %>
         <i class="fas fa-tachometer-alt"></i> Dashboard
-      </a>
+      <% end %>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">
+      <%= link_to purchases_path, class: "nav-link" do %>
         <i class="fa-solid fa-store"></i> Purchase Orders
-      </a>
+      <% end %>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">
+      <%= link_to sales_path, class: "nav-link" do %>
         <i class="fas fa-cogs"></i> Sales Orders
-      </a>
+      <% end %>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">
-        <i class="fa-solid fa-warehouse"></i> Inventory
-      </a>
+      <%= link_to suppliers_path, class: "nav-link" do %>
+        <i class="fa-solid fa-warehouse"></i> Suppliers
+      <% end %>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">
+      <%= link_to products_path, class: "nav-link" do %>
         <i class="fa-brands fa-product-hunt"></i> Products
-      </a>
+      <% end %>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">
-        <i class="fa-solid fa-person"></i>Customers
-      </a>
+      <%= link_to products_path, class: "nav-link" do %>
+        <i class="fa-solid fa-person"></i> Customers
+      <% end %>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">
-        <i class="fas fa-users"></i> Users
-      </a>
+      <% if user_signed_in?%>
+        <%= link_to employees_path, class: "nav-link" do %>
+          <i class="fas fa-users"></i> Employees
+        <% end %>
+      <% elsif employee_signed_in? && current_employee.role == 'Manager' %>
+          <%= link_to employees_path, class: "nav-link" do %>
+           <i class="fas fa-users"></i> Employees
+          <% end %>
+      <% else %>
+        <%= link_to employees_path, class: "nav-link" do %>
+          <i class="fa-solid fa-user"></i> My profile
+        <% end %>
+      <% end %>
     </li>
 
   </ul>
