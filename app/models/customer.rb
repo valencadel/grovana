@@ -1,4 +1,5 @@
 class Customer < ApplicationRecord
+  belongs_to :company
   has_many :sales
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
   validates :phone, format: { with: /\A\+?[\d\s-]{8,}\z/ }, allow_blank: true

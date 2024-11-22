@@ -3,7 +3,9 @@
      data-action="sale-detail:subtotalChanged->sales-form#updateTotal">
   <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-4">
     <%= f.association :product,
-                     collection: Product.active,
+                     collection: Product.where(company_id: current_user&.companies&.first&.id || current_employee&.company_id),
+                     label_method: :name,
+                     value_method: :id,
                      prompt: "Seleccionar producto",
                      wrapper_html: { class: 'col-span-2' },
                      input_html: {
