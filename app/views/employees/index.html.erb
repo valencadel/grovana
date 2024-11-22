@@ -1,138 +1,137 @@
 <%= render "shared/sidebar" %>
-<%= turbo_frame_tag :menu do %>
-<div class="content">
-<% if policy(Employee).index? %>
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="sm:flex sm:items-center">
-      <div class="sm:flex-auto">
-        <div class="flex items-center gap-x-3">
-          <h1 class="text-2xl font-semibold text-gray-900">Gestión de Empleados</h1>
-          <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-sm font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-            <%= @company.name %>
-          </span>
-          <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-            <% if current_user %>
-              <i class="fas fa-user-tie mr-2"></i>Usuario Admin
-            <% elsif current_employee %>
-              <i class="fas fa-user mr-2"></i><%= current_employee.role %>
+<%= turbo_frame_tag :employee do %>
+  <div class="content">
+  <% if policy(Employee).index? %>
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+          <div class="flex items-center gap-x-3">
+            <h1 class="text-2xl font-semibold text-gray-900">Gestión de Empleados</h1>
+            <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-sm font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+              <%= @company.name %>
+            </span>
+            <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+              <% if current_user %>
+                <i class="fas fa-user-tie mr-2"></i>Usuario Admin
+              <% elsif current_employee %>
+                <i class="fas fa-user mr-2"></i><%= current_employee.role %>
+              <% end %>
+            </span>
+          </div>
+          <p class="mt-2 text-sm text-gray-700">
+            Gestiona los empleados de tu empresa
+          </p>
+        </div>
+        <% if policy(Employee.new).create? %>
+          <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <%= link_to new_employee_path,
+                        class: "btn btn-primary" do %>
+              <i class="fas fa-plus mr-2"></i>Nuevo Empleado
             <% end %>
-          </span>
-        </div>
-        <p class="mt-2 text-sm text-gray-700">
-          Gestiona los empleados de tu empresa
-        </p>
-      </div>
-      <% if policy(Employee.new).create? %>
-        <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <%= link_to new_employee_path,
-                      class: "btn btn-primary",
-                      data: { turbo_frame: "_top" } do %>
-            <i class="fas fa-plus mr-2"></i>Nuevo Empleado
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-
-    <% Employee::VALID_ROLES.each do |role| %>
-      <div class="mt-8">
-        <h2 class="text-lg font-medium text-gray-900 mb-4">
-          <%= role.pluralize %>
-          <span class="text-sm text-gray-500">
-            (<%= policy_scope(@company.employees).where(role: role).count %>)
-          </span>
-        </h2>
-
-        <% %w[active inactive].each do |status| %>
-          <% employees = policy_scope(@company.employees).where(role: role, status: status) %>
-          <% if employees.any? %>
-            <div class="mt-4">
-              <h3 class="text-sm font-medium text-gray-500 mb-2">
-                <%= status == 'active' ? 'Activos' : 'Inactivos' %>
-                (<%= employees.count %>)
-              </h3>
-              <div class="mt-2">
-                <table class="min-w-full divide-y divide-gray-300">
-                  <thead>
-                    <tr>
-                      <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Nombre</th>
-                      <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
-                      <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                        <span class="sr-only">Acciones</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-gray-200">
-                    <% employees.each do |employee| %>
-                      <tr>
-                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                          <%= employee.full_name %>
-                        </td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <%= employee.email %>
-                        </td>
-                        <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                          <%= link_to employee_path(employee), class: "text-blue-600 hover:text-blue-900" do %>
-                            <i class="fas fa-eye"></i>
-                          <% end %>
-
-                          <% if policy(employee).edit? %>
-                            <%= link_to edit_employee_path(employee), class: "text-blue-600 hover:text-blue-900 ml-4" do %>
-                              <i class="fas fa-edit"></i>
-                            <% end %>
-                          <% end %>
-
-                          <% if policy(employee).update? %>
-                            <%= button_to employee_path(employee),
-                                method: :patch,
-                                class: "text-#{employee.active? ? 'red' : 'green'}-600 hover:text-#{employee.active? ? 'red' : 'green'}-900 inline ml-4",
-                                params: { employee: { status: employee.active? ? 'inactive' : 'active' } },
-                                data: { turbo_confirm: "¿Estás seguro de #{employee.active? ? 'desactivar' : 'activar'} este empleado?" } do %>
-                              <i class="fas fa-<%= employee.active? ? 'ban' : 'check' %>"></i>
-                            <% end %>
-                          <% end %>
-                        </td>
-                      </tr>
-                    <% end %>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          <% end %>
+          </div>
         <% end %>
       </div>
-    <% end %>
 
-    <% if policy_scope(@company.employees).empty? %>
-      <div class="text-center py-12">
-        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
-        <h3 class="mt-2 text-sm font-medium text-gray-900">No hay empleados</h3>
-        <p class="mt-1 text-sm text-gray-500">Comienza agregando empleados a tu empresa.</p>
-      </div>
-    <% end %>
-  </div>
-<% else %>
-  <div class="text-center py-12">
-    <div class="max-w-xl mx-auto">
-      <div class="bg-red-50 border-l-4 border-red-400 p-4">
-        <div class="flex">
-          <div class="flex-shrink-0">
-            <i class="fas fa-exclamation-circle text-red-400"></i>
-          </div>
-          <div class="ml-3">
-            <p class="text-sm text-red-700">
-              No tienes permiso para acceder a esta página.
-            </p>
-          </div>
+      <% Employee::VALID_ROLES.each do |role| %>
+        <div class="mt-8">
+          <h2 class="text-lg font-medium text-gray-900 mb-4">
+            <%= role.pluralize %>
+            <span class="text-sm text-gray-500">
+              (<%= policy_scope(@company.employees).where(role: role).count %>)
+            </span>
+          </h2>
+
+          <% %w[active inactive].each do |status| %>
+            <% employees = policy_scope(@company.employees).where(role: role, status: status) %>
+            <% if employees.any? %>
+              <div class="mt-4">
+                <h3 class="text-sm font-medium text-gray-500 mb-2">
+                  <%= status == 'active' ? 'Activos' : 'Inactivos' %>
+                  (<%= employees.count %>)
+                </h3>
+                <div class="mt-2">
+                  <table class="min-w-full divide-y divide-gray-300">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Nombre</th>
+                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
+                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                          <span class="sr-only">Acciones</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                      <% employees.each do |employee| %>
+                        <tr>
+                          <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                            <%= employee.full_name %>
+                          </td>
+                          <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            <%= employee.email %>
+                          </td>
+                          <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                            <%= link_to employee_path(employee), class: "text-blue-600 hover:text-blue-900" do %>
+                              <i class="fas fa-eye"></i>
+                            <% end %>
+
+                            <% if policy(employee).edit? %>
+                              <%= link_to edit_employee_path(employee), class: "text-blue-600 hover:text-blue-900 ml-4" do %>
+                                <i class="fas fa-edit"></i>
+                              <% end %>
+                            <% end %>
+
+                            <% if policy(employee).update? %>
+                              <%= button_to employee_path(employee),
+                                  method: :patch,
+                                  class: "text-#{employee.active? ? 'red' : 'green'}-600 hover:text-#{employee.active? ? 'red' : 'green'}-900 inline ml-4",
+                                  params: { employee: { status: employee.active? ? 'inactive' : 'active' } },
+                                  data: { turbo_confirm: "¿Estás seguro de #{employee.active? ? 'desactivar' : 'activar'} este empleado?" } do %>
+                                <i class="fas fa-<%= employee.active? ? 'ban' : 'check' %>"></i>
+                              <% end %>
+                            <% end %>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
         </div>
-      </div>
-      <%= link_to profile_employees_path, class: "mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" do %>
-        <i class="fas fa-user mr-2"></i>
-        Ir a mi perfil
+      <% end %>
+
+      <% if policy_scope(@company.employees).empty? %>
+        <div class="text-center py-12">
+          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <h3 class="mt-2 text-sm font-medium text-gray-900">No hay empleados</h3>
+          <p class="mt-1 text-sm text-gray-500">Comienza agregando empleados a tu empresa.</p>
+        </div>
       <% end %>
     </div>
+  <% else %>
+    <div class="text-center py-12">
+      <div class="max-w-xl mx-auto">
+        <div class="bg-red-50 border-l-4 border-red-400 p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <i class="fas fa-exclamation-circle text-red-400"></i>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-red-700">
+                No tienes permiso para acceder a esta página.
+              </p>
+            </div>
+          </div>
+        </div>
+        <%= link_to profile_employees_path, class: "mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" do %>
+          <i class="fas fa-user mr-2"></i>
+          Ir a mi perfil
+        <% end %>
+      </div>
+    </div>
+  <% end %>
   </div>
-<% end %>
-</div>
 <% end %>

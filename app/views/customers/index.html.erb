@@ -1,37 +1,37 @@
 <%= render "shared/sidebar" %>
-<%= turbo_frame_tag :menu do %>
-<div class="content">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>Clientes</h1>
-    <%= link_to "Nuevo Cliente", new_customer_path, class: "btn btn-primary" %>
-  </div>
+<%= turbo_frame_tag :customer do %>
+  <div class="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Clientes</h1>
+      <%= link_to "Nuevo Cliente", new_customer_path, class: "btn btn-primary" %>
+    </div>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Email</th>
-        <th>Teléfono</th>
-        <th>Dirección</th>
-        <th>ID Fiscal</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @customers.each do |customer| %>
+    <table class="table">
+      <thead>
         <tr>
-          <td><%= "#{customer.first_name} #{customer.last_name}" %></td>
-          <td><%= customer.email %></td>
-          <td><%= customer.phone %></td>
-          <td><%= customer.address %></td>
-          <td><%= customer.tax_id %></td>
-          <td class="d-flex gap-2">
-            <%= link_to "Ver", customer_path(customer), class: "btn btn-sm btn-info" %>
-            <%= link_to "Editar", edit_customer_path(customer), class: "btn btn-sm btn-warning" %>
-          </td>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Teléfono</th>
+          <th>Dirección</th>
+          <th>ID Fiscal</th>
+          <th>Acciones</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+      </thead>
+      <tbody>
+        <% @customers.each do |customer| %>
+          <tr>
+            <td><%= "#{customer.first_name} #{customer.last_name}" %></td>
+            <td><%= customer.email %></td>
+            <td><%= customer.phone %></td>
+            <td><%= customer.address %></td>
+            <td><%= customer.tax_id %></td>
+            <td class="d-flex gap-2">
+              <%= link_to "Ver", customer_path(customer), class: "btn btn-sm btn-info" %>
+              <%= link_to "Editar", edit_customer_path(customer), class: "btn btn-sm btn-warning" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 <% end %>
