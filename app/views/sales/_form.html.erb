@@ -1,33 +1,57 @@
-<%= simple_form_for @sale do |f| %>
-  <div class="row">
-    <div class="col-md-6">
-      <%= f.input :sale_date, as: :date %>
-      <%= f.input :payment_method, 
+<%= simple_form_for @sale, html: { data: { controller: 'sales-form' } } do |f| %>
+  <div class="space-y-8 divide-y divide-gray-200">
+    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+      <%= f.input :sale_date, as: :date, wrapper_html: { class: 'col-span-1' } %>
+      <%= f.input :payment_method,
                   collection: %w[Efectivo tarjeta_credito transferencia],
-                  prompt: "Seleccionar método de pago" %>
+                  prompt: "Seleccionar método de pago",
+                  wrapper_html: { class: 'col-span-1' } %>
       <%= f.association :customer,
                        label_method: lambda { |c| "#{c.first_name} #{c.last_name}" },
-                       prompt: "Seleccionar cliente" %>
+                       prompt: "Seleccionar cliente",
+                       wrapper_html: { class: 'col-span-2' } %>
+    </div>
+
+    <div class="pt-8">
+      <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4">Detalles de Productos</h3>
+
+      <div class="mt-4">
+        <div class="sale-details-list space-y-4">
+          <%= f.simple_fields_for :sale_details do |detail| %>
+            <%= render 'sale_detail_fields', f: detail %>
+          <% end %>
+        </div>
+
+        <div class="mt-4">
+          <%= link_to "Agregar Producto", "#",
+              class: "btn btn-primary",
+              data: {
+                controller: "nested-form",
+                action: "click->nested-form#add",
+                nested_form_wrapper_selector_value: ".sale-details-list",
+                nested_form_template_value: render('sale_detail_fields', f: f.object.sale_details.build).to_str
+              } %>
+        </div>
+      </div>
+    </div>
+
+    <div class="pt-8">
+      <div class="flex justify-end items-center space-x-4">
+        <div class="text-lg font-medium">
+          Total: <span data-sales-form-target="totalDisplay" class="text-xl font-bold">$0.00</span>
+        </div>
+        <%= f.input :total_price,
+                    input_html: {
+                      data: { sales_form_target: "totalInput" },
+                      readonly: true,
+                      class: 'bg-gray-100'
+                    } %>
+      </div>
+
+      <div class="mt-4 flex justify-end space-x-3">
+        <%= link_to 'Cancelar', sales_path, class: 'btn btn-secondary' %>
+        <%= f.button :submit, class: 'btn btn-primary' %>
+      </div>
     </div>
   </div>
-
-  <div class="sale-details">
-    <h3>Detalles de Productos</h3>
-    <%= f.simple_fields_for :sale_details do |detail| %>
-      <%= render 'sale_detail_fields', f: detail %>
-    <% end %>
-    
-    <div class="links">
-      <%= link_to_add_association 'Agregar Producto', f, :sale_details, 
-          class: 'btn btn-success mt-2',
-          partial: 'sale_detail_fields' %>
-    </div>
-  </div>
-
-  <%= f.input :total_price %>
-
-  <div class="form-actions mt-3">
-    <%= f.button :submit, class: 'btn btn-primary' %>
-    <%= link_to 'Cancelar', sales_path, class: 'btn btn-secondary' %>
-  </div>
-<% end %> 
+<% end %>

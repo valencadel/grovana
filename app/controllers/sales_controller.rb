@@ -56,9 +56,15 @@ class SalesController < ApplicationController
     params.require(:sale).permit(
       :sale_date,
       :payment_method,
-      :total_price,
       :customer_id,
-      sale_details_attributes: [:id, :product_id, :quantity, :unit_price, :_destroy]
+      :total_price,
+      sale_details_attributes: [
+        :id,
+        :product_id,
+        :quantity,
+        :unit_price,
+        :_destroy
+      ]
     )
   end
-end 
+end

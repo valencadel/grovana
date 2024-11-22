@@ -5,6 +5,8 @@ class Product < ApplicationRecord
   has_many :sale_details
   has_many :sales, through: :sale_details
 
+  scope :active, -> { where(status: true) } 
+
   validates :name, presence: { message: "no puede estar en blanco" }
   validates :sku, presence: { message: "no puede estar en blanco" },
                  uniqueness: { scope: :company_id, message: "ya existe para esta compañía" }
@@ -17,7 +19,7 @@ class Product < ApplicationRecord
               allow_blank: false
             }
 
-  validates :stock, 
+  validates :stock,
             presence: { message: "no puede estar en blanco" },
             numericality: {
               greater_than: 0,

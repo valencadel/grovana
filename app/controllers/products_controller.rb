@@ -44,6 +44,11 @@ class ProductsController < ApplicationController
     end
   end
 
+  def price
+    product = Product.find(params[:id])
+    render json: { price: product.price }
+  end
+  
   private
 
   def set_product

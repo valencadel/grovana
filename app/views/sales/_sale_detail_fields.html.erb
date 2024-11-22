@@ -1,20 +1,45 @@
-<div class="nested-fields">
-  <div class="row">
-    <div class="col-md-4">
-      <%= f.association :product, 
-          collection: Product.all,
-          label_method: :name,
-          value_method: :id,
-          prompt: "Seleccionar producto" %>
-    </div>
-    <div class="col-md-3">
-      <%= f.input :quantity %>
-    </div>
-    <div class="col-md-3">
-      <%= f.input :unit_price %>
-    </div>
-    <div class="col-md-2">
-      <%= link_to_remove_association "Eliminar", f, class: "btn btn-danger" %>
-    </div>
+<div class="nested-fields bg-gray-50 p-4 rounded-lg"
+     data-controller="sale-detail"
+     data-action="sale-detail:subtotalChanged->sales-form#updateTotal">
+  <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-4">
+    <%= f.association :product,
+                     collection: Product.active,
+                     prompt: "Seleccionar producto",
+                     wrapper_html: { class: 'col-span-2' },
+                     input_html: {
+                       data: {
+                         sale_detail_target: "product",
+                         action: "change->sale-detail#updatePrice"
+                       }
+                     } %>
+
+    <%= f.input :quantity,
+                input_html: {
+                  value: 1,
+                  min: 1,
+                  data: {
+                    sale_detail_target: "quantity",
+                    action: "change->sale-detail#updateSubtotal input->sale-detail#updateSubtotal"
+                  }
+                } %>
+
+    <%= f.input :unit_price,
+                input_html: {
+                  readonly: true,
+                  data: { sale_detail_target: "unitPrice" },
+                  class: 'bg-gray-100'
+                } %>
   </div>
-</div> 
+
+  <div class="mt-4 flex justify-between items-center">
+    <div class="text-sm font-medium">
+      Subtotal: <span data-sale-detail-target="subtotal" class="font-bold">$0.00</span>
+    </div>
+    <%= link_to "Eliminar", "#",
+        class: "text-red-600 hover:text-red-800",
+        data: {
+          action: "click->nested-form#remove click->sales-form#updateTotal",
+          nested_form_target: "remove"
+        } %>
+  </div>
+</div>
