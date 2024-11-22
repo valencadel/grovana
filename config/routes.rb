@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   end
 
   resources :suppliers, except: [:destroy]
+  resources :customers, except: [:destroy]
   resources :purchases
   resources :sales
 
