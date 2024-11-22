@@ -1,6 +1,8 @@
-<%= turbo_frame_tag :sidebar do %>
-<div class="content">
-  <!-- Your dashboard content goes here -->
-  <h1>Dashboard</h1>
-</div>
+<%= render "shared/sidebar" %>
+
+<%= turbo_frame_tag :menu do %>
+  <div class="content">
+    <!-- Your dashboard content goes here -->
+    <h1>Dashboard</h1>
+  </div>
 <% end %>

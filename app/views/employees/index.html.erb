@@ -1,3 +1,6 @@
+<%= render "shared/sidebar" %>
+<%= turbo_frame_tag :menu do %>
+<div class="content">
 <% if policy(Employee).index? %>
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="sm:flex sm:items-center">
@@ -130,4 +133,6 @@
       <% end %>
     </div>
   </div>
+<% end %>
+</div>
 <% end %>
