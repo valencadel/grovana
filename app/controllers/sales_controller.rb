@@ -1,12 +1,17 @@
 class SalesController < ApplicationController
   before_action :authenticate_any!
-  before_action :set_sale, only: [:show, :edit, :update]
-  before_action :set_company_resources, only: [:new, :create, :edit, :update]
+  before_action :set_sale, only: [ :show, :edit, :update ]
+  before_action :set_company_resources, only: [ :new, :create, :edit, :update ]
 
   def index
     @sales = Sale.joins(:customer)
                  .where(customers: { company_id: current_company.id })
                  .includes(:customer)
+
+    respond_to do |format|
+      format.html
+      format.xlsx
+    end
   end
 
   def show
@@ -25,7 +30,7 @@ class SalesController < ApplicationController
     @sale.customer = Customer.find(params[:sale][:customer_id])
 
     if @sale.save
-      redirect_to @sale, notice: 'Venta creada exitosamente.'
+      redirect_to @sale, notice: "Venta creada exitosamente."
     else
       render :new, status: :unprocessable_entity
     end
@@ -33,7 +38,7 @@ class SalesController < ApplicationController
 
   def update
     if @sale.update(sale_params)
-      redirect_to @sale, notice: 'Venta actualizada exitosamente.'
+      redirect_to @sale, notice: "Venta actualizada exitosamente."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -44,9 +49,9 @@ class SalesController < ApplicationController
   def current_company
     @current_company ||= if current_user
                           current_user.companies.first
-                        elsif current_employee
+    elsif current_employee
                           current_employee.company
-                        end
+    end
   end
 
   def set_company_resources
@@ -61,7 +66,7 @@ class SalesController < ApplicationController
                 .find_by(id: params[:id])
 
     unless @sale
-      redirect_to sales_url, alert: 'Venta no encontrada.'
+      redirect_to sales_url, alert: "Venta no encontrada."
     end
   end
 
@@ -71,13 +76,13 @@ class SalesController < ApplicationController
       :payment_method,
       :customer_id,
       :total_price,
-      sale_details_attributes: [:id, :product_id, :quantity, :unit_price, :_destroy]
+      sale_details_attributes: [ :id, :product_id, :quantity, :unit_price, :_destroy ]
     )
   end
 
   def authenticate_any!
     unless current_user || current_employee
-      redirect_to root_path, alert: 'Debe iniciar sesión para acceder a esta sección.'
+      redirect_to root_path, alert: "Debe iniciar sesión para acceder a esta sección."
     end
   end
 end

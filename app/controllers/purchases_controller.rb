@@ -1,8 +1,12 @@
 class PurchasesController < ApplicationController
-  before_action :set_purchase, only: [:show, :edit, :update, :destroy]
+  before_action :set_purchase, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @purchases = Purchase.all
+    respond_to do |format|
+      format.html
+      format.xlsx
+    end
   end
 
   def show
@@ -17,7 +21,7 @@ class PurchasesController < ApplicationController
   def create
     @purchase = Purchase.new(purchase_params)
     if @purchase.save
-      redirect_to @purchase, notice: 'Compra creada exitosamente.'
+      redirect_to @purchase, notice: "Compra creada exitosamente."
     else
       render :new, status: :unprocessable_entity
     end
@@ -30,7 +34,7 @@ class PurchasesController < ApplicationController
 
   def update
     if @purchase.update(purchase_params)
-      redirect_to @purchase, notice: 'Compra actualizada exitosamente.'
+      redirect_to @purchase, notice: "Compra actualizada exitosamente."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -38,7 +42,7 @@ class PurchasesController < ApplicationController
 
   def destroy
     @purchase.destroy
-    redirect_to purchases_url, notice: 'Compra eliminada exitosamente.'
+    redirect_to purchases_url, notice: "Compra eliminada exitosamente."
   end
 
   private
@@ -53,7 +57,7 @@ class PurchasesController < ApplicationController
       :expected_delivery_date,
       :total_price,
       :supplier_id,
-      purchase_details_attributes: [:id, :product_id, :quantity, :unit_price, :_destroy]
+      purchase_details_attributes: [ :id, :product_id, :quantity, :unit_price, :_destroy ]
     )
   end
 end

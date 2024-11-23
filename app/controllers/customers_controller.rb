@@ -1,9 +1,13 @@
 class CustomersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_customer, only: [:show, :edit, :update]
+  before_action :set_customer, only: [ :show, :edit, :update ]
 
   def index
     @customers = Customer.all
+    respond_to do |format|
+      format.html
+      format.xlsx
+    end
   end
 
   def show
@@ -16,7 +20,7 @@ class CustomersController < ApplicationController
   def create
     @customer = Customer.new(customer_params)
     if @customer.save
-      redirect_to @customer, notice: 'Cliente creado exitosamente.'
+      redirect_to @customer, notice: "Cliente creado exitosamente."
     else
       render :new, status: :unprocessable_entity
     end
@@ -27,7 +31,7 @@ class CustomersController < ApplicationController
 
   def update
     if @customer.update(customer_params)
-      redirect_to @customer, notice: 'Cliente actualizado exitosamente.'
+      redirect_to @customer, notice: "Cliente actualizado exitosamente."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -42,4 +46,4 @@ class CustomersController < ApplicationController
   def customer_params
     params.require(:customer).permit(:first_name, :last_name, :email, :phone, :address, :tax_id)
   end
-end 
+end
