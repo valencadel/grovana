@@ -55,20 +55,22 @@ export default class extends Controller {
 
     const tr = document.createElement('tr')
     tr.innerHTML = `
-      <td class="py-2">${selectedProduct.text}</td>
-      <td class="py-2">$${unitPrice.toFixed(2)}</td>
-      <td class="py-2">${quantity}</td>
-      <td class="py-2">$${total.toFixed(2)}</td>
-      <td class="py-2 text-center">
-        <button type="button"
-                class="border border-gray-300 rounded px-2 py-1"
-                data-action="click->purchases-form#removeProduct">
-          Eliminar
-        </button>
+      <td class="py-3 px-6">${selectedProduct.text}</td>
+      <td class="text-right py-3 px-6">$${unitPrice.toFixed(2)}</td>
+      <td class="text-right py-3 px-6">${quantity}</td>
+      <td class="text-right py-3 px-6">$${total.toFixed(2)}</td>
+      <td class="text-center py-3 px-6">
+        <div class="d-flex justify-content-center">
+          <button type="button"
+                  class="btn btn-danger btn-sm d-flex align-items-center gap-2 rounded"
+                  data-action="click->purchases-form#removeProduct">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+        <input type="hidden" name="purchase[purchase_details_attributes][][product_id]" value="${selectedProduct.value}">
+        <input type="hidden" name="purchase[purchase_details_attributes][][quantity]" value="${quantity}">
+        <input type="hidden" name="purchase[purchase_details_attributes][][unit_price]" value="${unitPrice}">
       </td>
-      <input type="hidden" name="purchase[purchase_details_attributes][][product_id]" value="${selectedProduct.value}">
-      <input type="hidden" name="purchase[purchase_details_attributes][][quantity]" value="${quantity}">
-      <input type="hidden" name="purchase[purchase_details_attributes][][unit_price]" value="${unitPrice}">
     `
 
     this.productsListTarget.appendChild(tr)
