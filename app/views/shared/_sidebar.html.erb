@@ -30,23 +30,16 @@
         <i class="fa-solid fa-person"></i> Customers
       <% end %>
     </li>
-    <li class="nav-item">
-      <% if user_signed_in?%>
+    <% if user_signed_in? || (employee_signed_in? && current_employee.role == 'Manager') %>
+      <li class="nav-item">
         <%= link_to employees_path, class: "nav-link" do %>
           <i class="fas fa-users"></i> Employees
         <% end %>
-
-      <% elsif employee_signed_in? && current_employee.role == 'Manager' %>
-          <%= link_to employees_path, class: "nav-link" do %>
-           <i class="fas fa-users"></i> Employees
-          <% end %>
-          <%= link_to profile_employees_path, class: "nav-link" do %>
-            <i class="fa-solid fa-user"></i> My profile
-          <% end %>
-      <% else %>
-        <%= link_to profile_employees_path, class: "nav-link" do %>
-          <i class="fa-solid fa-user"></i> My profile
-        <% end %>
+      </li>
+    <% end %>
+    <li class="nav-item">
+      <%= link_to profile_employees_path, class: "nav-link" do %>
+        <i class="fa-solid fa-user"></i> My profile
       <% end %>
     </li>
 
