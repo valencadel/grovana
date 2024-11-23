@@ -12,131 +12,92 @@ export default class extends Controller {
   ]
 
   connect() {
-    console.log("Purchases form controller connected")
     this.updateTotal()
-    this.quantityInputTarget.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        return false;
-      }
-    });
   }
 
   filterProducts() {
-    console.log("Filtering products")
     const selectedCategory = this.categorySelectTarget.value
     const productOptions = this.productSelectTarget.options
 
     for (let i = 0; i < productOptions.length; i++) {
       const option = productOptions[i]
-      if (option.value === "") continue
-
-      const productCategory = option.dataset.category
-      option.style.display = !selectedCategory || productCategory === selectedCategory ? "" : "none"
+      if (option.value !== "") {
+        const productCategory = option.dataset.category
+        option.hidden = selectedCategory !== "" && productCategory !== selectedCategory
+      }
     }
 
+    // Reset product selection and price
     this.productSelectTarget.value = ""
-    this.updatePrice()
+    this.unitPriceDisplayTarget.value = "0.00"
   }
 
   updatePrice() {
-    const selectedOption = this.productSelectTarget.selectedOptions[0];
-    console.log("Selected option:", selectedOption);
-
+    const selectedOption = this.productSelectTarget.selectedOptions[0]
     if (selectedOption && selectedOption.value) {
-      const price = selectedOption.dataset.price;
-      console.log("Raw price from dataset:", price);
-
-      if (price) {
-        const numericPrice = parseFloat(price);
-        console.log("Parsed numeric price:", numericPrice);
-        this.unitPriceDisplayTarget.value = numericPrice.toFixed(2);
-        console.log("Final formatted price:", this.unitPriceDisplayTarget.value);
-      } else {
-        this.unitPriceDisplayTarget.value = "0.00";
-      }
+      const price = selectedOption.dataset.price
+      this.unitPriceDisplayTarget.value = parseFloat(price).toFixed(2)
     } else {
-      this.unitPriceDisplayTarget.value = "0.00";
+      this.unitPriceDisplayTarget.value = "0.00"
     }
   }
 
   addProduct(event) {
     event.preventDefault()
-    const selectedOption = this.productSelectTarget.selectedOptions[0]
 
-    if (!selectedOption || !selectedOption.value) {
-      alert("Por favor seleccione un producto")
-      return
-    }
+    const productSelect = this.productSelectTarget
+    const selectedProduct = productSelect.selectedOptions[0]
+    if (!selectedProduct || !selectedProduct.value) return
 
     const quantity = parseInt(this.quantityInputTarget.value)
-    if (!quantity || quantity < 1) {
-      alert("Por favor ingrese una cantidad válida")
-      return
-    }
-
-    const productId = selectedOption.value
-    const productName = selectedOption.text
     const unitPrice = parseFloat(this.unitPriceDisplayTarget.value)
     const total = quantity * unitPrice
 
-    const newRow = document.createElement('tr')
-    newRow.className = 'nested-fields'
-    const timestamp = new Date().getTime()
-
-    newRow.innerHTML = `
-      <td class="py-3 px-6">${productName}</td>
-      <td class="text-right py-3 px-6">$${unitPrice.toFixed(2)}</td>
-      <td class="text-right py-3 px-6">${quantity}</td>
-      <td class="text-right py-3 px-6">$${total.toFixed(2)}</td>
-      <td class="text-center py-3 px-6">
+    const tr = document.createElement('tr')
+    tr.innerHTML = `
+      <td class="py-2">${selectedProduct.text}</td>
+      <td class="text-right py-2">$${unitPrice.toFixed(2)}</td>
+      <td class="text-right py-2">${quantity}</td>
+      <td class="text-right py-2">$${total.toFixed(2)}</td>
+      <td class="text-center py-2">
         <button type="button"
-                class="btn btn-danger btn-sm"
+                class="text-red-600 hover:text-red-800"
                 data-action="click->purchases-form#removeProduct">
-          <i class="bi bi-trash"></i>
           Eliminar
         </button>
-        <input type="hidden" name="purchase[purchase_details_attributes][${timestamp}][product_id]" value="${productId}">
-        <input type="hidden" name="purchase[purchase_details_attributes][${timestamp}][quantity]" value="${quantity}">
-        <input type="hidden" name="purchase[purchase_details_attributes][${timestamp}][unit_price]" value="${unitPrice}">
       </td>
+      <input type="hidden" name="purchase[purchase_details_attributes][][product_id]" value="${selectedProduct.value}">
+      <input type="hidden" name="purchase[purchase_details_attributes][][quantity]" value="${quantity}">
+      <input type="hidden" name="purchase[purchase_details_attributes][][unit_price]" value="${unitPrice}">
     `
 
-    this.productsListTarget.appendChild(newRow)
-    this.resetForm()
+    this.productsListTarget.appendChild(tr)
     this.updateTotal()
-  }
 
-  resetForm() {
-    this.productSelectTarget.value = ""
+    // Reset form
+    productSelect.value = ""
+    this.categorySelectTarget.value = ""
     this.quantityInputTarget.value = "1"
     this.unitPriceDisplayTarget.value = "0.00"
   }
 
   removeProduct(event) {
-    const row = event.target.closest('tr')
-    if (row) {
-      row.remove()
-      this.updateTotal()
-    }
+    const tr = event.target.closest('tr')
+    tr.remove()
+    this.updateTotal()
   }
 
   updateTotal() {
     let total = 0
-    const rows = this.productsListTarget.querySelectorAll('tr')
-
-    rows.forEach(row => {
-      const quantityInput = row.querySelector('input[name*="[quantity]"]')
-      const priceInput = row.querySelector('input[name*="[unit_price]"]')
-
-      if (quantityInput && priceInput) {
-        const quantity = parseFloat(quantityInput.value) || 0
-        const price = parseFloat(priceInput.value) || 0
-        total += quantity * price
+    this.productsListTarget.querySelectorAll('tr').forEach(tr => {
+      const priceCell = tr.cells[3]
+      if (priceCell) {
+        const price = parseFloat(priceCell.textContent.replace('$', '')) || 0
+        total += price
       }
     })
 
-    this.totalTarget.textContent = `$${total.toFixed(2)}`
-    this.totalInputTarget.value = total
+    this.totalTarget.textContent = total.toFixed(2)
+    this.totalInputTarget.value = total.toFixed(2)
   }
 }
