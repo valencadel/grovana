@@ -1,33 +1,167 @@
-<%= simple_form_for @sale do |f| %>
-  <div class="row">
-    <div class="col-md-6">
-      <%= f.input :sale_date, as: :date %>
-      <%= f.input :payment_method, 
-                  collection: %w[Efectivo tarjeta_credito transferencia],
-                  prompt: "Seleccionar método de pago" %>
-      <%= f.association :customer,
-                       label_method: lambda { |c| "#{c.first_name} #{c.last_name}" },
-                       prompt: "Seleccionar cliente" %>
+<div class="bg-white p-6">
+
+  <%= simple_form_for @sale, html: { data: { controller: 'sales-form' } } do |f| %>
+    <!-- Campos básicos -->
+    <div class="space-y-4 mb-6">
+      <div>
+        <label class="block mb-1">Sale date *</label>
+        <div class="flex gap-2 mb-3">
+          <%= select_tag 'sale[sale_date(1i)]',
+              options_for_select((Date.today.year-5..Date.today.year+5).to_a, @sale.sale_date&.year || Date.today.year),
+              class: "border rounded p-2 w-1/3 bg-light" %>
+
+          <%= select_tag 'sale[sale_date(2i)]',
+              options_for_select(Date::MONTHNAMES.compact.each_with_index.map { |name, i| [name, i+1] },
+              @sale.sale_date&.month || Date.today.month),
+              class: "border rounded p-2 w-1/3 bg-light" %>
+
+          <%= select_tag 'sale[sale_date(3i)]',
+              options_for_select((1..31).to_a, @sale.sale_date&.day || Date.today.day),
+              class: "border rounded p-2 w-1/3 bg-light" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.input :payment_method,
+                    label: 'Payment method *',
+                    collection: [
+                      ['Efectivo', 'Efectivo'],
+                      ['Tarjeta de Crédito', 'tarjeta_credito'],
+                      ['Transferencia', 'transferencia']
+                    ],
+                    include_blank: 'Seleccionar método de pago',
+                    input_html: { class: "border rounded p-2 w-full" } %>
+      </div>
+
+      <div>
+        <%= f.association :customer,
+                         label: 'Customer',
+                         collection: @customers,
+                         label_method: :name,
+                         value_method: :id,
+                         include_blank: 'Seleccionar cliente',
+                         input_html: { class: "border rounded p-2 w-full" } %>
+      </div>
     </div>
-  </div>
 
-  <div class="sale-details">
-    <h3>Detalles de Productos</h3>
-    <%= f.simple_fields_for :sale_details do |detail| %>
-      <%= render 'sale_detail_fields', f: detail %>
-    <% end %>
-    
-    <div class="links">
-      <%= link_to_add_association 'Agregar Producto', f, :sale_details, 
-          class: 'btn btn-success mt-2',
-          partial: 'sale_detail_fields' %>
+    <!-- Detalles de Productos -->
+    <div class="mb-4">
+      <h2 class="text-2xl font-bold mb-4">Detalles de Productos</h2>
+
+      <div style="display: inline-block; margin-right: 15px;">
+        <label style="display: inline-block; margin-right: 5px;">Category</label>
+        <select data-sales-form-target="categorySelect"
+                data-action="change->sales-form#filterProducts"
+                class="border border-gray-300 p-1.5 rounded-sm"
+                style="width: 200px;">
+          <option value="">Seleccionar categoría</option>
+          <% Product.distinct.pluck(:category).each do |category| %>
+            <option value="<%= category %>"><%= category %></option>
+          <% end %>
+        </select>
+      </div>
+
+      <div style="display: inline-block; margin-right: 15px;">
+        <label style="display: inline-block; margin-right: 5px;">Product</label>
+        <select data-sales-form-target="productSelect"
+                class="border border-gray-300 p-1.5 rounded-sm"
+                style="width: 200px;">
+          <option value="">Seleccionar producto</option>
+          <% @products.each do |product| %>
+            <option value="<%= product.id %>"
+                    data-category="<%= product.category %>"
+                    data-price="<%= product.price %>"
+                    data-stock="<%= product.stock %>">
+              <%= product.name %>
+            </option>
+          <% end %>
+        </select>
+      </div>
+
+      <div style="display: inline-block; margin-right: 15px;">
+        <label style="display: inline-block; margin-right: 5px;">Quantity *</label>
+        <input type="number"
+               value="1"
+               min="1"
+               class="border border-gray-300 p-1.5 rounded-sm"
+               style="width: 100px;"
+               data-sales-form-target="quantityInput">
+      </div>
+
+      <div style="display: inline-block; margin-right: 15px;">
+        <label style="display: inline-block; margin-right: 5px;">Unit price *</label>
+        <input type="text"
+               readonly
+               class="border border-gray-300 p-1.5 rounded-sm bg-gray-50"
+               style="width: 100px;"
+               data-sales-form-target="unitPriceDisplay">
+      </div>
     </div>
-  </div>
 
-  <%= f.input :total_price %>
+    <div class="mb-4">
+      <button type="button"
+              class="btn btn-success"
+              style="width: 200px;"
+              data-action="click->sales-form#addProduct">
+        Agregar Producto
+      </button>
+    </div>
 
-  <div class="form-actions mt-3">
-    <%= f.button :submit, class: 'btn btn-primary' %>
-    <%= link_to 'Cancelar', sales_path, class: 'btn btn-secondary' %>
-  </div>
-<% end %> 
+    <!-- Título de Resumen -->
+    <h2 class="text-xl font-bold mb-4">Resumen de Venta</h2>
+
+    <!-- Tabla con más espaciado -->
+    <table class="w-full table table-hover">
+      <thead>
+        <tr class="border-b">
+          <th class="text-left py-3 px-6">Producto</th>
+          <th class="text-right py-3 px-6">Precio</th>
+          <th class="text-right py-3 px-6">Cantidad</th>
+          <th class="text-right py-3 px-6">Stock</th>
+          <th class="text-right py-3 px-6">Total</th>
+          <th class="text-center py-3 px-6" style="min-width: 120px;">Acciones</th>
+        </tr>
+      </thead>
+      <tbody data-sales-form-target="productsList">
+        <% @sale.sale_details.each do |detail| %>
+          <tr class="nested-fields">
+            <td class="py-3 px-6"><%= detail.product.name %></td>
+            <td class="text-right py-3 px-6">$<%= detail.unit_price %></td>
+            <td class="text-right py-3 px-6"><%= detail.quantity %></td>
+            <td class="text-right py-3 px-6"><%= detail.product.stock %></td>
+            <td class="text-right py-3 px-6">$<%= detail.quantity * detail.unit_price %></td>
+            <td class="text-center py-3 px-6">
+              <div class="d-flex justify-content-center">
+                <button type="button"
+                        class="btn btn-danger btn-sm d-flex align-items-center gap-2"
+                        data-action="click->sales-form#removeProduct">
+                  <i class="bi bi-trash"></i>
+                  Eliminar
+                </button>
+              </div>
+              <%= hidden_field_tag "sale[sale_details_attributes][#{detail.id}][id]", detail.id %>
+              <%= hidden_field_tag "sale[sale_details_attributes][#{detail.id}][product_id]", detail.product_id %>
+              <%= hidden_field_tag "sale[sale_details_attributes][#{detail.id}][quantity]", detail.quantity %>
+              <%= hidden_field_tag "sale[sale_details_attributes][#{detail.id}][unit_price]", detail.unit_price %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr class="border-t font-bold">
+          <td colspan="4" class="text-right py-3 px-6">Total:</td>
+          <td class="text-right py-3 px-6" data-sales-form-target="total">$0.00</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <%= f.input :total_price, as: :hidden, input_html: { data: { sales_form_target: "totalInput" } } %>
+
+    <!-- Botones -->
+    <div class="mt-6">
+      <%= f.button :submit, "Create Sale", class: "btn btn-primary me-2" %>
+      <%= link_to "Cancelar", sales_path, class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>

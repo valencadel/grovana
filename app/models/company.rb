@@ -1,4 +1,5 @@
 class Company < ApplicationRecord
+  has_many :customers
   has_many :products
   has_many :employees
   has_many :suppliers
