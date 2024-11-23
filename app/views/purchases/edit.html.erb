@@ -1,10 +1,12 @@
-<div class="container mt-4">
-  <div class="card">
-    <div class="card-header">
-      <h2>Editar Compra</h2>
-    </div>
-    <div class="card-body">
-      <%= render 'form', purchase: @purchase %>
+<%= turbo_frame_tag :purchase do %>
+  <div class="content">
+    <div class="card">
+      <div class="card-header">
+        <h2>Editar Compra</h2>
+      </div>
+      <div class="card-body">
+        <%= render 'form', purchase: @purchase %>
+      </div>
     </div>
   </div>
-</div> 
+<% end %>

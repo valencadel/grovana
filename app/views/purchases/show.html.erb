@@ -1,43 +1,45 @@
-<div class="container mt-4">
-  <div class="card">
-    <div class="card-header">
-      <h2>Detalles de la Compra</h2>
-    </div>
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-6">
-          <p><strong>Fecha de Orden:</strong> <%= @purchase.order_date %></p>
-          <p><strong>Fecha de Entrega Esperada:</strong> <%= @purchase.expected_delivery_date %></p>
-          <p><strong>Precio Total:</strong> <%= number_to_currency(@purchase.total_price) %></p>
-          <p><strong>Proveedor:</strong> <%= @purchase.supplier.company_name %></p>
-        </div>
+<%= turbo_frame_tag :purchase do %>
+  <div class="content">
+    <div class="card">
+      <div class="card-header">
+        <h2>Detalles de la Compra</h2>
       </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Fecha de Orden:</strong> <%= @purchase.order_date %></p>
+            <p><strong>Fecha de Entrega Esperada:</strong> <%= @purchase.expected_delivery_date %></p>
+            <p><strong>Precio Total:</strong> <%= number_to_currency(@purchase.total_price) %></p>
+            <p><strong>Proveedor:</strong> <%= @purchase.supplier.company_name %></p>
+          </div>
+        </div>
 
-      <h3 class="mt-4">Detalles de Productos</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Precio Unitario</th>
-            <th>Subtotal</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @purchase.purchase_details.each do |detail| %>
+        <h3 class="mt-4">Detalles de Productos</h3>
+        <table class="table">
+          <thead>
             <tr>
-              <td><%= detail.product.name %></td>
-              <td><%= detail.quantity %></td>
-              <td><%= number_to_currency(detail.unit_price) %></td>
-              <td><%= number_to_currency(detail.quantity * detail.unit_price) %></td>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Precio Unitario</th>
+              <th>Subtotal</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-    <div class="card-footer">
-      <%= link_to "Editar", edit_purchase_path(@purchase), class: "btn btn-warning" %>
-      <%= link_to "Volver", purchases_path, class: "btn btn-secondary" %>
+          </thead>
+          <tbody>
+            <% @purchase.purchase_details.each do |detail| %>
+              <tr>
+                <td><%= detail.product.name %></td>
+                <td><%= detail.quantity %></td>
+                <td><%= number_to_currency(detail.unit_price) %></td>
+                <td><%= number_to_currency(detail.quantity * detail.unit_price) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer">
+        <%= link_to "Editar", edit_purchase_path(@purchase), class: "btn btn-warning" %>
+        <%= link_to "Volver", purchases_path, class: "btn btn-secondary" %>
+      </div>
     </div>
   </div>
-</div> 
+<% end %>
