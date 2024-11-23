@@ -5,7 +5,7 @@ class Product < ApplicationRecord
   has_many :sale_details
   has_many :sales, through: :sale_details
 
-  scope :active, -> { where(status: true) } 
+  scope :active, -> { where(status: 'active') }
 
   validates :name, presence: { message: "no puede estar en blanco" }
   validates :sku, presence: { message: "no puede estar en blanco" },
@@ -31,6 +31,10 @@ class Product < ApplicationRecord
 
   def available_stock
     stock
+  end
+
+  def name_with_stock
+    "#{name} (Stock: #{stock})"
   end
 
   private

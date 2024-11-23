@@ -1,13 +1,12 @@
 class SalesController < ApplicationController
   before_action :authenticate_any!
-  before_action :set_sale, only: [:show, :edit, :update, :destroy]
+  before_action :set_sale, only: [:show, :edit, :update]
   before_action :set_company_resources, only: [:new, :create, :edit, :update]
 
   def index
-    company_id = current_user&.companies&.first&.id || current_employee&.company_id
     @sales = Sale.joins(:customer)
-                 .where(customers: { company_id: company_id })
-                 .includes(:customer) # Para evitar N+1 queries
+                 .where(customers: { company_id: current_company.id })
+                 .includes(:customer)
   end
 
   def show
@@ -15,19 +14,21 @@ class SalesController < ApplicationController
 
   def new
     @sale = Sale.new
-    @sale.sale_details.build
+    @sale.sale_date = Date.today
+  end
+
+  def edit
   end
 
   def create
     @sale = Sale.new(sale_params)
+    @sale.customer = Customer.find(params[:sale][:customer_id])
+
     if @sale.save
       redirect_to @sale, notice: 'Venta creada exitosamente.'
     else
       render :new, status: :unprocessable_entity
     end
-  end
-
-  def edit
   end
 
   def update
@@ -38,24 +39,30 @@ class SalesController < ApplicationController
     end
   end
 
-  def destroy
-    @sale.destroy
-    redirect_to sales_url, notice: 'Venta eliminada exitosamente.'
-  end
-
   private
 
-  def set_sale
-    company_id = current_user&.companies&.first&.id || current_employee&.company_id
-    @sale = Sale.joins(:customer)
-                .where(customers: { company_id: company_id })
-                .find(params[:id])
+  def current_company
+    @current_company ||= if current_user
+                          current_user.companies.first
+                        elsif current_employee
+                          current_employee.company
+                        end
   end
 
   def set_company_resources
-    company_id = current_user&.companies&.first&.id || current_employee&.company_id
-    @products = Product.where(company_id: company_id)
-    @customers = Customer.where(company_id: company_id)
+    @products = Product.where(company_id: current_company.id).active
+    @customers = Customer.where(company_id: current_company.id)
+  end
+
+  def set_sale
+    @sale = Sale.joins(:customer)
+                .where(customers: { company_id: current_company.id })
+                .includes(sale_details: :product)
+                .find_by(id: params[:id])
+
+    unless @sale
+      redirect_to sales_url, alert: 'Venta no encontrada.'
+    end
   end
 
   def sale_params

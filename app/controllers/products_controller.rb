@@ -1,11 +1,11 @@
 class ProductsController < ApplicationController
-  before_action :authenticate_user! # Asegura que el usuario esté autenticado
-  before_action :set_product, only: [:show, :edit, :update]
+  before_action :authenticate_any!
+  before_action :set_product, only: [:show, :edit, :update, :price]
 
   def index
-    @products = current_user.companies.first.products
+    company_id = current_user&.companies&.first&.id || current_employee&.company_id
+    @products = Product.where(company_id: company_id)
   end
-
 
   def show
     authorize @product
@@ -45,14 +45,18 @@ class ProductsController < ApplicationController
   end
 
   def price
-    product = Product.find(params[:id])
-    render json: { price: product.price }
+    authorize @product
+    render json: {
+      price: @product.price,
+      stock: @product.stock
+    }
   end
-  
+
   private
 
   def set_product
-    @product = current_user.companies.first.products.find(params[:id])
+    company_id = current_user&.companies&.first&.id || current_employee&.company_id
+    @product = Product.where(company_id: company_id).find(params[:id])
   end
 
   def product_params
@@ -64,7 +68,8 @@ class ProductsController < ApplicationController
       :stock,
       :min_stock,
       :brand,
-      :status
+      :status,
+      :price
     )
   end
 end
