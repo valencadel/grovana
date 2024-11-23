@@ -20,6 +20,9 @@ class PurchasesController < ApplicationController
 
   def create
     @purchase = Purchase.new(purchase_params)
+    @products = Product.all
+    @suppliers = Supplier.all
+
     if @purchase.save
       redirect_to @purchase, notice: "Compra creada exitosamente."
     else
