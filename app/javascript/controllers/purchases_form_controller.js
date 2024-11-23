@@ -14,6 +14,12 @@ export default class extends Controller {
   connect() {
     console.log("Purchases form controller connected")
     this.updateTotal()
+    this.quantityInputTarget.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        return false;
+      }
+    });
   }
 
   filterProducts() {
@@ -34,23 +40,29 @@ export default class extends Controller {
   }
 
   updatePrice() {
-    console.log("Updating price")
-    const selectedOption = this.productSelectTarget.selectedOptions[0]
+    const selectedOption = this.productSelectTarget.selectedOptions[0];
+    console.log("Selected option:", selectedOption);
+
     if (selectedOption && selectedOption.value) {
-      const price = selectedOption.dataset.price
-      console.log("Selected price:", price)
-      this.unitPriceDisplayTarget.value = price
+      const price = selectedOption.dataset.price;
+      console.log("Raw price from dataset:", price);
+
+      if (price) {
+        const numericPrice = parseFloat(price);
+        console.log("Parsed numeric price:", numericPrice);
+        this.unitPriceDisplayTarget.value = numericPrice.toFixed(2);
+        console.log("Final formatted price:", this.unitPriceDisplayTarget.value);
+      } else {
+        this.unitPriceDisplayTarget.value = "0.00";
+      }
     } else {
-      this.unitPriceDisplayTarget.value = ""
+      this.unitPriceDisplayTarget.value = "0.00";
     }
   }
 
   addProduct(event) {
-    console.log("Adding product")
     event.preventDefault()
-
-    const productSelect = this.productSelectTarget
-    const selectedOption = productSelect.selectedOptions[0]
+    const selectedOption = this.productSelectTarget.selectedOptions[0]
 
     if (!selectedOption || !selectedOption.value) {
       alert("Por favor seleccione un producto")
@@ -68,39 +80,37 @@ export default class extends Controller {
     const unitPrice = parseFloat(this.unitPriceDisplayTarget.value)
     const total = quantity * unitPrice
 
-    console.log("Adding product with:", { productId, productName, unitPrice, quantity, total })
-
     const newRow = document.createElement('tr')
     newRow.className = 'nested-fields'
-
     const timestamp = new Date().getTime()
-    const rowHtml = `
+
+    newRow.innerHTML = `
       <td class="py-3 px-6">${productName}</td>
       <td class="text-right py-3 px-6">$${unitPrice.toFixed(2)}</td>
       <td class="text-right py-3 px-6">${quantity}</td>
       <td class="text-right py-3 px-6">$${total.toFixed(2)}</td>
       <td class="text-center py-3 px-6">
-        <div class="d-flex justify-content-center">
-          <button type="button"
-                  class="btn btn-danger btn-sm d-flex align-items-center gap-2"
-                  data-action="click->purchases-form#removeProduct">
-            <i class="bi bi-trash"></i>
-            Eliminar
-          </button>
-        </div>
+        <button type="button"
+                class="btn btn-danger btn-sm"
+                data-action="click->purchases-form#removeProduct">
+          <i class="bi bi-trash"></i>
+          Eliminar
+        </button>
         <input type="hidden" name="purchase[purchase_details_attributes][${timestamp}][product_id]" value="${productId}">
         <input type="hidden" name="purchase[purchase_details_attributes][${timestamp}][quantity]" value="${quantity}">
         <input type="hidden" name="purchase[purchase_details_attributes][${timestamp}][unit_price]" value="${unitPrice}">
       </td>
     `
-    newRow.innerHTML = rowHtml
+
     this.productsListTarget.appendChild(newRow)
-
-    productSelect.value = ""
-    this.quantityInputTarget.value = "1"
-    this.unitPriceDisplayTarget.value = ""
-
+    this.resetForm()
     this.updateTotal()
+  }
+
+  resetForm() {
+    this.productSelectTarget.value = ""
+    this.quantityInputTarget.value = "1"
+    this.unitPriceDisplayTarget.value = "0.00"
   }
 
   removeProduct(event) {

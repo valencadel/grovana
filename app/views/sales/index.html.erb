@@ -3,7 +3,10 @@
 <%= turbo_frame_tag :sale do %>
 <div class="content">
   <div class="sm:flex-auto">
-        <h1 class="text-2xl font-semibold text-gray-900">Sales</h1>
+    <h1 class="text-2xl font-semibold text-gray-900">Ventas</h1>
+    <p class="mt-2 text-sm text-gray-700">
+      Total de ventas: <%= @sales.count %>
+    </p>
   </div>
   <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-3">
         <%= link_to new_sale_path,

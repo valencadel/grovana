@@ -2,7 +2,10 @@
 <%= turbo_frame_tag :customer do %>
   <div class="content">
     <div class="sm:flex-auto">
-        <h1 class="text-2xl font-semibold text-gray-900">Customers</h1>
+        <h1 class="text-2xl font-semibold text-gray-900">Clientes</h1>
+        <p class="mt-2 text-sm text-gray-700">
+          Total de clientes: <%= @customers.count %>
+        </p>
     </div>
     <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-3">
         <%= link_to new_customer_path,

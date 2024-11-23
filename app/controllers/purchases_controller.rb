@@ -1,8 +1,13 @@
 class PurchasesController < ApplicationController
-  before_action :set_purchase, only: [ :show, :edit, :update, :destroy ]
+  before_action :authenticate_any!
+  before_action :set_purchase, only: [:show, :edit, :update]
+  before_action :set_company_resources, only: [:new, :create, :edit, :update]
 
   def index
-    @purchases = Purchase.all
+    @purchases = Purchase.joins(:supplier)
+                        .where(suppliers: { company_id: current_company.id })
+                        .includes(:supplier)
+
     respond_to do |format|
       format.html
       format.xlsx
@@ -14,14 +19,12 @@ class PurchasesController < ApplicationController
 
   def new
     @purchase = Purchase.new
-    @products = Product.all
-    @suppliers = Supplier.all
+    @purchase.order_date = Date.today
   end
 
   def create
     @purchase = Purchase.new(purchase_params)
-    @products = Product.all
-    @suppliers = Supplier.all
+    @purchase.supplier = Supplier.find(params[:purchase][:supplier_id])
 
     if @purchase.save
       redirect_to @purchase, notice: "Compra creada exitosamente."
@@ -31,8 +34,6 @@ class PurchasesController < ApplicationController
   end
 
   def edit
-    @products = Product.all
-    @suppliers = Supplier.all
   end
 
   def update
@@ -43,24 +44,55 @@ class PurchasesController < ApplicationController
     end
   end
 
-  def destroy
-    @purchase.destroy
-    redirect_to purchases_url, notice: "Compra eliminada exitosamente."
-  end
-
   private
 
+  def current_company
+    @current_company ||= if current_user
+                          current_user.companies.first
+                        elsif current_employee
+                          current_employee.company
+                        end
+  end
+
+  def set_company_resources
+    @products = Product.where(company_id: current_company.id)
+                      .active
+                      .select(:id, :name, :price, :category)
+
+    # Debugging
+    puts "\n=== Productos y sus precios ==="
+    @products.each do |product|
+      puts "#{product.name}: $#{product.price}"
+    end
+    puts "============================\n"
+
+    @suppliers = Supplier.where(company_id: current_company.id)
+  end
+
   def set_purchase
-    @purchase = Purchase.find(params[:id])
+    @purchase = Purchase.joins(:supplier)
+                       .where(suppliers: { company_id: current_company.id })
+                       .includes(purchase_details: :product)
+                       .find_by(id: params[:id])
+
+    unless @purchase
+      redirect_to purchases_url, alert: "Compra no encontrada."
+    end
   end
 
   def purchase_params
     params.require(:purchase).permit(
       :order_date,
       :expected_delivery_date,
-      :total_price,
       :supplier_id,
-      purchase_details_attributes: [ :id, :product_id, :quantity, :unit_price, :_destroy ]
+      :total_price,
+      purchase_details_attributes: [:id, :product_id, :quantity, :unit_price, :_destroy]
     )
+  end
+
+  def authenticate_any!
+    unless current_user || current_employee
+      redirect_to root_path, alert: "Debe iniciar sesión para acceder a esta sección."
+    end
   end
 end
