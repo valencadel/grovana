@@ -3,7 +3,7 @@
     <!-- Campos básicos -->
     <div class="space-y-4 mb-6">
       <div>
-        <label class="block mb-1">Fecha de Orden *</label>
+        <label class="block mb-1">Purchase date *</label>
         <div class="flex gap-2 mb-3">
           <%= select_tag 'purchase[order_date(1i)]',
               options_for_select((Date.today.year-5..Date.today.year+5).to_a, @purchase.order_date&.year || Date.today.year),
@@ -165,7 +165,11 @@
 
     <!-- Botones -->
     <div class="mt-6">
-      <%= f.button :submit, "Create Purchase", class: "btn btn-primary me-2" %>
+      <% if @purchase.new_record? %>
+        <%= f.button :submit, "Create Purchase", class: "btn btn-primary me-2" %>
+      <% else %>
+        <%= f.button :submit, "Edit", class: "btn btn-primary me-2" %>
+      <% end %>
       <%= link_to "Continue", purchases_path, class: "btn btn-secondary" %>
     </div>
   <% end %>
