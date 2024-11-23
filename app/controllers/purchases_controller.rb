@@ -24,7 +24,11 @@ class PurchasesController < ApplicationController
     @suppliers = Supplier.all
 
     if @purchase.save
-      redirect_to @purchase, notice: "Compra creada exitosamente."
+      respond_to do |format|
+        format.html { redirect_to @purchase, notice: "Compra creada exitosamente." }
+        # format.turbo_stream { render turbo_stream: turbo_stream.replace(@purchase, partial: "purchases/purchase", locals: { purchase: @purchase }) }
+        format.turbo_stream { flash.now[:notice] = "Compra creada exitosamente." }
+      end
     else
       render :new, status: :unprocessable_entity
     end
