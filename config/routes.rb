@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   resources :suppliers, except: [:destroy]
   resources :customers, except: [:destroy]
   resources :purchases
-  resources :sales
+  resources :sales, except: [:destroy]
 
   # Rutas de salud y PWA
   get "up" => "rails/health#show", as: :rails_health_check

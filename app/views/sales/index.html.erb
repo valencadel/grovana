@@ -25,13 +25,6 @@
           <td class="d-flex gap-2">
             <%= link_to "Ver", sale_path(sale), class: "btn btn-sm btn-info" %>
             <%= link_to "Editar", edit_sale_path(sale), class: "btn btn-sm btn-warning" %>
-            <%= link_to "Eliminar",
-                sale_path(sale),
-                data: {
-                  turbo_method: :delete,
-                  turbo_confirm: "¿Estás seguro que deseas eliminar esta venta?"
-                },
-                class: "btn btn-sm btn-danger" %>
           </td>
         </tr>
       <% end %>
