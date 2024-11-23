@@ -7,18 +7,22 @@
     </div>
     <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-3">
         <%= link_to new_purchase_path,
-                    class: "btn btn-primary mb-3 rounded" do %>
+                    class: "btn btn-sm btn-primary mb-3 mr-3 rounded" do %>
           <i class="fas fa-plus mr-2"></i>New Purchase
+        <% end %>
+        <%= link_to  purchases_path(format: :xlsx),
+                    class: "btn btn-sm btn-success mb-3 rounded" do %>
+          <i class="fa-solid fa-download"></i> Download as Excel
         <% end %>
       </div>
     <table class="table">
       <thead>
         <tr>
-          <th>Fecha de Orden</th>
-          <th>Fecha de Entrega</th>
-          <th>Precio Total</th>
-          <th>Proveedor</th>
-          <th>Acciones</th>
+          <th>Order Date</th>
+          <th>Delivery Date</th>
+          <th>Total Price</th>
+          <th>Supplier</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -29,9 +33,9 @@
             <td><%= number_to_currency(purchase.total_price) %></td>
             <td><%= purchase.supplier.company_name %></td>
             <td class="d-flex gap-2">
-              <%= link_to "Ver", purchase_path(purchase), class: "btn btn-sm btn-info" %>
-              <%= link_to "Editar", edit_purchase_path(purchase), class: "btn btn-sm btn-warning" %>
-              <%= link_to "Eliminar",
+              <%= link_to "View", purchase_path(purchase), class: "btn btn-sm btn-info rounded" %>
+              <%= link_to "Edit", edit_purchase_path(purchase), class: "btn btn-sm btn-warning rounded" %>
+              <%= link_to "Delete",
                   purchase_path(purchase),
                   data: {
                     turbo_method: :delete,

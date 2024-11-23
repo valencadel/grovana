@@ -1,10 +1,14 @@
 class ProductsController < ApplicationController
   before_action :authenticate_any!
-  before_action :set_product, only: [:show, :edit, :update, :price]
+  before_action :set_product, only: [ :show, :edit, :update, :price ]
 
   def index
     company_id = current_user&.companies&.first&.id || current_employee&.company_id
     @products = Product.where(company_id: company_id)
+    respond_to do |format|
+      format.html
+      format.xlsx
+    end
   end
 
   def show
@@ -22,9 +26,9 @@ class ProductsController < ApplicationController
     authorize @product
 
     if @product.save
-      redirect_to @product, notice: 'Producto creado exitosamente.'
+      redirect_to @product, notice: "Producto creado exitosamente."
     else
-      flash.now[:alert] = 'Error al crear el producto.'
+      flash.now[:alert] = "Error al crear el producto."
       render :new, status: :unprocessable_entity
     end
   end
@@ -37,9 +41,9 @@ class ProductsController < ApplicationController
     authorize @product
 
     if @product.update(product_params)
-      redirect_to @product, notice: 'Producto actualizado exitosamente.'
+      redirect_to @product, notice: "Producto actualizado exitosamente."
     else
-      flash.now[:alert] = 'Error al actualizar el producto.'
+      flash.now[:alert] = "Error al actualizar el producto."
       render :edit, status: :unprocessable_entity
     end
   end

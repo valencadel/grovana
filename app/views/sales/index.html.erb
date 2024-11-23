@@ -7,17 +7,21 @@
   </div>
   <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-3">
         <%= link_to new_sale_path,
-                    class: "btn btn-primary mb-3 rounded" do %>
+                    class: "btn btn-sm btn-primary mb-3 mr-3 rounded" do %>
           <i class="fas fa-plus mr-2"></i>New Sale
         <% end %>
+        <%= link_to sales_path(format: :xlsx),
+                    class: "btn btn-sm btn-success mb-3 rounded" do %>
+          <i class="fa-solid fa-download"></i> Download as Excel
+      <% end %>
   </div>
   <table class="table">
     <thead>
       <tr>
-        <th>Fecha</th>
-        <th>Cliente</th>
-        <th>Total</th>
-        <th>Acciones</th>
+        <th>Date</th>
+        <th>Client Name</th>
+        <th>Total Price</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -27,8 +31,8 @@
           <td><%= "#{sale.customer.first_name} #{sale.customer.last_name}" %></td>
           <td><%= number_to_currency(sale.total_price) %></td>
           <td class="d-flex gap-2">
-            <%= link_to "Ver", sale_path(sale), class: "btn btn-sm btn-info" %>
-            <%= link_to "Editar", edit_sale_path(sale), class: "btn btn-sm btn-warning" %>
+            <%= link_to "View", sale_path(sale), class: "btn btn-sm btn-info rounded" %>
+            <%= link_to "Edit", edit_sale_path(sale), class: "btn btn-sm btn-warning rounded" %>
           </td>
         </tr>
       <% end %>

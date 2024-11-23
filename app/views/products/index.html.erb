@@ -6,8 +6,12 @@
     </div>
     <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-3">
         <%= link_to new_product_path,
-                    class: "btn btn-primary mb-3 rounded" do %>
+                    class: "btn btn-sm btn-primary mb-3 mr-3 rounded" do %>
           <i class="fas fa-plus mr-2"></i>New Product
+        <% end %>
+        <%= link_to products_path(format: :xlsx),
+                    class: "btn btn-sm btn-success mb-3 rounded" do %>
+          <i class="fa-solid fa-download"></i> Download as Excel
         <% end %>
     </div>
     <table class="table">
@@ -16,6 +20,7 @@
           <th>Name</th>
           <th>SKU</th>
           <th>Category</th>
+          <th> Brand</th>
           <th>Stock</th>
           <th>Options</th>
         </tr>
@@ -26,10 +31,11 @@
             <td><%= product.name %></td>
             <td><%= product.sku %></td>
             <td> <%= product.category %> </td>
+            <td> <%= product.brand %> </td>
             <td><%= product.stock %></td>
             <td>
-              <%= link_to 'Ver', product_path(product), class: 'btn btn-info' %>
-              <%= link_to 'Editar', edit_product_path(product), class: 'btn btn-warning' if policy(product).edit? %>
+              <%= link_to 'View', product_path(product), class: 'btn btn-info rounded' %>
+              <%= link_to 'Edit', edit_product_path(product), class: 'btn btn-warning rounded' if policy(product).edit? %>
             </td>
           </tr>
         <% end %>

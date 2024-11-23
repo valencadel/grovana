@@ -1,15 +1,19 @@
 class SuppliersController < ApplicationController
   before_action :authenticate_any!
-  before_action :set_supplier, only: [:show, :edit, :update]
+  before_action :set_supplier, only: [ :show, :edit, :update ]
 
   def index
     @company = if current_user
                 current_user.companies.first
-              else
+    else
                 current_employee.company
-              end
+    end
 
     @suppliers = @company.suppliers.order(company_name: :asc)
+    respond_to do |format|
+      format.html
+      format.xlsx
+    end
   end
 
   def show
@@ -24,7 +28,7 @@ class SuppliersController < ApplicationController
     @supplier.company = current_user.companies.first
 
     if @supplier.save
-      redirect_to suppliers_path, notice: 'Proveedor creado exitosamente.'
+      redirect_to suppliers_path, notice: "Proveedor creado exitosamente."
     else
       render :new, status: :unprocessable_entity
     end
@@ -35,7 +39,7 @@ class SuppliersController < ApplicationController
 
   def update
     if @supplier.update(supplier_params)
-      redirect_to suppliers_path, notice: 'Proveedor actualizado exitosamente.'
+      redirect_to suppliers_path, notice: "Proveedor actualizado exitosamente."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -46,11 +50,11 @@ class SuppliersController < ApplicationController
   def set_supplier
     @supplier = if current_user
                  current_user.companies.first.suppliers.find(params[:id])
-               else
+    else
                  current_employee.company.suppliers.find(params[:id])
-               end
+    end
   rescue ActiveRecord::RecordNotFound
-    redirect_to suppliers_path, alert: 'Proveedor no encontrado'
+    redirect_to suppliers_path, alert: "Proveedor no encontrado"
   end
 
   def supplier_params
