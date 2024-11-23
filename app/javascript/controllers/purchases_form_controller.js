@@ -56,12 +56,12 @@ export default class extends Controller {
     const tr = document.createElement('tr')
     tr.innerHTML = `
       <td class="py-2">${selectedProduct.text}</td>
-      <td class="text-right py-2">$${unitPrice.toFixed(2)}</td>
-      <td class="text-right py-2">${quantity}</td>
-      <td class="text-right py-2">$${total.toFixed(2)}</td>
-      <td class="text-center py-2">
+      <td class="py-2">$${unitPrice.toFixed(2)}</td>
+      <td class="py-2">${quantity}</td>
+      <td class="py-2">$${total.toFixed(2)}</td>
+      <td class="py-2 text-center">
         <button type="button"
-                class="text-red-600 hover:text-red-800"
+                class="border border-gray-300 rounded px-2 py-1"
                 data-action="click->purchases-form#removeProduct">
           Eliminar
         </button>
