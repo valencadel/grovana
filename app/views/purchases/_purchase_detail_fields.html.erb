@@ -1,20 +1,48 @@
-<div class="nested-fields">
-  <div class="row">
-    <div class="col-md-4">
-      <%= f.association :product, 
-          collection: Product.all,
-          label_method: :name,
-          value_method: :id,
-          prompt: "Seleccionar producto" %>
-    </div>
-    <div class="col-md-3">
-      <%= f.input :quantity %>
-    </div>
-    <div class="col-md-3">
-      <%= f.input :unit_price %>
-    </div>
-    <div class="col-md-2">
-      <%= link_to_remove_association "Eliminar", f, class: "btn btn-danger" %>
-    </div>
-  </div>
-</div> 
+<tr class="nested-fields" data-purchases-target="detailRow">
+  <td>
+    <%= f.association :product,
+        collection: @products,
+        label: false,
+        label_method: lambda { |product| "#{product.category} - #{product.name}" },
+        value_method: :id,
+        input_html: {
+          class: "form-select",
+          data: {
+            purchases_target: "productSelect",
+            action: "change->purchases#updatePrice"
+          }
+        } %>
+  </td>
+  <td>
+    <%= f.input :quantity,
+        label: false,
+        input_html: {
+          class: "form-control",
+          value: f.object.quantity || 1,
+          min: 1,
+          data: {
+            purchases_target: "quantity",
+            action: "change->purchases#updateSubtotal"
+          }
+        } %>
+  </td>
+  <td>
+    <%= f.input :unit_price,
+        label: false,
+        input_html: {
+          class: "form-control",
+          data: {
+            purchases_target: "price",
+            action: "change->purchases#updateSubtotal"
+          }
+        } %>
+  </td>
+  <td>
+    <span data-purchases-target="subtotal">$0.00</span>
+  </td>
+  <td>
+    <%= link_to_remove_association "Eliminar", f,
+        class: "btn btn-danger btn-sm",
+        data: { action: "click->purchases#updateTotal" } %>
+  </td>
+</tr>

@@ -10,7 +10,6 @@ class PurchasesController < ApplicationController
 
   def new
     @purchase = Purchase.new
-    @purchase.purchase_details.build
     @products = Product.all
     @suppliers = Supplier.all
   end
@@ -50,8 +49,8 @@ class PurchasesController < ApplicationController
 
   def purchase_params
     params.require(:purchase).permit(
-      :order_date, 
-      :expected_delivery_date, 
+      :order_date,
+      :expected_delivery_date,
       :total_price,
       :supplier_id,
       purchase_details_attributes: [:id, :product_id, :quantity, :unit_price, :_destroy]
