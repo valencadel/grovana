@@ -10,7 +10,7 @@
     <p><strong>Marca:</strong> <%= @product.brand %></p>
     <p><strong>Estado:</strong> <%= @product.status ? 'Activo' : 'Inactivo' %></p>
 
-    <%= link_to 'Editar', edit_product_path(@product), class: 'btn btn-warning' if policy(@product).edit? %>
-    <%= link_to 'Volver', products_path, class: 'btn btn-secondary' %>
+    <%= link_to 'Editar', edit_product_path(@product), class: 'btn btn-sm btn-warning rounded' if policy(@product).edit? %>
+    <%= link_to 'Volver', products_path, class: 'btn btn-sm btn-secondary rounded' %>
   </div>
 <% end %>

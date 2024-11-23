@@ -100,7 +100,7 @@
 
     <div class="mb-4">
       <button type="button"
-              class="btn btn-success"
+              class="btn btn-sm btn-success rounded"
               style="width: 200px;"
               data-action="click->sales-form#addProduct">
         Agregar Producto
@@ -133,10 +133,9 @@
             <td class="text-center py-3 px-6">
               <div class="d-flex justify-content-center">
                 <button type="button"
-                        class="btn btn-danger btn-sm d-flex align-items-center gap-2"
+                        class="btn btn-danger btn-sm d-flex align-items-center gap-2 rounded"
                         data-action="click->sales-form#removeProduct">
-                  <i class="bi bi-trash"></i>
-                  Eliminar
+                  <i class="fas fa-trash"></i>
                 </button>
               </div>
               <%= hidden_field_tag "sale[sale_details_attributes][#{detail.id}][id]", detail.id %>
@@ -160,8 +159,8 @@
 
     <!-- Botones -->
     <div class="mt-6">
-      <%= f.button :submit, "Create Sale", class: "btn btn-primary me-2" %>
-      <%= link_to "Continue", sales_path, class: "btn btn-secondary" %>
+      <%= f.button :submit, "Create Sale", class: "btn btn-sm btn-primary me-2 rounded" %>
+      <%= link_to "Continue", sales_path, class: "btn btn-sm btn-secondary rounded" %>
     </div>
   <% end %>
 </div>
