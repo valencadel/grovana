@@ -14,7 +14,6 @@ class PurchasesController < ApplicationController
 
   def new
     @purchase = Purchase.new
-    @purchase.purchase_details.build
     @products = Product.all
     @suppliers = Supplier.all
   end
