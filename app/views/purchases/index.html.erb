@@ -1,11 +1,16 @@
 <%= render "shared/sidebar" %>
 <%= turbo_frame_tag :purchase do %>
   <div class="content">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1>Compras</h1>
-      <%= link_to "Nueva Compra", new_purchase_path, class: "btn btn-primary" %>
-    </div>
 
+    <div class="sm:flex-auto">
+        <h1 class="text-2xl font-semibold text-gray-900">Purchases for Stock</h1>
+    </div>
+    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-3">
+        <%= link_to new_purchase_path,
+                    class: "btn btn-primary mb-3 rounded" do %>
+          <i class="fas fa-plus mr-2"></i>New Purchase
+        <% end %>
+      </div>
     <table class="table">
       <thead>
         <tr>

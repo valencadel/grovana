@@ -2,7 +2,6 @@
 <%= turbo_frame_tag :employee do %>
   <div class="content">
   <% if policy(Employee).index? %>
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
           <div class="flex items-center gap-x-3">
@@ -23,10 +22,10 @@
           </p>
         </div>
         <% if policy(Employee.new).create? %>
-          <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+          <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-3">
             <%= link_to new_employee_path,
-                        class: "btn btn-primary" do %>
-              <i class="fas fa-plus mr-2"></i>Nuevo Empleado
+                        class: "btn btn-primary rounded" do %>
+              <i class="fas fa-plus mr-2"></i>New Employee
             <% end %>
           </div>
         <% end %>
@@ -45,10 +44,10 @@
             <% employees = policy_scope(@company.employees).where(role: role, status: status) %>
             <% if employees.any? %>
               <div class="mt-4">
-                <h3 class="text-sm font-medium text-gray-500 mb-2">
+                <h4 class="text-sm font-medium text-gray-500 mb-2">
                   <%= status == 'active' ? 'Activos' : 'Inactivos' %>
                   (<%= employees.count %>)
-                </h3>
+                </h4>
                 <div class="mt-2">
                   <table class="min-w-full divide-y divide-gray-300">
                     <thead>
@@ -110,7 +109,6 @@
           <p class="mt-1 text-sm text-gray-500">Comienza agregando empleados a tu empresa.</p>
         </div>
       <% end %>
-    </div>
   <% else %>
     <div class="text-center py-12">
       <div class="max-w-xl mx-auto">

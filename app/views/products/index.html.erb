@@ -1,17 +1,23 @@
 <%= render "shared/sidebar" %>
 <%= turbo_frame_tag :product do %>
   <div class="content">
-    <h1>Productos</h1>
-
-    <%= link_to 'Nuevo Producto', new_product_path, class: 'btn btn-primary' %>
-
+    <div class="sm:flex-auto">
+        <h1 class="text-2xl font-semibold text-gray-900">Products</h1>
+    </div>
+    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-3">
+        <%= link_to new_product_path,
+                    class: "btn btn-primary mb-3 rounded" do %>
+          <i class="fas fa-plus mr-2"></i>New Product
+        <% end %>
+    </div>
     <table class="table">
       <thead>
         <tr>
-          <th>Nombre</th>
+          <th>Name</th>
           <th>SKU</th>
+          <th>Category</th>
           <th>Stock</th>
-          <th>Opciones</th>
+          <th>Options</th>
         </tr>
       </thead>
       <tbody>
@@ -19,6 +25,7 @@
           <tr>
             <td><%= product.name %></td>
             <td><%= product.sku %></td>
+            <td> <%= product.category %> </td>
             <td><%= product.stock %></td>
             <td>
               <%= link_to 'Ver', product_path(product), class: 'btn btn-info' %>
