@@ -3,9 +3,9 @@ class Sale < ApplicationRecord
   has_many :sale_details, dependent: :destroy
   has_many :products, through: :sale_details
 
-  accepts_nested_attributes_for :sale_details, 
-                              reject_if: :all_blank, 
-                              allow_destroy: true
+  accepts_nested_attributes_for :sale_details,
+                              allow_destroy: true,
+                              reject_if: :all_blank
 
   validates :payment_method, presence: true
   validates :sale_date, presence: true
