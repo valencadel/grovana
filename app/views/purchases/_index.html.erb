@@ -1,7 +1,10 @@
   <div class="content">
 
     <div class="sm:flex-auto">
-        <h1 class="text-2xl font-semibold text-gray-900">Purchases for Stock</h1>
+        <h1 class="text-2xl font-semibold text-gray-900">Órdenes de Compra</h1>
+        <p class="mt-2 text-sm text-gray-700">
+          Total de órdenes: <%= @purchases.count %>
+        </p>
     </div>
     <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-3">
         <%= link_to new_purchase_path,
@@ -36,14 +39,6 @@
               <% end %>
               <%= link_to edit_purchase_path(purchase), class: "btn btn-sm btn-warning rounded" do %>
                 <i class="fas fa-edit"></i>
-              <% end %>
-              <%= link_to purchase_path(purchase),
-                  data: {
-                    turbo_method: :delete,
-                    turbo_confirm: "¿Estás seguro que deseas eliminar esta compra?"
-                  },
-                  class: "btn btn-sm btn-danger rounded" do %>
-                <i class="fas fa-trash"></i>
               <% end %>
             </td>
           </tr>
