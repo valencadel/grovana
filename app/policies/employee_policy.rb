@@ -16,23 +16,23 @@ class EmployeePolicy < ApplicationPolicy
   end
 
   def update?
-    user_has_company? || user_is_manager? || is_self?
+    user.is_a?(User)
   end
 
   def edit?
-    update?
+    user.is_a?(User)
   end
 
   def profile?
-    user.is_a?(Employee)  # Solo empleados pueden ver su perfil
+    true
   end
 
   def edit_password?
-    user.is_a?(Employee)
+    true
   end
 
   def update_password?
-    user.is_a?(Employee)
+    true
   end
 
   class Scope < Scope
