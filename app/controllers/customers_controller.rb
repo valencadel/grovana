@@ -1,6 +1,6 @@
 class CustomersController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_customer, only: [ :show, :edit, :update ]
+  before_action :authenticate_any!
+  before_action :set_customer, only: [:show, :edit, :update]
 
   def index
     @customers = Customer.where(company_id: current_company.id)
@@ -57,7 +57,12 @@ class CustomersController < ApplicationController
   end
 
   def set_customer
-    @customer = Customer.find(params[:id])
+    @customer = Customer.where(company_id: current_company.id)
+                       .find_by(id: params[:id])
+
+    unless @customer
+      redirect_to customers_url, alert: 'Cliente no encontrado.'
+    end
   end
 
   def customer_params

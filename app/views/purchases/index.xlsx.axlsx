@@ -2,6 +2,11 @@ wb = xlsx_package.workbook
 wb.add_worksheet(name: "Purchases") do |sheet|
   sheet.add_row ["Order Date", "Delivery Date", "Total Price", "Supplier"]
   @purchases.each do |purchase|
-    sheet.add_row [purchase.order_date, purchase.expected_delivery_date, purchase.total_price, purchase.supplier.company_name]
+    sheet.add_row [
+      purchase.order_date,
+      purchase.expected_delivery_date,
+      purchase.total_price,
+      purchase.supplier.company_name
+    ]
   end
 end

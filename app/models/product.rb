@@ -5,44 +5,19 @@ class Product < ApplicationRecord
   has_many :sale_details
   has_many :sales, through: :sale_details
 
-  scope :active, -> { where(status: 'active') }
+  validates :name, presence: true
+  validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :stock, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :min_stock, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
-  validates :name, presence: { message: "no puede estar en blanco" }
-  validates :sku, presence: { message: "no puede estar en blanco" },
-                 uniqueness: { scope: :company_id, message: "ya existe para esta compañía" }
-
-  validates :min_stock,
-            presence: { message: "no puede estar en blanco" },
-            numericality: {
-              greater_than: 0,
-              message: "debe ser mayor que 0",
-              allow_blank: false
-            }
-
-  validates :stock,
-            presence: { message: "no puede estar en blanco" },
-            numericality: {
-              greater_than: 0,
-              message: "debe ser mayor que 0",
-              allow_blank: false
-            }
-
-  validate :stock_must_not_be_less_than_minimum_stock
+  scope :active, -> { where(status: true) }
 
   def available_stock
     stock
   end
 
-  def name_with_stock
-    "#{name} (Stock: #{stock})"
-  end
-
-  private
-
-  def stock_must_not_be_less_than_minimum_stock
-    return unless stock && min_stock
-    if stock < min_stock
-      errors.add(:stock, "no puede ser menor que el stock mínimo")
-    end
+  # Método para actualizar el stock después de una venta
+  def update_stock_after_sale(quantity)
+    update(stock: stock - quantity)
   end
 end
