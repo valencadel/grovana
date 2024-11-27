@@ -88,8 +88,7 @@ export default class extends Controller {
             <button type="button"
                     class="btn btn-danger btn-sm d-flex align-items-center gap-2"
                     data-action="click->sales-form#removeProduct">
-              <i class="bi bi-trash"></i>
-              Eliminar
+              <i class="fas fa-trash"></i>
             </button>
           </div>
         </td>
