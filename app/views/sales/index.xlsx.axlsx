@@ -1,6 +1,10 @@
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "Sales") do |sheet|
+<<<<<<< HEAD
   sheet.add_row ["Date", "Client First Name", "Client Last Name", "Total Price"]
+=======
+  sheet.add_row ["Date", "Client First Name", "Client Last Name","Total Price"]
+>>>>>>> main
   @sales.each do |sale|
     sheet.add_row [
       sale.sale_date,

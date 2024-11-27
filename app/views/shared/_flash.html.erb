@@ -1,0 +1,10 @@
+<% flash.each do |flash_type, message| %>
+  <div
+    class="flash__message"
+    data-controller="removals"
+    data-action="animationend->removals#remove"
+  >
+    <i class="fas fa-info-circle" style="color: yellow; margin-right: 8px;"></i>
+    <%= message %>
+  </div>
+<% end %>
