@@ -84,8 +84,7 @@ export default class extends Controller {
           <button type="button"
                   class="btn btn-danger btn-sm d-flex align-items-center gap-2"
                   data-action="click->purchases-form#removeProduct">
-            <i class="bi bi-trash"></i>
-            Eliminar
+            <i class="fas fa-trash"></i>
           </button>
         </div>
         <input type="hidden" name="purchase[purchase_details_attributes][${timestamp}][product_id]" value="${productId}">
