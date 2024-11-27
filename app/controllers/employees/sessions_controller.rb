@@ -1,30 +1,13 @@
 class Employees::SessionsController < Devise::SessionsController
   before_action :authenticate_employee!, except: [:new, :create, :destroy]
 
-  def profile
-    @employee = current_employee
+  protected
+
+  def after_sign_in_path_for(resource)
+    profile_employees_path
   end
 
-  def edit_password
-    @employee = current_employee
-    set_minimum_password_length if respond_to?(:set_minimum_password_length)
-  end
-
-  def update_password
-    @employee = current_employee
-    if @employee.update_with_password(password_params)
-      bypass_sign_in(@employee)
-      flash[:notice] = "Contraseña actualizada exitosamente."
-      redirect_to employees_profile_path
-    else
-      set_minimum_password_length if respond_to?(:set_minimum_password_length)
-      render :edit_password
-    end
-  end
-
-  private
-
-  def password_params
-    params.require(:employee).permit(:current_password, :password, :password_confirmation)
+  def after_sign_out_path_for(resource_or_scope)
+    new_employee_session_path
   end
 end

@@ -35,4 +35,12 @@ Rails.application.routes.draw do
   # Ruta raíz
   root to: "pages#home"
   get "dashboard", to: "pages#dashboard", as: :dashboard
+
+  resources :users do
+    collection do
+      get :profile
+      get :edit_profile
+      patch :update_profile
+    end
+  end
 end
