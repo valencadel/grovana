@@ -26,7 +26,6 @@ class PurchasesController < ApplicationController
     if @purchase.save
       respond_to do |format|
         format.html { redirect_to @purchase, notice: "Compra creada exitosamente." }
-        # format.turbo_stream { render turbo_stream: turbo_stream.replace(@purchase, partial: "purchases/purchase", locals: { purchase: @purchase }) }
         format.turbo_stream { flash.now[:notice] = "Compra creada exitosamente." }
       end
     else
@@ -41,7 +40,10 @@ class PurchasesController < ApplicationController
 
   def update
     if @purchase.update(purchase_params)
-      redirect_to @purchase, notice: "Compra actualizada exitosamente."
+      respond_to do |format|
+        format.html { redirect_to @purchase, notice: "Compra actualizada exitosamente." }
+        format.turbo_stream { flash.now[:notice] = "Compra actualizada exitosamente." }
+      end
     else
       render :edit, status: :unprocessable_entity
     end
@@ -49,7 +51,11 @@ class PurchasesController < ApplicationController
 
   def destroy
     @purchase.destroy
-    redirect_to purchases_url, notice: "Compra eliminada exitosamente."
+    respond_to do |format|
+      format.html { redirect_to purchases_url notice: "Compra eliminada exitosamente." }
+      format.turbo_stream { redirect_to purchases_url, notice: "Compra eliminada exitosamente." }
+      # format.turbo_stream { flash.now[:notice] = "Compra eliminada exitosamente." }
+    end
   end
 
   private

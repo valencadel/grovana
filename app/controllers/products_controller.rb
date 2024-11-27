@@ -26,7 +26,10 @@ class ProductsController < ApplicationController
     authorize @product
 
     if @product.save
-      redirect_to @product, notice: "Producto creado exitosamente."
+      respond_to do |format|
+        format.html { redirect_to @product, notice: "Producto creado exitosamente." }
+        format.turbo_stream { flash.now[:notice] = "Producto creado exitosamente." }
+      end
     else
       flash.now[:alert] = "Error al crear el producto."
       render :new, status: :unprocessable_entity
@@ -41,7 +44,10 @@ class ProductsController < ApplicationController
     authorize @product
 
     if @product.update(product_params)
-      redirect_to @product, notice: "Producto actualizado exitosamente."
+      respond_to do |format|
+        format.html { redirect_to @product, notice: "Producto actualizado exitosamente." }
+        format.turbo_stream { flash.now[:notice] = "Producto actualizado exitosamente." }
+      end
     else
       flash.now[:alert] = "Error al actualizar el producto."
       render :edit, status: :unprocessable_entity

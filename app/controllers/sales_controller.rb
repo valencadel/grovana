@@ -30,7 +30,10 @@ class SalesController < ApplicationController
     @sale.customer = Customer.find(params[:sale][:customer_id])
 
     if @sale.save
-      redirect_to @sale, notice: "Venta creada exitosamente."
+      respond_to do |format|
+        format.html { redirect_to @sale, notice: "Venta creada exitosamente." }
+        format.turbo_stream { flash.now[:notice] = "Venta creada exitosamente." }
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -38,7 +41,10 @@ class SalesController < ApplicationController
 
   def update
     if @sale.update(sale_params)
-      redirect_to @sale, notice: "Venta actualizada exitosamente."
+      respond_to do |format|
+        format.html { redirect_to @sale, notice: "Venta actualizada exitosamente." }
+        format.turbo_stream { flash.now[:notice] = "Venta actualizada exitosamente." }
+      end
     else
       render :edit, status: :unprocessable_entity
     end

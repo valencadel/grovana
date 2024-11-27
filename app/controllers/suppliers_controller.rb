@@ -28,7 +28,10 @@ class SuppliersController < ApplicationController
     @supplier.company = current_user.companies.first
 
     if @supplier.save
-      redirect_to suppliers_path, notice: "Proveedor creado exitosamente."
+      respond_to do |format|
+        format.html { redirect_to @supplier, notice: "Proveedor creado exitosamente." }
+        format.turbo_stream { flash.now[:notice] = "Proveedor creado exitosamente." }
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -39,7 +42,10 @@ class SuppliersController < ApplicationController
 
   def update
     if @supplier.update(supplier_params)
-      redirect_to suppliers_path, notice: "Proveedor actualizado exitosamente."
+      respond_to do |format|
+        format.html { redirect_to @supplier, notice: "Proveedor actualizado exitosamente." }
+        format.turbo_stream { flash.now[:notice] = "Proveedor actualizado exitosamente." }
+      end
     else
       render :edit, status: :unprocessable_entity
     end
