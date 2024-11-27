@@ -50,8 +50,6 @@ class PurchasesController < ApplicationController
     end
   end
 
-<<<<<<< HEAD
-=======
   def destroy
     @purchase.destroy
     respond_to do |format|
@@ -61,7 +59,6 @@ class PurchasesController < ApplicationController
     end
   end
 
->>>>>>> main
   private
 
   def current_company
