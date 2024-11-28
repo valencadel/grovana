@@ -118,6 +118,7 @@ GEM
       marcel (~> 1.0)
       nokogiri (~> 1.10, >= 1.10.4)
       rubyzip (>= 1.3.0, < 3)
+    chartkick (5.1.2)
     cloudinary (2.2.0)
       faraday (>= 2.0.1, < 3.0.0)
       faraday-follow_redirects (~> 0.3.0)
@@ -164,6 +165,8 @@ GEM
       csv (>= 3.0.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    groupdate (6.5.1)
+      activesupport (>= 7)
     hashie (5.0.0)
     htmlentities (4.3.4)
     i18n (1.14.6)
@@ -428,6 +431,7 @@ DEPENDENCIES
   bootstrap4-kaminari-views
   brakeman
   capybara
+  chartkick
   cloudinary
   cocoon
   debug
@@ -436,6 +440,7 @@ DEPENDENCIES
   error_highlight (>= 0.4.0)
   font-awesome-sass (~> 6.1)
   geocoder
+  groupdate
   importmap-rails (~> 1.2.3)
   jbuilder
   kaminari
