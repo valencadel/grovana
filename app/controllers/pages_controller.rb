@@ -27,6 +27,7 @@ class PagesController < ApplicationController
                          .where(sale_date: @date_range)
                          .group_by_month(:sale_date)
                          .sum(:total_price)
+                         .transform_keys { |k| k.strftime("%b-%Y") }
 
     # Compras por mes
     @purchases_by_month = Purchase.joins(:supplier)
@@ -34,6 +35,7 @@ class PagesController < ApplicationController
                                 .where(order_date: @date_range)
                                 .group_by_month(:order_date)
                                 .sum(:total_price)
+                                .transform_keys { |k| k.strftime("%b-%Y") }
 
     # Ventas por método de pago
     @sales_by_payment = Sale.joins(:customer)
