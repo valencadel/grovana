@@ -81,3 +81,6 @@ gem "bootstrap4-kaminari-views"
 gem "cocoon"
 gem "pundit"
 gem "axlsx_rails"
+
+gem 'chartkick'
+gem 'groupdate'
