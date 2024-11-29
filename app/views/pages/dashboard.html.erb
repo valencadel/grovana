@@ -45,7 +45,6 @@
     font-size: 1.5rem;
     font-weight: 600;
     color: #1f2937;
-    margin-top: 0.25rem;
   }
 
   .progress-bar {
@@ -138,62 +137,92 @@
 <!-- KPIs -->
 <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; margin-bottom: 1.5rem;">
   <!-- Total Clientes -->
-  <div class="kpi-card" style="position: relative;">
+  <div class="kpi-card relative">
     <div style="position: absolute; top: 1rem; right: 1rem;">
       <i class="fas fa-users text-gray-400 text-xl"></i>
     </div>
     <div class="kpi-title">Total Clientes</div>
-    <div class="kpi-value"><%= @total_customers %></div>
+    <div style="display: flex; align-items: baseline; margin-top: 0.25rem;">
+      <div class="kpi-value" style="margin: 0;"><%= @total_customers %></div>
+      <span style="font-size: 12px; margin-left: 6px; color: <%= @customers_change.positive? ? '#10b981' : '#ef4444' %>">
+        <i class="fas fa-<%= @customers_change.positive? ? 'arrow-up' : 'arrow-down' %>"></i>
+        <%= @customers_change %>%
+      </span>
+    </div>
     <div class="progress-bar">
-      <div class="progress-value" style="width: 40%; background-color: #3b82f6;"></div>
+      <div class="progress-value" style="width: 100%; background-color: #3b82f6;"></div>
     </div>
   </div>
 
   <!-- Total Compras -->
-  <div class="kpi-card" style="position: relative;">
+  <div class="kpi-card relative">
     <div style="position: absolute; top: 1rem; right: 1rem;">
       <i class="fas fa-shopping-cart text-gray-400 text-xl"></i>
     </div>
     <div class="kpi-title">Total Compras</div>
-    <div class="kpi-value"><%= @total_purchases %></div>
+    <div style="display: flex; align-items: baseline; margin-top: 0.25rem;">
+      <div class="kpi-value" style="margin: 0;"><%= @total_purchases %></div>
+      <span style="font-size: 12px; margin-left: 6px; color: <%= @purchases_change.positive? ? '#10b981' : '#ef4444' %>">
+        <i class="fas fa-<%= @purchases_change.positive? ? 'arrow-up' : 'arrow-down' %>"></i>
+        <%= @purchases_change %>%
+      </span>
+    </div>
     <div class="progress-bar">
-      <div class="progress-value" style="width: 60%; background-color: #ef4444;"></div>
+      <div class="progress-value" style="width: 100%; background-color: #ef4444;"></div>
     </div>
   </div>
 
   <!-- Total Compras ($) -->
-  <div class="kpi-card" style="position: relative;">
+  <div class="kpi-card relative">
     <div style="position: absolute; top: 1rem; right: 1rem;">
       <i class="fas fa-dollar-sign text-gray-400 text-xl"></i>
     </div>
     <div class="kpi-title">Total Compras ($)</div>
-    <div class="kpi-value"><%= number_to_currency(@total_purchases_amount, precision: 0, delimiter: ".", unit: "") %></div>
+    <div style="display: flex; align-items: baseline; margin-top: 0.25rem;">
+      <div class="kpi-value" style="margin: 0;"><%= number_to_currency(@total_purchases_amount, precision: 0, delimiter: ".", unit: "") %></div>
+      <span style="font-size: 12px; margin-left: 6px; color: <%= @purchases_amount_change.positive? ? '#10b981' : '#ef4444' %>">
+        <i class="fas fa-<%= @purchases_amount_change.positive? ? 'arrow-up' : 'arrow-down' %>"></i>
+        <%= @purchases_amount_change %>%
+      </span>
+    </div>
     <div class="progress-bar">
-      <div class="progress-value" style="width: 45%; background-color: #ef4444;"></div>
+      <div class="progress-value" style="width: 100%; background-color: #ef4444;"></div>
     </div>
   </div>
 
   <!-- Total Ventas -->
-  <div class="kpi-card" style="position: relative;">
+  <div class="kpi-card relative">
     <div style="position: absolute; top: 1rem; right: 1rem;">
       <i class="fas fa-chart-line text-gray-400 text-xl"></i>
     </div>
     <div class="kpi-title">Total Ventas</div>
-    <div class="kpi-value"><%= @total_sales %></div>
+    <div style="display: flex; align-items: baseline; margin-top: 0.25rem;">
+      <div class="kpi-value" style="margin: 0;"><%= @total_sales %></div>
+      <span style="font-size: 12px; margin-left: 6px; color: <%= @sales_change.positive? ? '#10b981' : '#ef4444' %>">
+        <i class="fas fa-<%= @sales_change.positive? ? 'arrow-up' : 'arrow-down' %>"></i>
+        <%= @sales_change %>%
+      </span>
+    </div>
     <div class="progress-bar">
-      <div class="progress-value" style="width: 75%; background-color: #10b981;"></div>
+      <div class="progress-value" style="width: 100%; background-color: #10b981;"></div>
     </div>
   </div>
 
   <!-- Total Ventas ($) -->
-  <div class="kpi-card" style="position: relative;">
+  <div class="kpi-card relative">
     <div style="position: absolute; top: 1rem; right: 1rem;">
       <i class="fas fa-coins text-gray-400 text-xl"></i>
     </div>
     <div class="kpi-title">Total Ventas ($)</div>
-    <div class="kpi-value"><%= number_to_currency(@total_sales_amount, precision: 0, delimiter: ".", unit: "") %></div>
+    <div style="display: flex; align-items: baseline; margin-top: 0.25rem;">
+      <div class="kpi-value" style="margin: 0;"><%= number_to_currency(@total_sales_amount, precision: 0, delimiter: ".", unit: "") %></div>
+      <span style="font-size: 12px; margin-left: 6px; color: <%= @sales_amount_change.positive? ? '#10b981' : '#ef4444' %>">
+        <i class="fas fa-<%= @sales_amount_change.positive? ? 'arrow-up' : 'arrow-down' %>"></i>
+        <%= @sales_amount_change %>%
+      </span>
+    </div>
     <div class="progress-bar">
-      <div class="progress-value" style="width: 25%; background-color: #10b981;"></div>
+      <div class="progress-value" style="width: 100%; background-color: #10b981;"></div>
     </div>
   </div>
 </div>
