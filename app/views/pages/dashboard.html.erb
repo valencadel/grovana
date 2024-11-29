@@ -241,16 +241,20 @@
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div class="pie-chart-title">Ventas por Método de Pago</div>
             <%= pie_chart @sales_by_payment,
-                colors: ["#3b82f6", "#ef4444", "#10b981"],
+                colors: ["#3b82f6", "#ef4444", "#f59e0b", "#10b981"],
                 height: "200px",
                 loading: "Cargando...",
                 library: {
                   plugins: {
                     legend: {
                       position: 'bottom',
-                      labels: { font: { size: 11 } }
+                      labels: {
+                        font: { size: 11 },
+                        padding: 20
+                      }
                     }
-                  }
+                  },
+                  cutout: '70%'
                 } %>
           </div>
 
@@ -258,16 +262,20 @@
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div class="pie-chart-title">Compras por Proveedor</div>
             <%= pie_chart @purchases_by_supplier,
-                colors: ["#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#6366f1"],
+                colors: ["#3b82f6", "#ef4444", "#f59e0b", "#10b981"],
                 height: "200px",
                 loading: "Cargando...",
                 library: {
                   plugins: {
                     legend: {
                       position: 'bottom',
-                      labels: { font: { size: 11 } }
+                      labels: {
+                        font: { size: 11 },
+                        padding: 20
+                      }
                     }
-                  }
+                  },
+                  cutout: '70%'
                 } %>
           </div>
         </div>
