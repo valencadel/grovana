@@ -27,22 +27,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @purchases.each do |purchase| %>
-          <tr>
-            <td><%= purchase.order_date %></td>
-            <td><%= purchase.expected_delivery_date %></td>
-            <td><%= number_to_currency(purchase.total_price) %></td>
-            <td><%= purchase.supplier.company_name %></td>
-            <td class="d-flex gap-2">
-              <%= link_to purchase_path(purchase), class: "btn btn-sm btn-info rounded" do %>
-                <i class="fas fa-eye"></i>
-              <% end %>
-              <%= link_to edit_purchase_path(purchase), class: "btn btn-sm btn-warning rounded" do %>
-                <i class="fas fa-edit"></i>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
+        <%= render @purchases %>
       </tbody>
     </table>
   </div>
