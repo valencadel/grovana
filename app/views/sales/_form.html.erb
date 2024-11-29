@@ -1,6 +1,18 @@
 <div class="bg-white p-6">
 
-  <%= simple_form_for @sale, html: { data: { controller: 'sales-form' } } do |f| %>
+  <%= simple_form_for @sale, html: {
+  data: {
+    controller: 'sales-form alert',
+    action: 'submit->alert#initSweetalert',
+    # turbo: 'false',
+    'alert-icon-value' => 'warning',
+    'alert-title-value' => '¿Estás seguro?',
+    'alert-html-value' => 'Crear nueva venta.',
+    'alert-confirm-button-text-value' => '¡Sí, Todo bien!',
+    'alert-show-cancel-button-value' => 'true',
+    'alert-cancel-button-text-value' => 'Cancelar'
+  }
+  } do |f| %>
     <!-- Campos básicos -->
     <div class="space-y-4 mb-6">
       <div>

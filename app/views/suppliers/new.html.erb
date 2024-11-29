@@ -5,7 +5,19 @@
         <div class="px-4 py-5 sm:p-6">
           <h1 class="text-lg font-medium leading-6 text-gray-900">Nuevo Proveedor</h1>
 
-          <%= form_with(model: @supplier, class: "mt-5") do |f| %>
+          <%= form_with(model: @supplier, class: "mt-5", html: {
+            data: {
+              controller: 'alert',
+              action: 'submit->alert#initSweetalert',
+              # turbo: 'false',
+              'alert-icon-value' => 'warning',
+              'alert-title-value' => '¿Estás seguro?',
+              'alert-html-value' => 'Crear nuevo proveedor.',
+              'alert-confirm-button-text-value' => '¡Sí, Todo bien!',
+              'alert-show-cancel-button-value' => 'true',
+              'alert-cancel-button-text-value' => 'Cancelar'
+            }
+            }) do |f| %>
             <%# <%= render "shared/error_messages", resource: @supplier if @supplier.errors.any? %>
 
             <div class="space-y-4">

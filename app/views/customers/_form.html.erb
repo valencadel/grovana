@@ -1,4 +1,16 @@
-<%= simple_form_for @customer do |f| %>
+<%= simple_form_for @customer, html: {
+  data: {
+    controller: 'alert',
+    action: 'submit->alert#initSweetalert',
+    # turbo: 'false',
+    'alert-icon-value' => 'warning',
+    'alert-title-value' => '¿Estás seguro?',
+    'alert-html-value' => 'Agregar nuevo cliente.',
+    'alert-confirm-button-text-value' => '¡Sí, Todo bien!',
+    'alert-show-cancel-button-value' => 'true',
+    'alert-cancel-button-text-value' => 'Cancelar'
+  }
+  } do |f| %>
   <div class="row">
     <div class="col-md-6">
       <%= f.input :first_name %>

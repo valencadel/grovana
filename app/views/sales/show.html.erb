@@ -1,3 +1,4 @@
+<%= render "shared/sidebar" %>
 <%= turbo_frame_tag :sale do %>
   <%= render partial: "show", locals: { sale: @sale } %>
 <% end %>

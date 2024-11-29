@@ -1,13 +1,14 @@
 class PurchasesController < ApplicationController
   before_action :authenticate_any!
-  before_action :set_purchase, only: [:show, :edit, :update]
-  before_action :set_company_resources, only: [:new, :create, :edit, :update]
+  before_action :set_purchase, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_company_resources, only: [ :new, :create, :edit, :update ]
 
   def index
     @purchases = Purchase.joins(:supplier)
                         .where(suppliers: { company_id: current_company.id })
                         .includes(:supplier)
 
+    @purchases = @purchases.order(order_date: :desc)
     respond_to do |format|
       format.html
       format.xlsx
@@ -53,9 +54,9 @@ class PurchasesController < ApplicationController
   def destroy
     @purchase.destroy
     respond_to do |format|
-      format.html { redirect_to purchases_url notice: "Compra eliminada exitosamente." }
-      format.turbo_stream { redirect_to purchases_url, notice: "Compra eliminada exitosamente." }
-      # format.turbo_stream { flash.now[:notice] = "Compra eliminada exitosamente." }
+      format.html { redirect_to purchases_url notice: "Compra eliminada exitosamente.", status: :see_other }
+      # format.turbo_stream { redirect_to purchases_url, notice: "Compra eliminada exitosamente." }
+      format.turbo_stream
     end
   end
 
@@ -64,9 +65,9 @@ class PurchasesController < ApplicationController
   def current_company
     @current_company ||= if current_user
                           current_user.companies.first
-                        elsif current_employee
+    elsif current_employee
                           current_employee.company
-                        end
+    end
   end
 
   def set_company_resources
@@ -101,7 +102,7 @@ class PurchasesController < ApplicationController
       :expected_delivery_date,
       :supplier_id,
       :total_price,
-      purchase_details_attributes: [:id, :product_id, :quantity, :unit_price, :_destroy]
+      purchase_details_attributes: [ :id, :product_id, :quantity, :unit_price, :_destroy ]
     )
   end
 
