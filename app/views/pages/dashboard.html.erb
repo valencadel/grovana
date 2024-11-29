@@ -166,7 +166,7 @@
           <!-- Otro KPI -->
           <div class="kpi-card">
             <div class="kpi-title">Total Ventas ($)</div>
-            <div class="kpi-value">25%</div>
+            <div class="kpi-value"><%= number_to_currency(@total_sales_amount, precision: 0, delimiter: ".", unit: "") %></div>
             <div class="progress-bar">
               <div class="progress-value" style="width: 25%; background-color: #6366f1;"></div>
             </div>

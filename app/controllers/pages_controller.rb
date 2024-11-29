@@ -70,6 +70,10 @@ class PagesController < ApplicationController
                              .sort_by { |_, quantity| -quantity }
                              .first(5)
                              .to_h
+
+    @total_sales_amount = Sale.joins(:customer)
+                             .where(customers: { company_id: current_company.id })
+                             .sum(:total_price)
   end
 
   private
