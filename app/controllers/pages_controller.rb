@@ -74,6 +74,11 @@ class PagesController < ApplicationController
     @total_sales_amount = Sale.joins(:customer)
                              .where(customers: { company_id: current_company.id })
                              .sum(:total_price)
+
+    @total_purchases_amount = Purchase.joins(:supplier)
+                                    .where(suppliers: { company_id: current_company.id })
+                                    .where(order_date: @date_range)
+                                    .sum(:total_price)
   end
 
   private

@@ -136,7 +136,7 @@
         </div>
 
 <!-- KPIs -->
-<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 1.5rem;">
+<div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; margin-bottom: 1.5rem;">
   <!-- Total Clientes -->
   <div class="kpi-card" style="position: relative;">
     <div style="position: absolute; top: 1rem; right: 1rem;">
@@ -145,7 +145,7 @@
     <div class="kpi-title">Total Clientes</div>
     <div class="kpi-value"><%= @total_customers %></div>
     <div class="progress-bar">
-      <div class="progress-value" style="width: 40%; background-color: #10b981;"></div>
+      <div class="progress-value" style="width: 40%; background-color: #3b82f6;"></div>
     </div>
   </div>
 
@@ -161,6 +161,18 @@
     </div>
   </div>
 
+  <!-- Total Compras ($) -->
+  <div class="kpi-card" style="position: relative;">
+    <div style="position: absolute; top: 1rem; right: 1rem;">
+      <i class="fas fa-dollar-sign text-gray-400 text-xl"></i>
+    </div>
+    <div class="kpi-title">Total Compras ($)</div>
+    <div class="kpi-value"><%= number_to_currency(@total_purchases_amount, precision: 0, delimiter: ".", unit: "") %></div>
+    <div class="progress-bar">
+      <div class="progress-value" style="width: 45%; background-color: #ef4444;"></div>
+    </div>
+  </div>
+
   <!-- Total Ventas -->
   <div class="kpi-card" style="position: relative;">
     <div style="position: absolute; top: 1rem; right: 1rem;">
@@ -169,7 +181,7 @@
     <div class="kpi-title">Total Ventas</div>
     <div class="kpi-value"><%= @total_sales %></div>
     <div class="progress-bar">
-      <div class="progress-value" style="width: 75%; background-color: #f59e0b;"></div>
+      <div class="progress-value" style="width: 75%; background-color: #10b981;"></div>
     </div>
   </div>
 
@@ -181,7 +193,7 @@
     <div class="kpi-title">Total Ventas ($)</div>
     <div class="kpi-value"><%= number_to_currency(@total_sales_amount, precision: 0, delimiter: ".", unit: "") %></div>
     <div class="progress-bar">
-      <div class="progress-value" style="width: 25%; background-color: #6366f1;"></div>
+      <div class="progress-value" style="width: 25%; background-color: #10b981;"></div>
     </div>
   </div>
 </div>
