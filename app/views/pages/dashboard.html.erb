@@ -129,7 +129,8 @@
                 <label class="kpi-title">Hasta:</label>
                 <%= date_field_tag :end_date, params[:end_date], class: "filter-input" %>
               </div>
-              <%= submit_tag "Filtrar", class: "filter-button" %>
+              <%= submit_tag "Filter", class: "filter-button" %>
+              <%= link_to "Reset", dashboard_path, class: "filter-button", style: "background-color: #ef4444; text-decoration: none;" %>
             </div>
           <% end %>
         </div>
