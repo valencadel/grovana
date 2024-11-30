@@ -253,18 +253,14 @@
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div class="chart-title">Sales by Month</div>
             <%= column_chart @sales_by_month,
-                colors: ["#3b82f6"],
+                colors: ["#10b981"],
                 height: "200px",
                 loading: "Loading...",
                 messages: {empty: "No data available"},
                 library: {
-                  scales: {
-                    y: {
-                      beginAtZero: true,
-                      grid: { display: false }
-                    },
-                    x: {
-                      grid: { display: false }
+                  plugins: {
+                    legend: {
+                      display: false
                     }
                   }
                 } %>
@@ -295,11 +291,10 @@
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div class="pie-chart-title">Sales by Payment Method</div>
             <%= pie_chart @sales_by_payment,
-                colors: ["#3b82f6", "#ef4444", "#f59e0b", "#10b981"],
+                colors: ["#8b5cf6", "#ef4444", "#f59e0b", "#10b981"],
                 height: "200px",
                 loading: "Loading...",
                 messages: {empty: "No data available"},
-                legend: "bottom",
                 donut: true,
                 library: {
                   plugins: {
@@ -318,11 +313,10 @@
           <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div class="pie-chart-title">Purchases by Supplier</div>
             <%= pie_chart @purchases_by_supplier,
-                colors: ["#3b82f6", "#ef4444", "#f59e0b", "#10b981", "#8b5cf6"],
+                colors: ["#8b5cf6", "#ef4444", "#f59e0b", "#10b981", "#6366f1"],
                 height: "200px",
                 loading: "Loading...",
                 messages: {empty: "No data available"},
-                legend: "bottom",
                 donut: true,
                 library: {
                   plugins: {

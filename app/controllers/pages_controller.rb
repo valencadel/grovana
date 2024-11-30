@@ -16,32 +16,33 @@ class PagesController < ApplicationController
       previous_start_date = start_date - 1.month
       previous_end_date = end_date - 1.month
       previous_range = previous_start_date..previous_end_date
+      active_range = @date_range  # Usar el rango filtrado
     else
       @date_range = @year_range
-      previous_range = nil
+      active_range = @year_range  # Usar el rango del año completo
     end
 
-    # Métricas anuales (siempre muestran el año completo)
+    # Métricas básicas (responden al filtro)
     @total_customers = Customer.where(company_id: current_company.id)
-                               .where(created_at: @year_range).count
+                               .where(created_at: active_range).count
 
     @total_sales = Sale.joins(:customer)
                       .where(customers: { company_id: current_company.id })
-                      .where(sale_date: @year_range).count
+                      .where(sale_date: active_range).count
 
     @total_purchases = Purchase.joins(:supplier)
                                .where(suppliers: { company_id: current_company.id })
-                               .where(order_date: @year_range).count
+                               .where(order_date: active_range).count
 
-    # Montos totales anuales
+    # Montos totales (responden al filtro)
     @total_sales_amount = Sale.joins(:customer, :sale_details)
                                .where(customers: { company_id: current_company.id })
-                               .where(sale_date: @year_range)
+                               .where(sale_date: active_range)
                                .sum('sale_details.unit_price * sale_details.quantity')
 
     @total_purchases_amount = Purchase.joins(:supplier, :purchase_details)
                                       .where(suppliers: { company_id: current_company.id })
-                                      .where(order_date: @year_range)
+                                      .where(order_date: active_range)
                                       .sum('purchase_details.unit_price * purchase_details.quantity')
 
     # Calcular diferencias porcentuales solo si hay filtro de fechas
@@ -105,25 +106,25 @@ class PagesController < ApplicationController
       @purchases_amount_change = 0
     end
 
-    # Gráficos (siempre muestran el año completo)
+    # Gráficos (responden al filtro)
     @sales_by_month = Sale.joins(:customer, :sale_details)
                           .where(customers: { company_id: current_company.id })
-                          .where(sale_date: @year_range)
+                          .where(sale_date: active_range)
                           .group("DATE_TRUNC('month', sales.sale_date)")
                           .sum('sale_details.unit_price * sale_details.quantity')
                           .transform_keys { |k| k.strftime("%B %Y") }
 
     @purchases_by_month = Purchase.joins(:supplier, :purchase_details)
                                    .where(suppliers: { company_id: current_company.id })
-                                   .where(order_date: @year_range)
+                                   .where(order_date: active_range)
                                    .group("DATE_TRUNC('month', purchases.order_date)")
                                    .sum('purchase_details.unit_price * purchase_details.quantity')
                                    .transform_keys { |k| k.strftime("%B %Y") }
 
-    # Ventas por método de pago (año completo)
+    # Ventas por método de pago (responde al filtro)
     @sales_by_payment = Sale.joins(:customer)
                              .where(customers: { company_id: current_company.id })
-                             .where(sale_date: @year_range)
+                             .where(sale_date: active_range)
                              .group(:payment_method)
                              .count
                              .transform_keys do |key|
@@ -136,12 +137,17 @@ class PagesController < ApplicationController
                                end
                              end
 
-    # Compras por proveedor (año completo)
+    # Compras por proveedor (responde al filtro)
     @purchases_by_supplier = Purchase.joins(:supplier, :purchase_details)
                                      .where(suppliers: { company_id: current_company.id })
-                                     .where(order_date: @year_range)
+                                     .where(order_date: active_range)
                                      .group('suppliers.company_name')
                                      .sum('purchase_details.unit_price * purchase_details.quantity')
+
+    # Debugging
+    Rails.logger.debug "Rango activo: #{active_range}"
+    Rails.logger.debug "Total ventas en rango: #{@total_sales}"
+    Rails.logger.debug "Total compras en rango: #{@total_purchases}"
   end
 
   private
