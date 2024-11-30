@@ -444,4 +444,84 @@ created_companies.each do |company|
   end
 end
 
+# Creando purchase orders
+puts "Creando purchase orders..."
+
+# Distribución mensual de órdenes (total 60)
+monthly_distribution = {
+  1 => 4,  # Enero
+  2 => 3,  # Febrero
+  3 => 4,  # Marzo
+  4 => 4,  # Abril
+  5 => 4,  # Mayo
+  6 => 5,  # Junio
+  7 => 8,  # Julio
+  8 => 4,  # Agosto
+  9 => 4,  # Septiembre
+  10 => 5, # Octubre
+  11 => 7, # Noviembre
+  12 => 8  # Diciembre
+}
+
+# Ajuste de inflación mensual (estimado 2024)
+def apply_monthly_inflation(price, month)
+  inflation_rate = 1 + (0.12 * (month - 1) / 12.0) # 12% anual estimado
+  (price * inflation_rate).round
+end
+
+created_companies.each do |company|
+  suppliers = Supplier.where(company_id: company.id)
+  products = Product.where(company_id: company.id)
+
+  monthly_distribution.each do |month, quantity|
+    quantity.times do
+      date = Date.new(2024, month, rand(1..28))
+      supplier = suppliers.sample
+
+      selected_products = []
+      total_price = 0
+
+      # Seleccionar entre 2 y 5 productos y calcular el total
+      rand(2..5).times do
+        product = products.sample
+        quantity = rand(1..10)
+
+        # Ajustar precio según el mes y aplicar descuento por mayorista
+        base_price = product.price.to_i
+        adjusted_price = apply_monthly_inflation(base_price, month)
+        wholesale_price = (adjusted_price * 0.85).round # 15% descuento mayorista
+
+        selected_products << {
+          product: product,
+          quantity: quantity,
+          unit_price: wholesale_price # Precio mayorista
+        }
+
+        total_price += quantity * wholesale_price
+      end
+
+      # Crear la purchase con el total_price calculado
+      purchase = Purchase.create!(
+        order_date: date,
+        expected_delivery_date: date + rand(5..15).days,
+        supplier_id: supplier.id,
+        company_id: company.id,
+        total_price: total_price
+      )
+
+      # Crear los detalles de la compra
+      selected_products.each do |item|
+        PurchaseDetail.create!(
+          purchase_id: purchase.id,
+          product_id: item[:product].id,
+          quantity: item[:quantity],
+          unit_price: item[:unit_price]
+        )
+      end
+    end
+  end
+end
+
+puts "Purchase orders creadas exitosamente!"
+
 puts "Seed completado exitosamente!"
