@@ -1,3 +1,5 @@
+require "gemini-ai"
+require "base64"
 class PagesController < ApplicationController
   skip_before_action :authenticate_any!, only: :home
   before_action :authenticate_any!, only: :dashboard
@@ -16,7 +18,7 @@ class PagesController < ApplicationController
     # Métricas actuales
     @total_customers = Customer.where(company_id: current_company.id).count
     @total_customers_last_month = Customer.where(company_id: current_company.id)
-                                        .where('created_at <= ?', 1.month.ago.end_of_month).count
+                                        .where("created_at <= ?", 1.month.ago.end_of_month).count
 
     @total_purchases = Purchase.joins(:supplier)
                              .where(suppliers: { company_id: current_company.id })
@@ -79,9 +81,29 @@ class PagesController < ApplicationController
     @purchases_by_supplier = Purchase.joins(:supplier)
                                    .where(suppliers: { company_id: current_company.id })
                                    .where(order_date: @date_range)
-                                   .group('suppliers.company_name')
+                                   .group("suppliers.company_name")
                                    .sum(:total_price)
+  end
 
+  def doc_gemini
+    client = Gemini.new(
+      credentials: {
+        service: "generative-language-api",
+        api_key: ENV["GEMINI_API_KEY"]
+      },
+      options: { model: "gemini-1.5-flash", server_sent_events: true }
+    )
+    result = client.stream_generate_content({
+      contents: { role: "user", parts: { text: "Hi, can you tell me where is located Peru?" } }
+    })
+    # Extract the response text
+    response_text = result.flat_map do |entry|
+      entry["candidates"].flat_map do |candidate|
+        candidate["content"]["parts"].map { |part| part["text"] }
+      end
+    end.join
+
+    @content = response_text
   end
 
   private
@@ -94,8 +116,8 @@ class PagesController < ApplicationController
   def current_company
     @current_company ||= if current_user
                           current_user.companies.first
-                        elsif current_employee
+    elsif current_employee
                           current_employee.company
-                        end
+    end
   end
 end
