@@ -23,7 +23,7 @@
           <th>Name</th>
           <th>SKU</th>
           <th>Category</th>
-          <th> Brand</th>
+          <th>Brand</th>
           <th>Stock</th>
           <th>Options</th>
         </tr>
@@ -31,11 +31,34 @@
       <tbody>
         <% @products.each do |product| %>
           <tr>
-            <td><%= product.name %></td>
+            <td>
+              <%= product.name %>
+              <% case product.stock_status %>
+              <% when 'normal' %>
+                <span class="badge bg-success text-white rounded-pill ml-2">
+                  <i class="fas fa-check"></i> Normal
+                </span>
+              <% when 'warning' %>
+                <span class="badge bg-warning text-dark rounded-pill ml-2">
+                  <i class="fas fa-exclamation"></i> Stock Bajo
+                </span>
+              <% when 'danger' %>
+                <span class="badge bg-danger text-white rounded-pill ml-2">
+                  <i class="fas fa-exclamation-triangle"></i> Sin Stock
+                </span>
+              <% end %>
+            </td>
             <td><%= product.sku %></td>
-            <td> <%= product.category %> </td>
-            <td> <%= product.brand %> </td>
-            <td><%= product.stock %></td>
+            <td><%= product.category %></td>
+            <td><%= product.brand %></td>
+            <td>
+              <span class="<%= product.stock_status == 'danger' ? 'text-danger fw-bold' : '' %>">
+                <%= product.stock %>
+              </span>
+              <small class="text-muted">
+                (Mín: <%= product.min_stock %>)
+              </small>
+            </td>
             <td>
               <%= link_to product_path(product), class: 'btn btn-info rounded' do %>
                 <i class="fas fa-eye"></i>
