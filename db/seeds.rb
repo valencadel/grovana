@@ -522,6 +522,107 @@ created_companies.each do |company|
   end
 end
 
-puts "Purchase orders creadas exitosamente!"
+# Actualizar stock después de las compras
+puts "Actualizando stock después de las compras..."
+Product.all.each do |product|
+  # Calcular entradas totales de las compras
+  total_purchased = PurchaseDetail.joins(:purchase)
+                                .where(product_id: product.id)
+                                .where('purchases.company_id = ?', product.company_id)
+                                .sum(:quantity)
+
+  # Actualizar el stock del producto
+  product.update!(stock: total_purchased)
+end
+
+# Ahora las sales orders con el stock actualizado
+puts "Creando sales orders..."
+
+# Distribución para todo 2024
+monthly_distribution = {
+  1 => 6,   # Enero
+  2 => 5,   # Febrero
+  3 => 6,   # Marzo
+  4 => 6,   # Abril
+  5 => 6,   # Mayo
+  6 => 8,   # Junio
+  7 => 12,  # Julio (más ventas)
+  8 => 6,   # Agosto
+  9 => 6,   # Septiembre
+  10 => 8,  # Octubre
+  11 => 9,  # Noviembre
+  12 => 12  # Diciembre (más ventas)
+}
+
+payment_methods = %w[Efectivo tarjeta_credito transferencia]
+
+created_companies.each do |company|
+  customers = Customer.where(company_id: company.id)
+  products = Product.where(company_id: company.id)
+
+  product_stock = {}
+  products.each do |product|
+    product_stock[product.id] = product.stock
+  end
+
+  monthly_distribution.each do |month, quantity|
+    quantity.times do
+      # Asegurarnos de que la fecha no sea futura
+      proposed_date = Date.new(2024, month, rand(1..28))
+      next if proposed_date > Date.today
+
+      customer = customers.sample
+      available_products = products.select { |product| product_stock[product.id].to_i > 0 }
+
+      next if available_products.empty?
+
+      selected_products = []
+      total_price = 0
+
+      rand(1..3).times do
+        product = available_products.sample
+        next unless product && product_stock[product.id].to_i > 0
+
+        max_quantity = [product_stock[product.id].to_i, 2].min
+        quantity = rand(1..max_quantity)
+
+        base_price = product.price.to_i
+        adjusted_price = apply_monthly_inflation(base_price, month)
+        retail_price = (adjusted_price * 1.35).round
+
+        selected_products << {
+          product: product,
+          quantity: quantity,
+          unit_price: retail_price
+        }
+
+        total_price += quantity * retail_price
+        product_stock[product.id] -= quantity
+      end
+
+      next if selected_products.empty?
+
+      sale = Sale.create!(
+        sale_date: proposed_date,
+        payment_method: payment_methods.sample,
+        customer_id: customer.id,
+        total_price: total_price
+      )
+
+      selected_products.each do |item|
+        SaleDetail.create!(
+          sale_id: sale.id,
+          product_id: item[:product].id,
+          quantity: item[:quantity],
+          unit_price: item[:unit_price]
+        )
+
+        item[:product].update!(stock: product_stock[item[:product].id])
+      end
+    end
+  end
+end
+
+puts "Sales orders creadas exitosamente!"
 
 puts "Seed completado exitosamente!"
