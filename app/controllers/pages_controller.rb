@@ -161,17 +161,68 @@ class PagesController < ApplicationController
       },
       options: { model: "gemini-1.5-flash", server_sent_events: true }
     )
-    result = client.stream_generate_content({
-      contents: { role: "user", parts: { text: "Hi, can you tell me where is located Peru?" } }
-    })
-    # Extract the response text
+    
+    result = client.stream_generate_content(
+      { contents: [
+        { role: 'user', parts: [
+          { text: gemini_prompt },
+          { inline_data: {
+            mime_type: 'image/jpeg',
+            data: Base64.strict_encode64(File.read('factura_1.jpg'))
+          } }
+        ] }
+      ] }
+    )
+
+    # Extraer y limpiar la respuesta
     response_text = result.flat_map do |entry|
       entry["candidates"].flat_map do |candidate|
         candidate["content"]["parts"].map { |part| part["text"] }
       end
     end.join
 
-    @content = response_text
+    # Limpiar el texto de marcadores JSON y otros caracteres no deseados
+    cleaned_text = response_text.gsub(/```json\s*|\s*```/, '').strip
+
+    begin
+      @content = JSON.parse(cleaned_text)
+
+      # Crear productos a partir de la respuesta
+      @content["products"].each do |product_data|
+        product = Product.new(
+          sku: sanitize_sku(product_data["SKU"]),
+          name: product_data["name"].presence || "Producto sin nombre",
+          description: product_data["description"].presence || "Sin descripción",
+          category: product_data["category"].presence || "Sin categoría",
+          brand: product_data["brand"].presence || "Sin marca",
+          price: product_data["price"].to_f,
+          stock: product_data["quantity"].to_i || 0,
+          min_stock: calculate_min_stock(product_data["quantity"].to_i),
+          status: true,
+          company_id: current_company.id
+        )
+
+        if product.save
+          Rails.logger.info "Producto creado exitosamente: #{product.name}"
+        else
+          Rails.logger.error "Error al crear producto: #{product.errors.full_messages.join(', ')}"
+          flash.now[:alert] = "Error al crear producto: #{product.errors.full_messages.join(', ')}"
+          return render :doc_gemini, status: :unprocessable_entity
+        end
+      end
+
+      flash.now[:notice] = "Productos importados exitosamente"
+      render :doc_gemini
+    rescue JSON::ParserError => e
+      Rails.logger.error "Error parseando JSON: #{e.message}"
+      Rails.logger.error "Texto recibido: #{cleaned_text}"
+      flash.now[:alert] = "Error al procesar la respuesta: formato inválido"
+      render :doc_gemini, status: :unprocessable_entity
+    rescue StandardError => e
+      Rails.logger.error "Error procesando documento: #{e.message}"
+      flash.now[:alert] = "Error al procesar el documento: #{e.message}"
+      render :doc_gemini, status: :unprocessable_entity
+    end
   end
 
   private
@@ -193,5 +244,97 @@ class PagesController < ApplicationController
     elsif current_employee
                           current_employee.company
     end
+  end
+
+  def gemini_prompt
+    @gemini_prompt ||= "Features to Extract:
+
+        1. Product: all the variables of the product. Text
+          1.1. name: the name of the product. Text
+          1.2. SKU: the alphanumeric identificator of each product. shudnt be longer than 10 to 15 characters and cant have dots, dashes or special characters. numerical value
+          1.3. description: the description of the product. Text
+          1.4. category: the category of the product. Text
+          1.5. brand: the brand of the product. Text
+          1.6. price: the price for each unit of the products listed. Numerical value
+          1.7. quantity: quantity of each product listed. Numerical value
+          1.8. productTotal: the amount paid for each product, given the unit price and the quantity of the products bought. Numeric Value
+        2. Name of the seller: name of the company that created the invoice or that is the manufacturer of the products.
+        3. totalProducts: the summary of all the products bought. Numerical value.
+        4. Total amount paid: Total price of the invoice, the summary of all the items listed. Numerical value.
+        5. Date of purchase: date of the purchase. Date value.
+        6. Date of delivery: date of the expected delivery. Date value.
+        7. Name of company buying: name of the company thats buying the products. Text.
+
+        ---
+
+        Output Format:
+
+        Please output the extracted features as follows:
+
+        products: [
+                   SKU: [value]
+                   name: [value]
+                   description: [value]
+                   category: [value]
+                   brand: [value]
+                   price: [value]
+                   quantity: [value]
+                   productTotal: [value]
+                  ]
+        sellerName: [value]
+        totalProducts: [value]
+        totalPaid: [value]
+        purchaseDate: [value]
+        deliveryDate: [value]
+        company: [value]
+
+       inside products, i should have the SKU, the unit price, the quantity, and the total amount
+
+        For example:
+
+        SKU: MACBK0001
+        products: computadora MacBook Pro M3-Pro 16GB RAM 512SSD
+        sellerName: Company S.R.L.
+        unitPrice: 10.000,00
+        quantity: 10
+        productTotal: 100.000,00
+        totalProducts: 35
+        totalPaid: 1.500.000,00
+        purchaseDate: 2024-11-07
+        deliveryDate: 2025-02-17
+        company: valentin cadel S.A.
+
+        ---
+
+        Important:
+
+        - Do not include any explanations, reasoning, code, or additional text. Just include the result in the format specified above.
+        - Do not include the media description again in the output.
+        - Respond **ONLY** with the results for each feature on a new line, in a json format"
+  end
+
+  def calculate_min_stock(quantity)
+    return 1 if quantity.nil? || quantity <= 0
+    
+    case quantity
+    when 1..10
+      1
+    when 11..50
+      5
+    when 51..100
+      10
+    else
+      (quantity * 0.1).round # 10% del stock inicial
+    end
+  end
+
+  def sanitize_sku(sku)
+    return nil if sku.nil?
+    
+    # Eliminar caracteres especiales y espacios
+    sanitized = sku.to_s.gsub(/[^\w\d]/, '')
+    
+    # Limitar longitud a 15 caracteres
+    sanitized[0...15]
   end
 end
