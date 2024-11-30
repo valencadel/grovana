@@ -1,17 +1,9 @@
-<%= render "shared/sidebar" %>
+
 
 <style>
   .wrapper {
     display: flex;
     min-height: 100vh;
-  }
-
-  .sidebar {
-    width: 250px;
-    background-color: #1e1b4b;
-    position: fixed;
-    height: 100vh;
-    overflow-y: auto;
   }
 
   .main-content {
@@ -133,11 +125,10 @@
   background-color: #2563eb; /* Darken on hover */
 }
 </style>
-
-<div class="wrapper">
   <%= render "shared/sidebar" %>
 
-  <div class="main-content">
+
+  <div class="content">
     <div class="content-container">
       <%= turbo_frame_tag "dashboard_content" do %>
         <!-- Filtro -->
@@ -363,4 +354,3 @@
       <i class="fas fa-plus"></i>
     <% end %>
   </div>
-</div>
