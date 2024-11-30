@@ -108,6 +108,30 @@
   .filter-button:hover {
     background-color: #2563eb;
   }
+
+  /* Floating Plus Button Style */
+.floating-button {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 40px;
+  right: 40px;
+  background-color: #3b82f6; /* Adjust color as needed */
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 30px;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.floating-button i {
+  margin-top: 15px;
+}
+
+.floating-button:hover {
+  background-color: #2563eb; /* Darken on hover */
+}
 </style>
 
 <div class="wrapper">
@@ -333,5 +357,10 @@
         </div>
       <% end %>
     </div>
+
+    <!-- Floating Plus Button -->
+    <%= link_to doc_gemini_path, class: "floating-button" do %>
+      <i class="fas fa-plus"></i>
+    <% end %>
   </div>
 </div>

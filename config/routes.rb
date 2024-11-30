@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   # Ruta raíz
   root to: "pages#home"
   get "dashboard", to: "pages#dashboard", as: :dashboard
+  get "doc_gemini", to: "pages#doc_gemini", as: :doc_gemini
 
   resources :users do
     collection do
