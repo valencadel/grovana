@@ -1,5 +1,5 @@
-<!-- Topbar Start -->
-<div class="container-fluid bg-dark">
+<!-- Topbar and Navbar Start -->
+<div class="container-fluid bg-dark fixed-top">
     <div class="row py-2 px-lg-5">
         <div class="col-lg-6 text-center text-lg-left mb-2 mb-lg-0">
             <div class="d-inline-flex align-items-center text-white">
@@ -22,40 +22,39 @@
             </div>
         </div>
     </div>
-</div>
-<!-- Topbar End -->
 
-
-<!-- Navbar Start -->
-<div class="container-fluid p-0">
-    <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-lg-5 justify-content-between">
-    <div>
-          <h1 class="m-0 display-6 text-uppercase text-primary"><i class="fa-solid fa-cart-flatbed"></i> Grovana</h1>
+    <!-- Navbar Start -->
+    <div class="container-fluid p-0">
+        <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-lg-5 justify-content-between">
+            <div>
+                <h1 class="m-0 display-6 text-uppercase text-primary"><i class="fa-solid fa-cart-flatbed"></i> Grovana</h1>
+            </div>
+            <% if user_signed_in? || employee_signed_in? %>
+                <div class="d-flex">
+                    <div class="collapse navbar-collapse px-lg-3">
+                        <%= link_to "Home", root_path, class: "btn btn-primary btn-sm py-2 px-4 d-none d-lg-block rounded" %>
+                    </div>
+                    <div class="collapse navbar-collapse px-lg-3">
+                        <%= link_to "Dashboard", dashboard_path, class: "btn btn-primary btn-sm py-2 px-4 d-none d-lg-block rounded" %>
+                    </div>
+                    <div class="collapse navbar-collapse px-lg-3">
+                        <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "btn btn-primary btn-sm py-2 px-4 d-none d-lg-block rounded" %>
+                    </div>
+                </div>
+            <% else %>
+                <div class="d-flex">
+                    <div class="collapse navbar-collapse px-lg-3">
+                        <%= link_to "Log In as Owner", new_user_session_path, class: "btn btn-primary btn-sm py-2 px-4 d-none d-lg-block rounded" %>
+                    </div>
+                    <div class="collapse navbar-collapse px-lg-3">
+                        <%= link_to "Log In as Employee", new_employee_session_path, class: "btn btn-primary btn-sm py-2 px-4 d-none d-lg-block rounded" %>
+                    </div>
+                    <div class="collapse navbar-collapse px-lg-3">
+                        <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary btn-sm py-2 px-4 d-none d-lg-block rounded" %>
+                    </div>
+                </div>
+            <% end %>
+        </nav>
     </div>
-      <% if user_signed_in? || employee_signed_in? %>
-        <div class="d-flex">
-          <div class="collapse navbar-collapse px-lg-3">
-            <%= link_to "Home", root_path, class: "btn btn-primary btn-sm py-2 px-4 d-none d-lg-block rounded" %>
-          </div>
-          <div class="collapse navbar-collapse px-lg-3">
-            <%= link_to "Dashboard", dashboard_path, class: "btn btn-primary btn-sm py-2 px-4 d-none d-lg-block rounded" %>
-          </div>
-          <div class="collapse navbar-collapse px-lg-3">
-            <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "btn btn-primary btn-sm py-2 px-4 d-none d-lg-block rounded" %>
-          </div>
-        </div>
-      <% else %>
-        <div class="d-flex">
-          <div class="collapse navbar-collapse px-lg-3">
-            <%= link_to "Log In as Owner", new_user_session_path, class: "btn btn-primary btn-sm py-2 px-4 d-none d-lg-block rounded" %>
-          </div>
-          <div class="collapse navbar-collapse px-lg-3">
-              <%= link_to "Log In as Employee", new_employee_session_path, class: "btn btn-primary btn-sm py-2 px-4 d-none d-lg-block rounded" %>
-          </div>
-          <div class="collapse navbar-collapse px-lg-3">
-              <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary btn-sm py-2 px-4 d-none d-lg-block rounded" %>
-          </div>
-        </div>
-      <% end %>
-    </nav>
 </div>
+<!-- Topbar and Navbar End -->
