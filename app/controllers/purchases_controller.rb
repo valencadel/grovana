@@ -26,6 +26,7 @@ class PurchasesController < ApplicationController
   def create
     @purchase = Purchase.new(purchase_params)
     @purchase.supplier = Supplier.find(params[:purchase][:supplier_id])
+    @purchase.company = current_user.companies.first
 
     if @purchase.save
       respond_to do |format|
