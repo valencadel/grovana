@@ -6,8 +6,10 @@ class PagesController < ApplicationController
   end
 
   def dashboard
-    start_date = params[:start_date].presence || 1.year.ago
-    end_date = params[:end_date].presence || Date.current
+    # Convertir strings a Date
+    start_date = params[:start_date].present? ? Date.parse(params[:start_date]) : Date.current.beginning_of_month
+    end_date = params[:end_date].present? ? Date.parse(params[:end_date]) : Date.current.end_of_month
+
     @date_range = start_date..end_date
     last_month_range = (start_date - 1.month)..(end_date - 1.month)
 
@@ -80,7 +82,6 @@ class PagesController < ApplicationController
                                    .group('suppliers.company_name')
                                    .sum(:total_price)
 
-    # ... resto del código existente para los gráficos ...
   end
 
   private
