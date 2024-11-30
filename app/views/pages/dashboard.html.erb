@@ -1,4 +1,25 @@
+<div class="container-fluid">
+  <div class="row">
+    <!-- Dashboard existente (lado izquierdo) -->
+    <div class="col-md-6">
+      <!-- Tu contenido actual del dashboard -->
+      <div class="dashboard-stats">
+        <!-- ... tus estadísticas actuales ... -->
+      </div>
+    </div>
 
+    <!-- Mapa (lado derecho) -->
+    <div class="col-md-6">
+      <div class="dashboard-map">
+        <div data-controller="map"
+             data-map-markers-value="<%= @markers.to_json %>"
+             data-map-api-key-value="<%= ENV['MAPBOX_API_KEY'] %>"
+             class="map-container">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <style>
   .wrapper {
@@ -344,6 +365,20 @@
                     }
                   }
                 } %>
+          </div>
+        </div>
+
+        <!-- Mapa -->
+        <div class="container mt-4">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title">Ubicación de Clientes</h3>
+              <div data-controller="map"
+                   data-map-markers-value="<%= @markers.to_json %>"
+                   data-map-api-key-value="<%= ENV['MAPBOX_API_KEY'] %>"
+                   style="width: 100%; height: 600px;">
+              </div>
+            </div>
           </div>
         </div>
       <% end %>

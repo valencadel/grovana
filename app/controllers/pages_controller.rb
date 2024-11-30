@@ -151,6 +151,13 @@ class PagesController < ApplicationController
     Rails.logger.debug "Filtro activo: #{params[:start_date].present?}"
     Rails.logger.debug "Período: #{active_range}"
     Rails.logger.debug "Total clientes: #{@total_customers}"
+
+    @markers = Customer.geocoded.map do |customer|
+      {
+        lat: customer.latitude,
+        lng: customer.longitude
+      }
+    end
   end
 
   def doc_gemini
