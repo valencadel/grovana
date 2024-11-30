@@ -20,4 +20,20 @@ class Product < ApplicationRecord
   def update_stock_after_sale(quantity)
     update(stock: stock - quantity)
   end
+
+  def low_stock?
+    stock <= min_stock
+  end
+
+  def stock_status
+    if stock.zero?
+      'danger'
+    elsif stock <= min_stock
+      'warning'
+    elsif stock > min_stock && stock < (min_stock * 2)
+      'safe'
+    else
+      'normal'
+    end
+  end
 end

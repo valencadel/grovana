@@ -8,14 +8,18 @@ export default class extends Controller {
     "unitPriceDisplay",
     "productsList",
     "total",
-    "totalInput"
+    "totalInput",
+    "stockDisplay"
   ]
 
   connect() {
     console.log("Sales form controller connected")
 
     if (this.hasProductSelectTarget) {
-      this.productSelectTarget.addEventListener('change', this.updateUnitPrice.bind(this))
+      this.productSelectTarget.addEventListener('change', () => {
+        this.updateUnitPrice()
+        this.updateStockDisplay()
+      })
     }
 
     // Inicializar los detalles existentes
@@ -35,13 +39,17 @@ export default class extends Controller {
     const selectedOption = this.productSelectTarget.selectedOptions[0]
     if (selectedOption && selectedOption.value !== "") {
       const price = selectedOption.dataset.price
+      const stock = selectedOption.dataset.stock
       if (price) {
         this.unitPriceDisplayTarget.value = `$${parseFloat(price).toFixed(2)}`
+        this.stockDisplayTarget.value = stock
       } else {
         this.unitPriceDisplayTarget.value = ''
+        this.stockDisplayTarget.value = ''
       }
     } else {
       this.unitPriceDisplayTarget.value = ''
+      this.stockDisplayTarget.value = ''
     }
   }
 
@@ -159,8 +167,9 @@ export default class extends Controller {
       }
     }
 
-    // Reset product selection
+    // Reset product selection and displays
     this.productSelectTarget.value = ""
     this.unitPriceDisplayTarget.value = ""
+    this.stockDisplayTarget.value = ""
   }
 }
