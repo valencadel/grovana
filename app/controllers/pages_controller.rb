@@ -1,3 +1,5 @@
+require "gemini-ai"
+require "base64"
 class PagesController < ApplicationController
   skip_before_action :authenticate_any!, only: :home
   before_action :authenticate_any!, only: :dashboard
@@ -56,12 +58,12 @@ class PagesController < ApplicationController
     @total_sales_amount = Sale.joins(:customer, :sale_details)
                                .where(customers: { company_id: current_company.id })
                                .where(sale_date: active_range)
-                               .sum('sale_details.unit_price * sale_details.quantity')
+                               .sum("sale_details.unit_price * sale_details.quantity")
 
     @total_purchases_amount = Purchase.joins(:supplier, :purchase_details)
                                       .where(suppliers: { company_id: current_company.id })
                                       .where(order_date: active_range)
-                                      .sum('purchase_details.unit_price * purchase_details.quantity')
+                                      .sum("purchase_details.unit_price * purchase_details.quantity")
 
     # Calcular diferencias porcentuales solo si hay filtro de fechas
     if params[:start_date].present? && params[:end_date].present?
@@ -76,11 +78,11 @@ class PagesController < ApplicationController
       filtered_sales_amount = Sale.joins(:customer, :sale_details)
                                  .where(customers: { company_id: current_company.id })
                                  .where(sale_date: @date_range)
-                                 .sum('sale_details.unit_price * sale_details.quantity')
+                                 .sum("sale_details.unit_price * sale_details.quantity")
       filtered_sales_amount_last_month = Sale.joins(:customer, :sale_details)
                                             .where(customers: { company_id: current_company.id })
                                             .where(sale_date: previous_range)
-                                            .sum('sale_details.unit_price * sale_details.quantity')
+                                            .sum("sale_details.unit_price * sale_details.quantity")
       @sales_amount_change = calculate_percentage_change(filtered_sales_amount, filtered_sales_amount_last_month)
 
       filtered_purchases = Purchase.joins(:supplier)
@@ -94,11 +96,11 @@ class PagesController < ApplicationController
       filtered_purchases_amount = Purchase.joins(:supplier, :purchase_details)
                                         .where(suppliers: { company_id: current_company.id })
                                         .where(order_date: @date_range)
-                                        .sum('purchase_details.unit_price * purchase_details.quantity')
+                                        .sum("purchase_details.unit_price * purchase_details.quantity")
       filtered_purchases_amount_last_month = Purchase.joins(:supplier, :purchase_details)
                                                   .where(suppliers: { company_id: current_company.id })
                                                   .where(order_date: previous_range)
-                                                  .sum('purchase_details.unit_price * purchase_details.quantity')
+                                                  .sum("purchase_details.unit_price * purchase_details.quantity")
       @purchases_amount_change = calculate_percentage_change(filtered_purchases_amount, filtered_purchases_amount_last_month)
     else
       @sales_change = 0
@@ -112,14 +114,14 @@ class PagesController < ApplicationController
                           .where(customers: { company_id: current_company.id })
                           .where(sale_date: active_range)
                           .group("DATE_TRUNC('month', sales.sale_date)")
-                          .sum('sale_details.unit_price * sale_details.quantity')
+                          .sum("sale_details.unit_price * sale_details.quantity")
                           .transform_keys { |k| k.strftime("%B %Y") }
 
     @purchases_by_month = Purchase.joins(:supplier, :purchase_details)
                                  .where(suppliers: { company_id: current_company.id })
                                  .where(order_date: active_range)
                                  .group("DATE_TRUNC('month', purchases.order_date)")
-                                 .sum('purchase_details.unit_price * purchase_details.quantity')
+                                 .sum("purchase_details.unit_price * purchase_details.quantity")
                                  .transform_keys { |k| k.strftime("%B %Y") }
 
     # Ventas por método de pago
@@ -130,10 +132,10 @@ class PagesController < ApplicationController
                            .count
                            .transform_keys do |key|
                              case key
-                             when 'Efectivo' then 'Cash'
-                             when 'tarjeta_credito' then 'Credit Card'
-                             when 'tarjeta_debito' then 'Debit Card'
-                             when 'transferencia' then 'Transfer'
+                             when "Efectivo" then "Cash"
+                             when "tarjeta_credito" then "Credit Card"
+                             when "tarjeta_debito" then "Debit Card"
+                             when "transferencia" then "Transfer"
                              else key.to_s.titleize
                              end
                            end
@@ -142,13 +144,34 @@ class PagesController < ApplicationController
     @purchases_by_supplier = Purchase.joins(:supplier, :purchase_details)
                                      .where(suppliers: { company_id: current_company.id })
                                      .where(order_date: active_range)
-                                     .group('suppliers.company_name')
-                                     .sum('purchase_details.unit_price * purchase_details.quantity')
+                                     .group("suppliers.company_name")
+                                     .sum("purchase_details.unit_price * purchase_details.quantity")
 
     # Debugging
     Rails.logger.debug "Filtro activo: #{params[:start_date].present?}"
     Rails.logger.debug "Período: #{active_range}"
     Rails.logger.debug "Total clientes: #{@total_customers}"
+  end
+
+  def doc_gemini
+    client = Gemini.new(
+      credentials: {
+        service: "generative-language-api",
+        api_key: ENV["GEMINI_API_KEY"]
+      },
+      options: { model: "gemini-1.5-flash", server_sent_events: true }
+    )
+    result = client.stream_generate_content({
+      contents: { role: "user", parts: { text: "Hi, can you tell me where is located Peru?" } }
+    })
+    # Extract the response text
+    response_text = result.flat_map do |entry|
+      entry["candidates"].flat_map do |candidate|
+        candidate["content"]["parts"].map { |part| part["text"] }
+      end
+    end.join
+
+    @content = response_text
   end
 
   private
@@ -167,8 +190,8 @@ class PagesController < ApplicationController
   def current_company
     @current_company ||= if current_user
                           current_user.companies.first
-                        elsif current_employee
+    elsif current_employee
                           current_employee.company
-                        end
+    end
   end
 end

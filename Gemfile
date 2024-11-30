@@ -82,5 +82,6 @@ gem "cocoon"
 gem "pundit"
 gem "axlsx_rails"
 
-gem 'chartkick'
-gem 'groupdate'
+gem "chartkick"
+gem "groupdate"
+gem "gemini-ai", "~> 4.2.0"
