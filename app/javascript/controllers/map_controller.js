@@ -12,7 +12,7 @@ export default class extends Controller {
     this.map = new mapboxgl.Map({
       container: this.element,
       style: "mapbox://styles/mapbox/streets-v12",
-      center: [-74.5, 40], // Ajusta estas coordenadas según necesites
+      center: [-74.5, 40],
       zoom: 9
     })
 
@@ -22,9 +22,24 @@ export default class extends Controller {
 
   #addMarkersToMap() {
     this.markersValue.forEach((marker) => {
-      new mapboxgl.Marker()
+      const popup = new mapboxgl.Popup({
+        offset: 25,
+        closeButton: false,
+        closeOnClick: false
+      }).setHTML(marker.info_window_html)
+
+      const mapMarker = new mapboxgl.Marker()
         .setLngLat([ marker.lng, marker.lat ])
+        .setPopup(popup)
         .addTo(this.map)
+
+      mapMarker.getElement().addEventListener('mouseenter', () => {
+        popup.addTo(this.map)
+      })
+
+      mapMarker.getElement().addEventListener('mouseleave', () => {
+        popup.remove()
+      })
     })
   }
 
@@ -33,4 +48,4 @@ export default class extends Controller {
     this.markersValue.forEach(marker => bounds.extend([ marker.lng, marker.lat ]))
     this.map.fitBounds(bounds, { padding: 70, maxZoom: 15, duration: 0 })
   }
-} 
+}
