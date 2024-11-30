@@ -5,4 +5,14 @@
 .mapboxgl-popup-content {
   text-align: center;
   font-family: "Open Sans", sans-serif;
-} 
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.map-info-window {
+  text-align: left;
+}
+
+.custom-marker {
+  font-size: 24px;
+}
