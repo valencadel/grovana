@@ -180,6 +180,28 @@
     </div>
   </div>
 
+  <!-- Total Customers -->
+  <div class="kpi-card relative">
+    <div style="position: absolute; top: 1rem; right: 1rem;">
+      <i class="fas fa-users text-gray-400 text-xl"></i>
+    </div>
+    <div class="kpi-title">Total Customers</div>
+    <div style="display: flex; align-items: baseline; margin-top: 0.25rem;">
+      <div class="kpi-value" style="margin: 0;"><%= @total_customers %></div>
+      <span style="font-size: 12px; margin-left: 6px; color: <%= @customers_change.zero? ? '#6B7280' : (@customers_change.positive? ? '#10b981' : '#ef4444') %>">
+        <% if @customers_change.zero? %>
+          <span><%= number_to_percentage(0, precision: 1) %></span>
+        <% else %>
+          <i class="fas fa-<%= @customers_change.positive? ? 'arrow-up' : 'arrow-down' %>"></i>
+          <%= number_to_percentage(@customers_change.abs, precision: 1) %>
+        <% end %>
+      </span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-value" style="width: 100%; background-color: #3b82f6;"></div>
+    </div>
+  </div>
+
   <!-- Total Purchases -->
   <div class="kpi-card relative">
     <div style="position: absolute; top: 1rem; right: 1rem;">
@@ -221,28 +243,6 @@
     </div>
     <div class="progress-bar">
       <div class="progress-value" style="width: 100%; background-color: #ef4444;"></div>
-    </div>
-  </div>
-
-  <!-- Total Customers -->
-  <div class="kpi-card relative">
-    <div style="position: absolute; top: 1rem; right: 1rem;">
-      <i class="fas fa-users text-gray-400 text-xl"></i>
-    </div>
-    <div class="kpi-title">Total Customers</div>
-    <div style="display: flex; align-items: baseline; margin-top: 0.25rem;">
-      <div class="kpi-value" style="margin: 0;"><%= @total_customers %></div>
-      <span style="font-size: 12px; margin-left: 6px; color: <%= @customers_change.zero? ? '#6B7280' : (@customers_change.positive? ? '#10b981' : '#ef4444') %>">
-        <% if @customers_change.zero? %>
-          <span><%= number_to_percentage(0, precision: 1) %></span>
-        <% else %>
-          <i class="fas fa-<%= @customers_change.positive? ? 'arrow-up' : 'arrow-down' %>"></i>
-          <%= number_to_percentage(@customers_change.abs, precision: 1) %>
-        <% end %>
-      </span>
-    </div>
-    <div class="progress-bar">
-      <div class="progress-value" style="width: 100%; background-color: #3b82f6;"></div>
     </div>
   </div>
 </div>
