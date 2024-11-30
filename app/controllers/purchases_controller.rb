@@ -53,7 +53,7 @@ class PurchasesController < ApplicationController
   end
 
   def destroy
-    @purchase.destroy
+    @purchase.destroy!
     respond_to do |format|
       format.html { redirect_to purchases_url notice: "Compra eliminada exitosamente.", status: :see_other }
       # format.turbo_stream { redirect_to purchases_url, notice: "Compra eliminada exitosamente." }
