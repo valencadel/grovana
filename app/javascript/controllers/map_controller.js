@@ -28,7 +28,9 @@ export default class extends Controller {
         closeOnClick: false
       }).setHTML(marker.info_window_html)
 
-      const mapMarker = new mapboxgl.Marker()
+      const mapMarker = new mapboxgl.Marker({
+        color: '#f97316'
+      })
         .setLngLat([ marker.lng, marker.lat ])
         .setPopup(popup)
         .addTo(this.map)
