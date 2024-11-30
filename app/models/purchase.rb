@@ -1,5 +1,6 @@
 class Purchase < ApplicationRecord
   belongs_to :supplier
+  belongs_to :company
   has_many :purchase_details, dependent: :destroy
   has_many :products, through: :purchase_details
 
