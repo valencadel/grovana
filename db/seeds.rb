@@ -546,49 +546,59 @@ monthly_distribution = {
   4 => 6,   # Abril
   5 => 6,   # Mayo
   6 => 8,   # Junio
-  7 => 12,  # Julio (más ventas)
+  7 => 12,  # Julio
   8 => 6,   # Agosto
   9 => 6,   # Septiembre
   10 => 8,  # Octubre
   11 => 9,  # Noviembre
-  12 => 12  # Diciembre (más ventas)
+  12 => 12  # Diciembre
 }
 
 payment_methods = %w[Efectivo tarjeta_credito transferencia]
 
+# Verificar y actualizar stock inicial
+puts "Verificando stock inicial..."
+Product.all.each do |product|
+  purchased_quantity = PurchaseDetail.joins(:purchase)
+                                   .where(product_id: product.id)
+                                   .sum(:quantity)
+  product.update!(stock: purchased_quantity)
+end
+
+total_purchases = Purchase.sum(:total_price)
+puts "Total de compras: $#{total_purchases}"
+
 created_companies.each do |company|
   customers = Customer.where(company_id: company.id)
-  products = Product.where(company_id: company.id)
-
-  product_stock = {}
-  products.each do |product|
-    product_stock[product.id] = product.stock
-  end
 
   monthly_distribution.each do |month, quantity|
     quantity.times do
-      # Asegurarnos de que la fecha no sea futura
       proposed_date = Date.new(2024, month, rand(1..28))
       next if proposed_date > Date.today
 
       customer = customers.sample
-      available_products = products.select { |product| product_stock[product.id].to_i > 0 }
+
+      # Obtener productos con stock disponible
+      available_products = Product.where(company_id: company.id)
+                                .where('stock > 0')
+                                .to_a
 
       next if available_products.empty?
 
       selected_products = []
       total_price = 0
 
-      rand(1..3).times do
+      rand(2..4).times do
         product = available_products.sample
-        next unless product && product_stock[product.id].to_i > 0
+        next unless product && product.stock > 0
 
-        max_quantity = [product_stock[product.id].to_i, 2].min
+        # Asegurar que no excedemos el stock disponible
+        max_quantity = [product.stock, 3].min
         quantity = rand(1..max_quantity)
 
         base_price = product.price.to_i
         adjusted_price = apply_monthly_inflation(base_price, month)
-        retail_price = (adjusted_price * 1.35).round
+        retail_price = (adjusted_price * 1.65).round
 
         selected_products << {
           product: product,
@@ -597,11 +607,15 @@ created_companies.each do |company|
         }
 
         total_price += quantity * retail_price
-        product_stock[product.id] -= quantity
+
+        # Actualizar stock disponible en memoria
+        product.stock -= quantity
+        available_products.reject! { |p| p.stock <= 0 }
       end
 
       next if selected_products.empty?
 
+      # Crear la venta
       sale = Sale.create!(
         sale_date: proposed_date,
         payment_method: payment_methods.sample,
@@ -609,6 +623,7 @@ created_companies.each do |company|
         total_price: total_price
       )
 
+      # Crear los detalles y actualizar stock en la base de datos
       selected_products.each do |item|
         SaleDetail.create!(
           sale_id: sale.id,
@@ -617,11 +632,17 @@ created_companies.each do |company|
           unit_price: item[:unit_price]
         )
 
-        item[:product].update!(stock: product_stock[item[:product].id])
+        # Actualizar stock en la base de datos
+        item[:product].save!
       end
     end
   end
 end
+
+total_sales = Sale.sum(:total_price)
+puts "Total de ventas: $#{total_sales}"
+puts "Margen bruto: $#{total_sales - total_purchases}"
+puts "Margen porcentual: #{((total_sales.to_f / total_purchases.to_f - 1) * 100).round(2)}%"
 
 puts "Sales orders creadas exitosamente!"
 
