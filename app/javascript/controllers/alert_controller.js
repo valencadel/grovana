@@ -56,7 +56,8 @@ export default class extends Controller {
             'Accept': 'application/json'
           }
         }).then(response => {
-          window.location.href = '/purchases';
+          // window.location.href = '/purchases';
+          window.location.reload();
         });
       }
     });
