@@ -13,14 +13,14 @@
         <% end %>
         <%= link_to upload_path(upload),
                 data: {  controller: "alert",
-                              alert_icon_value: "warning",
-                              alert_title_value: "¿Estás seguro?",
-                              alert_html_value: "Eliminar esta Factura.",
-                              alert_confirm_button_text_value: "¡Sí, eliminar!",
-                              alert_show_cancel_button_value: true,
-                              alert_cancel_button_text_value: "Cancelar",
-                              action: "click->alert#confirmDelete",
-                              turbo: false},
+                        alert_icon_value: "warning",
+                        alert_title_value: "¿Estás seguro?",
+                        alert_html_value: "Eliminar esta Factura.",
+                        alert_confirm_button_text_value: "¡Sí, eliminar!",
+                        alert_show_cancel_button_value: true,
+                        alert_cancel_button_text_value: "Cancelar",
+                        action: "click->alert#confirmDelete",
+                        turbo: false},
                 class: "btn btn-sm btn-danger rounded" do %>
         <i class="fas fa-trash"></i>
       <% end %>
