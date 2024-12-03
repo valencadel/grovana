@@ -44,4 +44,6 @@ Rails.application.routes.draw do
       patch :update_profile
     end
   end
+
+  resources :uploads
 end

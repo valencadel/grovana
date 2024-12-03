@@ -1,0 +1,51 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-6 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Images</h1>
+    <%= link_to new_upload_path,
+        class: "bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark" do %>
+      <i class="fas fa-plus mr-2"></i>Upload New Image
+    <% end %>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% @uploads.each do |upload| %>
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="aspect-w-16 aspect-h-9">
+          <%= cl_image_tag upload.photo,
+              class: "w-full h-full object-cover" %>
+        </div>
+        <div class="p-4">
+          <p class="text-sm text-gray-500">
+            Uploaded <%= time_ago_in_words(upload.created_at) %> ago
+          </p>
+          <div class="mt-4 flex justify-end space-x-2">
+            <%= link_to upload_path(upload),
+                class: "text-primary hover:text-primary-dark" do %>
+              <i class="fas fa-eye"></i>
+            <% end %>
+            <%= button_to upload_path(upload),
+                method: :delete,
+                class: "text-red-600 hover:text-red-800",
+                data: { confirm: "Are you sure?" } do %>
+              <i class="fas fa-trash"></i>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @uploads.empty? %>
+    <div class="text-center py-12">
+      <div class="text-gray-400 mb-4">
+        <i class="fas fa-images text-6xl"></i>
+      </div>
+      <h3 class="text-lg font-medium text-gray-900">No images yet</h3>
+      <p class="mt-1 text-sm text-gray-500">Get started by uploading your first image.</p>
+      <%= link_to new_upload_path,
+          class: "mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark" do %>
+        <i class="fas fa-plus mr-2"></i>Upload Image
+      <% end %>
+    </div>
+  <% end %>
+</div>
