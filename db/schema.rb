@@ -42,27 +42,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_03_001946) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "chat_room_participants", force: :cascade do |t|
-    t.bigint "chat_room_id", null: false
-    t.bigint "user_id", null: false
-    t.datetime "last_read_at"
-    t.boolean "is_admin", default: false
+  create_table "assets", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["chat_room_id", "user_id"], name: "index_chat_room_participants_on_chat_room_id_and_user_id", unique: true
-    t.index ["chat_room_id"], name: "index_chat_room_participants_on_chat_room_id"
-    t.index ["user_id"], name: "index_chat_room_participants_on_user_id"
-  end
-
-  create_table "chat_rooms", force: :cascade do |t|
-    t.string "name", null: false
-    t.integer "room_type", default: 0
-    t.boolean "is_private", default: false
-    t.bigint "creator_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["creator_id"], name: "index_chat_rooms_on_creator_id"
-    t.index ["room_type"], name: "index_chat_rooms_on_room_type"
+    t.bigint "company_id", null: false
+    t.index ["company_id"], name: "index_assets_on_company_id"
   end
 
   create_table "companies", force: :cascade do |t|
@@ -105,19 +89,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_03_001946) do
     t.index ["company_id"], name: "index_employees_on_company_id"
     t.index ["email"], name: "index_employees_on_email", unique: true
     t.index ["reset_password_token"], name: "index_employees_on_reset_password_token", unique: true
-  end
-
-  create_table "messages", force: :cascade do |t|
-    t.bigint "chat_room_id", null: false
-    t.bigint "user_id", null: false
-    t.text "content", null: false
-    t.boolean "is_read", default: false
-    t.datetime "read_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["chat_room_id", "created_at"], name: "index_messages_on_chat_room_id_and_created_at"
-    t.index ["chat_room_id"], name: "index_messages_on_chat_room_id"
-    t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -218,13 +189,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_03_001946) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "chat_room_participants", "chat_rooms"
-  add_foreign_key "chat_room_participants", "users"
-  add_foreign_key "chat_rooms", "users", column: "creator_id"
+  add_foreign_key "assets", "companies"
   add_foreign_key "companies", "users"
   add_foreign_key "customers", "companies"
-  add_foreign_key "messages", "chat_rooms"
-  add_foreign_key "messages", "users"
   add_foreign_key "products", "companies"
   add_foreign_key "purchase_details", "products"
   add_foreign_key "purchase_details", "purchases"
