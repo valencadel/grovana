@@ -65,7 +65,7 @@ gem "font-awesome-sass", "~> 6.1"
 gem "simple_form", github: "heartcombo/simple_form"
 gem "sassc-rails"
 
-gem "dotenv-rails"
+#gem "dotenv-rails"
 gem "cloudinary"
 gem "devise"
 
@@ -85,3 +85,4 @@ gem "axlsx_rails"
 gem "chartkick"
 gem "groupdate"
 gem "gemini-ai", "~> 4.2.0"
+gem 'dotenv-rails', groups: [:development, :test]
