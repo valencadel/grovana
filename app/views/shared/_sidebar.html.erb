@@ -30,6 +30,11 @@
         <i class="fa-solid fa-person"></i> Customers
       <% end %>
     </li>
+    <li class="nav-item">
+      <%= link_to uploads_path, class: "nav-link" do %>
+        <i class="fa-solid fa-file-invoice"></i> Invoices
+      <% end %>
+    </li>
     <% if user_signed_in? || (employee_signed_in? && current_employee.role == 'Manager') %>
       <li class="nav-item">
         <%= link_to employees_path, class: "nav-link" do %>
