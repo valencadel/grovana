@@ -1,0 +1,30 @@
+ <div class="col">
+  <div class="card h-100 custom-card">
+    <div class="card-img-container">
+      <%= cl_image_tag upload.photo, class: "card-img-top custom-card-img" %>
+    </div>
+    <div class="card-body">
+      <p class="card-text text-muted">
+        Uploaded <%= time_ago_in_words(upload.created_at) %> ago
+      </p>
+      <div class="d-flex justify-content-end">
+        <%= link_to upload_path(upload), class: "btn btn-sm btn-info rounded mr-2" do %>
+          <i class="fas fa-eye"></i>
+        <% end %>
+        <%= link_to upload_path(upload),
+                data: {  controller: "alert",
+                        alert_icon_value: "warning",
+                        alert_title_value: "¿Estás seguro?",
+                        alert_html_value: "Eliminar esta Factura.",
+                        alert_confirm_button_text_value: "¡Sí, eliminar!",
+                        alert_show_cancel_button_value: true,
+                        alert_cancel_button_text_value: "Cancelar",
+                        action: "click->alert#confirmDelete",
+                        turbo: false},
+                class: "btn btn-sm btn-danger rounded" do %>
+        <i class="fas fa-trash"></i>
+      <% end %>
+      </div>
+    </div>
+  </div>
+</div>

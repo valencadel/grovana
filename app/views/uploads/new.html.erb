@@ -1,0 +1,28 @@
+<div class="max-w-2xl mx-auto p-6">
+  <div class="bg-white rounded-lg shadow p-6">
+    <h1 class="text-2xl font-bold mb-6">Subir Nueva Imagen</h1>
+
+    <%= form_with(model: @upload, local: true, class: "space-y-6") do |f| %>
+      <% if @upload.errors.any? %>
+        <div class="bg-red-50 p-4 rounded-md">
+          <ul class="mt-2 text-red-700 text-sm">
+            <% @upload.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div>
+        <%= f.file_field :photo_file,
+            class: "mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-dark",
+            accept: 'image/*' %>
+      </div>
+
+      <div class="pt-4">
+        <%= f.submit "Subir Imagen",
+            class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
