@@ -1,52 +1,8 @@
 <%= turbo_frame_tag :supplier do %>
   <div class="content">
-    <div class="max-w-2xl mx-auto">
-      <div class="bg-white shadow sm:rounded-lg">
-        <div class="px-4 py-5 sm:p-6">
-          <h1 class="text-lg font-medium leading-6 text-gray-900">Editar Proveedor</h1>
-
-          <%= form_with(model: @supplier, class: "mt-5") do |f| %>
-            <%= render "shared/error_messages", resource: @supplier if @supplier.errors.any? %>
-
-            <div class="space-y-4">
-              <div>
-                <%= f.label :company_name, "Nombre de la empresa", class: "block text-sm font-medium text-gray-700" %>
-                <%= f.text_field :company_name, class: "input-field" %>
-              </div>
-
-              <div>
-                <%= f.label :contact_name, "Nombre de contacto", class: "block text-sm font-medium text-gray-700" %>
-                <%= f.text_field :contact_name, class: "input-field" %>
-              </div>
-
-              <div>
-                <%= f.label :email, "Email", class: "block text-sm font-medium text-gray-700" %>
-                <%= f.email_field :email, class: "input-field" %>
-              </div>
-
-              <div>
-                <%= f.label :phone, "Teléfono", class: "block text-sm font-medium text-gray-700" %>
-                <%= f.text_field :phone, class: "input-field" %>
-              </div>
-
-              <div>
-                <%= f.label :address, "Dirección", class: "block text-sm font-medium text-gray-700" %>
-                <%= f.text_field :address, class: "input-field" %>
-              </div>
-
-              <div>
-                <%= f.label :tax_id, "CUIT", class: "block text-sm font-medium text-gray-700" %>
-                <%= f.text_field :tax_id, class: "input-field" %>
-              </div>
-
-              <div class="flex justify-end gap-3 mt-3">
-                <%= link_to "Cancelar", suppliers_path, class: "btn btn-sm btn-secondary rounded" %>
-                <%= f.submit "Actualizar Proveedor", class: "btn btn-sm btn-primary rounded" %>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    </div>
+    <%= render 'form', 
+        title: 'Editar Proveedor',
+        submit_text: 'Actualizar Proveedor',
+        submit_message: 'Actualizar proveedor.' %>
   </div>
 <% end %>
