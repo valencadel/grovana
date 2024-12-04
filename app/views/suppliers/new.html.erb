@@ -3,57 +3,69 @@
     <div class="max-w-2xl mx-auto">
       <div class="bg-white shadow sm:rounded-lg">
         <div class="px-4 py-5 sm:p-6">
-          <h1 class="text-lg font-medium leading-6 text-gray-900">Nuevo Proveedor</h1>
+          <h1 class="text-lg font-medium leading-6 text-gray-900 mb-6">Nuevo Proveedor</h1>
 
-          <%= form_with(model: @supplier, class: "mt-5", html: {
-            data: {
-              controller: 'alert',
-              action: 'submit->alert#initSweetalert',
-              # turbo: 'false',
-              'alert-icon-value' => 'warning',
-              'alert-title-value' => '¿Estás seguro?',
-              'alert-html-value' => 'Crear nuevo proveedor.',
-              'alert-confirm-button-text-value' => '¡Sí, Todo bien!',
-              'alert-show-cancel-button-value' => 'true',
-              'alert-cancel-button-text-value' => 'Cancelar'
-            }
-            }) do |f| %>
-            <%# <%= render "shared/error_messages", resource: @supplier if @supplier.errors.any? %>
+          <%= simple_form_for @supplier, 
+              html: {
+                class: "mt-5",
+                data: {
+                  controller: 'alert',
+                  action: 'submit->alert#initSweetalert',
+                  'alert-icon-value': 'warning',
+                  'alert-title-value': '¿Estás seguro?',
+                  'alert-html-value': 'Crear nuevo proveedor.',
+                  'alert-confirm-button-text-value': '¡Sí, Todo bien!',
+                  'alert-show-cancel-button-value': 'true',
+                  'alert-cancel-button-text-value': 'Cancelar'
+                }
+              } do |f| %>
+            
+            <div class="space-y-6">
+              <%= f.input :company_name,
+                  label: "Nombre de la empresa",
+                  placeholder: "Ejemplo: Acme Inc.",
+                  wrapper_html: { class: "grid grid-cols-1 gap-2" },
+                  input_html: { class: "input-field w-full" },
+                  label_html: { class: "block text-sm font-medium text-gray-700" } %>
 
-            <div class="space-y-4">
-              <div>
-                <%= f.label :company_name, "Nombre de la empresa", class: "block text-sm font-medium text-gray-700" %>
-                <%= f.text_field :company_name, class: "input-field" %>
-              </div>
+              <%= f.input :contact_name,
+                  label: "Nombre de contacto",
+                  placeholder: "Ejemplo: John Doe",
+                  wrapper_html: { class: "grid grid-cols-1 gap-2" },
+                  input_html: { class: "input-field w-full" },
+                  label_html: { class: "block text-sm font-medium text-gray-700" } %>
 
-              <div>
-                <%= f.label :contact_name, "Nombre de contacto", class: "block text-sm font-medium text-gray-700" %>
-                <%= f.text_field :contact_name, class: "input-field" %>
-              </div>
+              <%= f.input :email,
+                  label: "Email",
+                  placeholder: "Ejemplo: john.doe@example.com",
+                  wrapper_html: { class: "grid grid-cols-1 gap-2" },
+                  input_html: { class: "input-field w-full" },
+                  label_html: { class: "block text-sm font-medium text-gray-700" } %>
 
-              <div>
-                <%= f.label :email, "Email", class: "block text-sm font-medium text-gray-700" %>
-                <%= f.email_field :email, class: "input-field" %>
-              </div>
+              <%= f.input :phone,
+                  label: "Teléfono",
+                  placeholder: "Ejemplo: 1132345678",
+                  wrapper_html: { class: "grid grid-cols-1 gap-2" },
+                  input_html: { class: "input-field w-full" },
+                  label_html: { class: "block text-sm font-medium text-gray-700" } %>
 
-              <div>
-                <%= f.label :phone, "Teléfono", class: "block text-sm font-medium text-gray-700" %>
-                <%= f.text_field :phone, class: "input-field" %>
-              </div>
+              <%= f.input :address,
+                  label: "Dirección",
+                  placeholder: "Ejemplo: 123 Main St, Anytown, USA",
+                  wrapper_html: { class: "grid grid-cols-1 gap-2" },
+                  input_html: { class: "input-field w-full" },
+                  label_html: { class: "block text-sm font-medium text-gray-700" } %>
 
-              <div>
-                <%= f.label :address, "Dirección", class: "block text-sm font-medium text-gray-700" %>
-                <%= f.text_field :address, class: "input-field" %>
-              </div>
-
-              <div>
-                <%= f.label :tax_id, "CUIT", class: "block text-sm font-medium text-gray-700" %>
-                <%= f.text_field :tax_id, class: "input-field" %>
-              </div>
+              <%= f.input :tax_id,
+                  label: "CUIT",
+                  placeholder: "Ejemplo: 20-12345678-9",
+                  wrapper_html: { class: "grid grid-cols-1 gap-2" },
+                  input_html: { class: "input-field w-full" },
+                  label_html: { class: "block text-sm font-medium text-gray-700" } %>
 
               <div class="flex justify-end gap-3">
                 <%= link_to "Cancelar", suppliers_path, class: "btn btn-secondary" %>
-                <%= f.submit "Crear Proveedor", class: "btn btn-primary" %>
+                <%= f.button :submit, "Crear Proveedor", class: "btn btn-primary" %>
               </div>
             </div>
           <% end %>
