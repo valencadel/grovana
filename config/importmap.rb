@@ -10,3 +10,4 @@ pin "@popperjs/core", to: "popper.js", preload: true
 pin "chartkick", to: "chartkick.js"
 pin "Chart.bundle", to: "Chart.bundle.js"
 pin "sweetalert2", to: "https://ga.jspm.io/npm:sweetalert2@11.7.2/dist/sweetalert2.all.js"
+pin "@rails/activestorage", to: "https://ga.jspm.io/npm:@rails/activestorage@7.1.3/app/assets/javascripts/activestorage.esm.js"

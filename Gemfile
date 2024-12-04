@@ -86,3 +86,7 @@ gem "chartkick"
 gem "groupdate"
 gem "gemini-ai", "~> 4.2.0"
 gem 'dotenv-rails', groups: [:development, :test]
+
+gem "active_storage_validations"
+
+gem 'activestorage-cloudinary-service'
