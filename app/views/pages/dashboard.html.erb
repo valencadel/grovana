@@ -145,6 +145,38 @@
 .floating-button:hover {
   background-color: #2563eb; /* Darken on hover */
 }
+/* Modal Action Blocks */
+.action-link {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s;
+}
+
+.action-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.action-icon {
+  font-size: 4rem; /* Adjust size as needed */
+  flex: 0 0 80%;
+}
+.action-title {
+  font-size: 1.25rem; /* Adjust size as needed */
+  flex: 0 0 20%;
+  margin-top: 10px;
+}
+.action-link:hover {
+  text-decoration: none; /* Remove underline on hover */
+}
+.action-link:hover .action-icon,
+.action-link:hover .action-title {
+  color: #FF4800;
+}
+
 </style>
   <%= render "shared/sidebar" %>
 
@@ -389,7 +421,41 @@
     </div>
 
     <!-- Floating Plus Button -->
-    <%= link_to doc_gemini_path, class: "floating-button" do %>
+    <button type="button" class="floating-button" data-bs-toggle="modal" data-bs-target="#exampleModal">
       <i class="fas fa-plus"></i>
-    <% end %>
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Choose your new action</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <div class="row">
+                <div class="col-6 text-center">
+                  <a href="<%= new_upload_path %>" class="action-link">
+                    <div class="action-block">
+                      <i class="fas fa-shopping-cart action-icon"></i>
+                      <div class="action-title">New Purchase</div>
+                    </div>
+                  </a>
+                </div>
+                <div class="col-6 text-center">
+                  <a href="<%= new_purchase_path %>" class="action-link">
+                    <div class="action-block">
+                      <i class="fas fa-cogs action-icon"></i>
+                      <div class="action-title">New Sell</div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
