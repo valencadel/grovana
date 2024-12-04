@@ -26,8 +26,8 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
             </svg>
 
-            <p class="text-[24px] text-gray-600 leading-tight">Arrastra tu foto aquí dentro</p>
-            <p class="text-[24px] text-blue-500 leading-tight">o selecciona</p>
+            <p class="text-[24px] text-gray-600 leading-tight">Drag your photo here inside</p>
+            <p class="text-[24px] text-blue-500 leading-tight">or select</p>
             <p class="text-[20px] text-gray-400 mt-4">PNG, JPG (5MB)</p>
           </div>
         </div>
@@ -41,9 +41,13 @@
         </div>
       </div>
 
-      <!-- Botón de Submit debajo -->
-      <div class="mt-4 flex justify-center">
-        <%= f.submit "Subir imagen", class: "bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600" %>
+      <!-- Botón de subida en inglés -->
+      <div class="p-4">
+        <button type="button"
+                onclick="event.preventDefault(); event.stopPropagation(); this.closest('form').requestSubmit();"
+                class="w-full bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 transition-colors text-[16px] font-medium">
+          Upload Image
+        </button>
       </div>
 
     </div>
