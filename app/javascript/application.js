@@ -6,3 +6,8 @@ import "bootstrap"
 // import "@nathanvda/cocoon"
 import "chartkick"
 import "Chart.bundle"
+import "@rails/activestorage"
+import * as ActiveStorage from "@rails/activestorage"
+
+// Inicializar Active Storage
+ActiveStorage.start()

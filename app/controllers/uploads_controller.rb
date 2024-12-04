@@ -17,9 +17,14 @@ class UploadsController < ApplicationController
     @upload = current_company.uploads.build(upload_params)
 
     if @upload.save
-      redirect_to @upload, notice: 'Imagen subida exitosamente.'
+      render json: {
+        success: true,
+        image_url: url_for(@upload.image)
+      }
     else
-      render :new, status: :unprocessable_entity
+      render json: {
+        error: @upload.errors.full_messages.join(", ")
+      }, status: :unprocessable_entity
     end
   end
 
@@ -45,6 +50,6 @@ class UploadsController < ApplicationController
   end
 
   def upload_params
-    params.require(:upload).permit(:photo_file)
+    params.require(:upload).permit(:image)
   end
 end
