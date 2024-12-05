@@ -5,7 +5,11 @@
     </div>
 
     <div class="rounded-lg overflow-hidden">
-      <%= cl_image_tag @upload.photo, class: "w-full h-auto" %>
+      <% if @upload.image.attached? %>
+        <%= image_tag @upload.image, class: "w-full h-auto" %>
+      <% else %>
+        <p class="text-gray-500">No image available</p>
+      <% end %>
     </div>
 
     <div class="mt-6 flex justify-between">
