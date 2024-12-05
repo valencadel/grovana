@@ -5,11 +5,11 @@
     action: 'submit->alert#initSweetalert',
     # turbo: 'false',
     'alert-icon-value' => 'warning',
-    'alert-title-value' => '¿Estás seguro?',
-    'alert-html-value' => 'Crear nueva compra.',
-    'alert-confirm-button-text-value' => '¡Sí, Todo bien!',
+    'alert-title-value' => 'Are you sure?',
+    'alert-html-value' => 'Create a new purchase.',
+    'alert-confirm-button-text-value' => 'Yes, do it!',
     'alert-show-cancel-button-value' => 'true',
-    'alert-cancel-button-text-value' => 'Cancelar'
+    'alert-cancel-button-text-value' => 'Cancel'
   }
   } do |f| %>
     <!-- Campos básicos -->
@@ -33,7 +33,7 @@
       </div>
 
       <div>
-        <label class="block mb-1">Fecha de Entrega Esperada *</label>
+        <label class="block mb-1">Expected delivery date *</label>
         <div class="flex gap-2 mb-3">
           <%= select_tag 'purchase[expected_delivery_date(1i)]',
               options_for_select((Date.today.year-5..Date.today.year+5).to_a, @purchase.expected_delivery_date&.year || Date.today.year),
@@ -56,14 +56,14 @@
                          collection: @suppliers,
                          label_method: :company_name,
                          value_method: :id,
-                         include_blank: 'Seleccionar proveedor',
+                         include_blank: 'Select supplier',
                          input_html: { class: "border rounded p-2 w-full" } %>
       </div>
     </div>
 
     <!-- Detalles de Productos -->
     <div class="mb-4">
-      <h2 class="text-2xl font-bold mb-4">Detalles de Productos</h2>
+      <h2 class="text-2xl font-bold mb-4">Product Details</h2>
 
       <div style="display: inline-block; margin-right: 15px;">
         <label style="display: inline-block; margin-right: 5px;">Category</label>
@@ -71,7 +71,7 @@
                 data-action="change->purchases-form#filterProducts"
                 class="border border-gray-300 p-1.5 rounded-sm"
                 style="width: 200px;">
-          <option value="">Seleccionar categoría</option>
+          <option value="">Select category</option>
           <% Product.distinct.pluck(:category).each do |category| %>
             <option value="<%= category %>"><%= category %></option>
           <% end %>
@@ -84,7 +84,7 @@
                 data-action="change->purchases-form#updatePrice"
                 class="border border-gray-300 p-1.5 rounded-sm"
                 style="width: 200px;">
-          <option value="">Seleccionar producto</option>
+          <option value="">Select product</option>
           <% @products.each do |product| %>
             <option value="<%= product.id %>"
                     data-category="<%= product.category %>"
@@ -120,22 +120,22 @@
               class="btn btn-sm btn-success rounded"
               style="width: 200px;"
               data-action="click->purchases-form#addProduct">
-        Agregar Producto
+        Add Product
       </button>
     </div>
 
     <!-- Título de Resumen -->
-    <h2 class="text-xl font-bold mb-4">Resumen de Compra</h2>
+    <h2 class="text-xl font-bold mb-4">Purchase Summary</h2>
 
     <!-- Tabla con el formato correcto -->
     <table class="w-full table table-hover">
       <thead>
         <tr class="border-b">
-          <th class="text-left py-3 px-6">Producto</th>
-          <th class="text-right py-3 px-6">Precio</th>
-          <th class="text-right py-3 px-6">Cantidad</th>
+          <th class="text-left py-3 px-6">Product</th>
+          <th class="text-right py-3 px-6">Price</th>
+          <th class="text-right py-3 px-6">Quantity</th>
           <th class="text-right py-3 px-6">Total</th>
-          <th class="text-center py-3 px-6" style="min-width: 120px;">Acciones</th>
+          <th class="text-center py-3 px-6" style="min-width: 120px;">Actions</th>
         </tr>
       </thead>
       <tbody data-purchases-form-target="productsList">
@@ -176,12 +176,12 @@
 
     <!-- Botones -->
     <div class="mt-6">
+      <%= link_to "Cancel", purchases_path, class: "btn btn-sm btn-secondary rounded" %>
       <% if @purchase.new_record? %>
         <%= f.button :submit, "Create Purchase", class: "btn btn-sm btn-primary me-2 rounded" %>
       <% else %>
         <%= f.button :submit, "Update", class: "btn btn-sm btn-primary me-2 rounded" %>
       <% end %>
-      <%= link_to "Continue", purchases_path, class: "btn btn-sm btn-secondary rounded" %>
     </div>
   <% end %>
 </div>
