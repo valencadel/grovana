@@ -1,0 +1,72 @@
+<div class="max-w-2xl mx-auto">
+  <div class="bg-white shadow sm:rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+      <h1 class="text-lg font-medium leading-6 text-gray-900 mb-6"><%= title %></h1>
+
+      <%= simple_form_for @supplier, 
+          html: {
+            class: "mt-5",
+            data: {
+              controller: 'alert',
+              action: 'submit->alert#initSweetalert',
+              'alert-icon-value': 'warning',
+              'alert-title-value': '¿Estás seguro?',
+              'alert-html-value': submit_message,
+              'alert-confirm-button-text-value': '¡Sí, Todo bien!',
+              'alert-show-cancel-button-value': 'true',
+              'alert-cancel-button-text-value': 'Cancelar'
+            }
+          } do |f| %>
+        
+        <div class="space-y-6">
+          <%= f.input :company_name,
+              label: "Nombre de la empresa",
+              placeholder: "Nombre de la empresa",
+              wrapper_html: { class: "grid grid-cols-1 gap-2" },
+              input_html: { class: "input-field w-full" },
+              label_html: { class: "block text-sm font-medium text-gray-700" } %>
+
+          <%= f.input :contact_name,
+              label: "Nombre de contacto",
+              placeholder: "Nombre de contacto",
+              wrapper_html: { class: "grid grid-cols-1 gap-2" },
+              input_html: { class: "input-field w-full" },
+              label_html: { class: "block text-sm font-medium text-gray-700" } %>
+
+          <%= f.input :email,
+              label: "Email",
+              placeholder: "Email",
+              wrapper_html: { class: "grid grid-cols-1 gap-2" },
+              input_html: { class: "input-field w-full" },
+              label_html: { class: "block text-sm font-medium text-gray-700" } %>
+
+          <%= f.input :phone,
+              label: "Teléfono",
+              placeholder: "Teléfono",
+              wrapper_html: { class: "grid grid-cols-1 gap-2" },
+              input_html: { class: "input-field w-full" },
+              label_html: { class: "block text-sm font-medium text-gray-700" } %>
+
+          <%= f.input :address,
+              label: "Dirección",
+              placeholder: "Dirección",
+              wrapper_html: { class: "grid grid-cols-1 gap-2" },
+              input_html: { class: "input-field w-full" },
+              label_html: { class: "block text-sm font-medium text-gray-700" } %>
+
+          <%= f.input :tax_id,
+              label: "CUIT",
+              placeholder: "CUIT",
+              wrapper_html: { class: "grid grid-cols-1 gap-2" },
+              input_html: { class: "input-field w-full" },
+              label_html: { class: "block text-sm font-medium text-gray-700" } %>
+
+          <div class="flex justify-end gap-3">
+            <%= link_to "Cancelar", suppliers_path, class: "btn btn-secondary" %>
+            <%= f.button :submit, submit_text, class: "btn btn-primary" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div> 

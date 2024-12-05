@@ -1,70 +1,8 @@
 <%= turbo_frame_tag :product do %>
   <div class="content">
-    <h1 class="text-2xl font-bold mb-4">Editar Producto</h1>
-
-    <%= simple_form_for @product do |f| %>
-      <%# Mostrar errores si existen %>
-      <% if @product.errors.any? %>
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          <h2><%= pluralize(@product.errors.count, "error") %> impidieron guardar este producto:</h2>
-          <ul class="list-disc list-inside">
-            <% @product.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-
-      <%= f.input :name,
-                  required: true,
-                  input_html: { minlength: 1 },
-                  error: true %>
-
-      <%= f.input :sku,
-                  required: true,
-                  input_html: { minlength: 1 },
-                  error: true %>
-
-      <%= f.input :description %>
-
-      <%= f.input :category %>
-
-      <%= f.input :stock,
-                  required: true,
-                  input_html: {
-                    type: 'number',
-                    min: 1,
-                    step: 1,
-                    required: true
-                  },
-                  error: true %>
-
-      <%= f.input :min_stock,
-                  required: true,
-                  input_html: {
-                    type: 'number',
-                    min: 1,
-                    step: 1,
-                    required: true
-                  },
-                  error: true %>
-
-      <%= f.input :brand %>
-
-      <%= f.input :status,
-                  as: :boolean,
-                  input_html: {
-                    class: 'form-checkbox h-4 w-4 text-indigo-600'
-                  } %>
-
-      <div class="mt-4 space-x-2">
-        <%= f.submit 'Guardar',
-                    class: 'btn btn-sm btn-success rounded',
-                    data: { disable_with: 'Guardando...' } %>
-        <%= link_to 'Cancelar',
-                    products_path,
-                    class: 'btn btn-sm btn-secondary rounded' %>
-      </div>
-    <% end %>
+    <%= render 'form', 
+        title: 'Editar Producto',
+        submit_text: 'Actualizar Producto',
+        submit_message: 'Actualizar producto.' %>
   </div>
 <% end %>
