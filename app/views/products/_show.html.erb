@@ -1,14 +1,49 @@
 <div class="content">
-    <h1><%= @product.name %></h1>
-
-    <p><strong>SKU:</strong> <%= @product.sku %></p>
-    <p><strong>Descripción:</strong> <%= @product.description %></p>
-    <p><strong>Categoría:</strong> <%= @product.category %></p>
-    <p><strong>Stock:</strong> <%= @product.stock %></p>
-    <p><strong>Stock Mínimo:</strong> <%= @product.min_stock %></p>
-    <p><strong>Marca:</strong> <%= @product.brand %></p>
-    <p><strong>Estado:</strong> <%= @product.status ? 'Activo' : 'Inactivo' %></p>
-
-    <%= link_to 'Editar', edit_product_path(@product), class: 'btn btn-sm btn-warning rounded' if policy(@product).edit? %>
-    <%= link_to 'Volver', products_path, class: 'btn btn-sm btn-secondary rounded' %>
+  <div class="card">
+    <div class="card-header">
+      <h2>Detalles del Producto</h2>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>Nombre:</strong> <%= @product.name %></p>
+          <p><strong>SKU:</strong> <%= @product.sku %></p>
+          <p><strong>Descripción:</strong> <%= @product.description %></p>
+          <p><strong>Categoría:</strong> <%= @product.category %></p>
+          <p><strong>Stock:</strong> 
+            <%= @product.stock %>
+            <small class="text-muted">(Mín: <%= @product.min_stock %>)</small>
+            <% case @product.stock_status %>
+            <% when 'normal' %>
+              <span class="badge bg-success text-white rounded-pill ml-2">
+                <i class="fas fa-check"></i> Normal
+              </span>
+            <% when 'warning' %>
+              <span class="badge bg-warning text-dark rounded-pill ml-2">
+                <i class="fas fa-exclamation"></i> Stock Bajo
+              </span>
+            <% when 'danger' %>
+              <span class="badge bg-danger text-white rounded-pill ml-2">
+                <i class="fas fa-exclamation-triangle"></i> Sin Stock
+              </span>
+            <% end %>
+          </p>
+          <p><strong>Marca:</strong> <%= @product.brand %></p>
+          <p><strong>Estado:</strong> 
+            <% if @product.status %>
+              <span class="badge bg-success text-white">Activo</span>
+            <% else %>
+              <span class="badge bg-danger text-white">Inactivo</span>
+            <% end %>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <% if policy(@product).edit? %>
+        <%= link_to 'Editar', edit_product_path(@product), class: 'btn btn-sm btn-warning rounded' %>
+      <% end %>
+      <%= link_to 'Volver', products_path, class: 'btn btn-sm btn-secondary rounded' %>
+    </div>
+  </div>
 </div>

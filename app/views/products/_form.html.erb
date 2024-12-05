@@ -1,0 +1,104 @@
+<div class="max-w-2xl mx-auto">
+  <div class="bg-white shadow sm:rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+      <h1 class="text-lg font-medium leading-6 text-gray-900 mb-6"><%= title %></h1>
+
+      <%= simple_form_for @product, 
+          html: {
+            class: "mt-5",
+            data: {
+              controller: 'alert',
+              action: 'submit->alert#initSweetalert',
+              'alert-icon-value': 'warning',
+              'alert-title-value': '¿Estás seguro?',
+              'alert-html-value': submit_message,
+              'alert-confirm-button-text-value': '¡Sí, Todo bien!',
+              'alert-show-cancel-button-value': 'true',
+              'alert-cancel-button-text-value': 'Cancelar'
+            }
+          } do |f| %>
+        
+        <div class="space-y-6">
+          <%= f.input :name,
+              required: true,
+              label: "Nombre",
+              placeholder: "Ejemplo: Producto A",
+              wrapper_html: { class: "grid grid-cols-1 gap-2" },
+              input_html: { class: "input-field w-full", minlength: 1 },
+              label_html: { class: "block text-sm font-medium text-gray-700" },
+              error: true %>
+
+          <%= f.input :sku,
+              required: true,
+              label: "SKU",
+              placeholder: "Ejemplo: SKU123",
+              wrapper_html: { class: "grid grid-cols-1 gap-2" },
+              input_html: { class: "input-field w-full", minlength: 1 },
+              label_html: { class: "block text-sm font-medium text-gray-700" },
+              error: true %>
+
+          <%= f.input :description,
+              label: "Descripción",
+              placeholder: "Ejemplo: Producto A de la marca XYZ de color rojo",
+              wrapper_html: { class: "grid grid-cols-1 gap-2" },
+              input_html: { class: "input-field w-full" },
+              label_html: { class: "block text-sm font-medium text-gray-700" } %>
+
+          <%= f.input :category,
+              label: "Categoría",
+              placeholder: "Ejemplo: Computadoras",
+              wrapper_html: { class: "grid grid-cols-1 gap-2" },
+              input_html: { class: "input-field w-full" },
+              label_html: { class: "block text-sm font-medium text-gray-700" } %>
+
+          <%= f.input :stock,
+              required: true,
+              label: "Stock",
+              wrapper_html: { class: "grid grid-cols-1 gap-2" },
+              input_html: { 
+                class: "input-field w-full",
+                type: 'number',
+                min: 1,
+                step: 1,
+                value: @product.stock || 1
+              },
+              label_html: { class: "block text-sm font-medium text-gray-700" },
+              error: true %>
+
+          <%= f.input :min_stock,
+              required: true,
+              label: "Stock Mínimo",
+              wrapper_html: { class: "grid grid-cols-1 gap-2" },
+              input_html: { 
+                class: "input-field w-full",
+                type: 'number',
+                min: 1,
+                step: 1,
+                value: @product.min_stock || 1
+              },
+              label_html: { class: "block text-sm font-medium text-gray-700" },
+              error: true %>
+
+          <%= f.input :brand,
+              label: "Marca",
+              placeholder: "Marca del producto",
+              wrapper_html: { class: "grid grid-cols-1 gap-2" },
+              input_html: { class: "input-field w-full" },
+              label_html: { class: "block text-sm font-medium text-gray-700" } %>
+
+          <%= f.input :status,
+              as: :boolean,
+              label: "Activo",
+              wrapper_html: { class: "grid grid-cols-1 gap-2" },
+              input_html: { class: "form-checkbox h-4 w-4 text-indigo-600" },
+              label_html: { class: "block text-sm font-medium text-gray-700" } %>
+
+          <div class="flex justify-end gap-3">
+            <%= link_to "Cancelar", products_path, class: "btn btn-secondary" %>
+            <%= f.button :submit, submit_text, class: "btn btn-primary" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div> 

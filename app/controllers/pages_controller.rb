@@ -184,54 +184,106 @@ class PagesController < ApplicationController
           { text: gemini_prompt },
           { inline_data: {
             mime_type: 'image/jpeg',
-            data: Base64.strict_encode64(File.read('factura_1.jpg'))
+            data: Base64.strict_encode64(File.read('factura_4.jpg'))
           } }
         ] }
       ] }
     )
 
-    # Extraer y limpiar la respuesta
     response_text = result.flat_map do |entry|
       entry["candidates"].flat_map do |candidate|
         candidate["content"]["parts"].map { |part| part["text"] }
       end
     end.join
 
-    # Limpiar el texto de marcadores JSON y otros caracteres no deseados
     cleaned_text = response_text.gsub(/```json\s*|\s*```/, '').strip
 
     begin
       @content = JSON.parse(cleaned_text)
+      products_to_process = []
+      products_created = 0
+      products_updated = 0
 
-      # Crear productos a partir de la respuesta
       @content["products"].each do |product_data|
-        product = Product.new(
-          sku: sanitize_sku(product_data["SKU"]),
-          name: product_data["name"].presence || "Producto sin nombre",
-          description: product_data["description"].presence || "Sin descripción",
-          category: product_data["category"].presence || "Sin categoría",
-          brand: product_data["brand"].presence || "Sin marca",
-          price: product_data["price"].to_f,
-          stock: product_data["quantity"].to_i || 0,
-          min_stock: calculate_min_stock(product_data["quantity"].to_i),
-          status: true,
-          company_id: current_company.id
-        )
+        sanitized_sku = sanitize_sku(product_data["SKU"])
+        product = Product.find_by(sku: sanitized_sku, company_id: current_company.id)
+        
+        products_to_process << {
+          product: product,
+          data: product_data,
+          action: product ? :update : :create
+        }
+      end
 
-        if product.save
-          Rails.logger.info "Producto creado exitosamente: #{product.name}"
+      products_to_process.each do |item|
+        if item[:action] == :update
+          new_stock = item[:product].stock + item[:data]["quantity"].to_i
+          if item[:product].update(stock: new_stock)
+            products_updated += 1
+            Rails.logger.info "Producto actualizado: #{item[:product].name}, Nuevo stock: #{new_stock}"
+          else
+            raise StandardError.new("Error actualizando producto: #{item[:product].errors.full_messages.join(', ')}")
+          end
         else
-          Rails.logger.error "Error al crear producto: #{product.errors.full_messages.join(', ')}"
-          flash.now[:alert] = "Error al crear producto: #{product.errors.full_messages.join(', ')}"
-          return render :doc_gemini, status: :unprocessable_entity
+          new_product = Product.new(
+            sku: sanitize_sku(item[:data]["SKU"]),
+            name: item[:data]["name"].presence || "Producto sin nombre",
+            description: item[:data]["description"].presence || "Sin descripción",
+            category: item[:data]["category"].presence || "Sin categoría",
+            brand: item[:data]["brand"].presence || "Sin marca",
+            price: item[:data]["price"].to_f,
+            stock: item[:data]["quantity"].to_i || 0,
+            min_stock: calculate_min_stock(item[:data]["quantity"].to_i),
+            status: true,
+            company_id: current_company.id
+          )
+
+          if new_product.save
+            products_created += 1
+            item[:product] = new_product
+            Rails.logger.info "Producto creado: #{new_product.name}"
+          else
+            raise StandardError.new("Error creando producto: #{new_product.errors.full_messages.join(', ')}")
+          end
         end
       end
 
-      flash.now[:notice] = "Productos importados exitosamente"
-      render :doc_gemini
+      supplier = Supplier.find_or_create_by!(
+        company_name: @content["sellerName"],
+        company_id: current_company.id
+      ) do |s|
+        s.contact_name = "Pendiente"
+        s.email = "pendiente@ejemplo.com"
+        s.phone = "1181539563"
+        s.address = "Pendiente 1234"
+        s.tax_id = "1234567890"
+      end
+
+      purchase = Purchase.new(
+        order_date: Date.parse(@content["purchaseDate"]),
+        expected_delivery_date: Date.parse(@content["deliveryDate"]),
+        supplier_id: supplier.id,
+        company_id: current_company.id,
+        total_price: @content["totalPaid"].to_f
+      )
+
+      products_to_process.each do |item|
+        purchase.purchase_details.build(
+          product_id: item[:product].id,
+          quantity: item[:data]["quantity"].to_i,
+          unit_price: item[:data]["price"].to_f
+        )
+      end
+
+      if purchase.save
+        redirect_to purchase_path(purchase), 
+                    notice: "Proceso completado: #{products_created} productos creados, #{products_updated} productos actualizados"
+      else
+        raise StandardError.new("Error al crear la compra: #{purchase.errors.full_messages.join(', ')}")
+      end
+
     rescue JSON::ParserError => e
       Rails.logger.error "Error parseando JSON: #{e.message}"
-      Rails.logger.error "Texto recibido: #{cleaned_text}"
       flash.now[:alert] = "Error al procesar la respuesta: formato inválido"
       render :doc_gemini, status: :unprocessable_entity
     rescue StandardError => e
