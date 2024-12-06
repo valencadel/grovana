@@ -6,5 +6,5 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   validates :first_name, :last_name, presence: true
-  validates :phone, format: { with: /\A[0-9]+\z/, message: "solo permite números" }, allow_blank: true
+  validates :phone, format: { with: /\A[0-9]+\z/, message: "only allows numbers" }, allow_blank: true
 end

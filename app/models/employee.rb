@@ -10,8 +10,8 @@ class Employee < ApplicationRecord
   VALID_ROLES = %w[Manager Employee].freeze
 
   validates :first_name, :last_name, presence: true
-  validates :status, inclusion: { in: VALID_STATUSES, message: "%{value} no es un estado válido" }
-  validates :role, inclusion: { in: VALID_ROLES, message: "%{value} no es un rol válido" }
+  validates :status, inclusion: { in: VALID_STATUSES, message: "%{value} is not a valid status" }
+  validates :role, inclusion: { in: VALID_ROLES, message: "%{value} is not a valid role" }
   validates :email, uniqueness: { scope: :company_id }
 
   # Status y role por defecto
