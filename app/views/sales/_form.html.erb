@@ -6,11 +6,11 @@
     action: 'submit->alert#initSweetalert',
     # turbo: 'false',
     'alert-icon-value' => 'warning',
-    'alert-title-value' => '¿Estás seguro?',
-    'alert-html-value' => 'Crear nueva venta.',
-    'alert-confirm-button-text-value' => '¡Sí, Todo bien!',
+    'alert-title-value' => 'Are you sure?',
+    'alert-html-value' => 'Create a new sale.',
+    'alert-confirm-button-text-value' => 'Yes, do it!',
     'alert-show-cancel-button-value' => 'true',
-    'alert-cancel-button-text-value' => 'Cancelar'
+    'alert-cancel-button-text-value' => 'Cancel'
   }
   } do |f| %>
     <!-- Campos básicos -->
@@ -37,11 +37,11 @@
         <%= f.input :payment_method,
                     label: 'Payment method *',
                     collection: [
-                      ['Efectivo', 'Efectivo'],
-                      ['Tarjeta de Crédito', 'tarjeta_credito'],
-                      ['Transferencia', 'transferencia']
+                      ['Cash', 'cash'],
+                      ['Credit Card', 'credit_card'],
+                      ['Transfer', 'transfer']
                     ],
-                    include_blank: 'Seleccionar método de pago',
+                    include_blank: 'Select payment method',
                     input_html: { class: "border rounded p-2 w-full" } %>
       </div>
 
@@ -51,14 +51,14 @@
                          collection: @customers,
                          label_method: :name,
                          value_method: :id,
-                         include_blank: 'Seleccionar cliente',
+                         include_blank: 'Select customer',
                          input_html: { class: "border rounded p-2 w-full" } %>
       </div>
     </div>
 
     <!-- Detalles de Productos -->
     <div class="mb-4">
-      <h2 class="text-2xl font-bold mb-4">Detalles de Productos</h2>
+      <h2 class="text-2xl font-bold mb-4">Product Details</h2>
 
       <div style="display: inline-block; margin-right: 15px;">
         <label style="display: inline-block; margin-right: 5px;">Category</label>
@@ -66,7 +66,7 @@
                 data-action="change->sales-form#filterProducts"
                 class="border border-gray-300 p-1.5 rounded-sm"
                 style="width: 200px;">
-          <option value="">Seleccionar categoría</option>
+          <option value="">Select category</option>
           <% Product.distinct.pluck(:category).each do |category| %>
             <option value="<%= category %>"><%= category %></option>
           <% end %>
@@ -78,7 +78,7 @@
         <select data-sales-form-target="productSelect"
                 class="border border-gray-300 p-1.5 rounded-sm"
                 style="width: 200px;">
-          <option value="">Seleccionar producto</option>
+          <option value="">Select product</option>
           <% @products.each do |product| %>
             <option value="<%= product.id %>"
                     data-category="<%= product.category %>"
@@ -110,7 +110,7 @@
       </div>
 
       <div style="display: inline-block; margin-right: 15px;">
-        <label style="display: inline-block; margin-right: 5px;">Stock disponible</label>
+        <label style="display: inline-block; margin-right: 5px;">Available stock</label>
         <input type="text"
                readonly
                class="border border-gray-300 p-1.5 rounded-sm bg-gray-50"
@@ -124,23 +124,23 @@
               class="btn btn-sm btn-success rounded"
               style="width: 200px;"
               data-action="click->sales-form#addProduct">
-        Agregar Producto
+        Add Product
       </button>
     </div>
 
     <!-- Título de Resumen -->
-    <h2 class="text-xl font-bold mb-4">Resumen de Venta</h2>
+    <h2 class="text-xl font-bold mb-4">Sale Summary</h2>
 
     <!-- Tabla con más espaciado -->
     <table class="w-full table table-hover">
       <thead>
         <tr class="border-b">
-          <th class="text-left py-3 px-6">Producto</th>
-          <th class="text-right py-3 px-6">Precio</th>
-          <th class="text-right py-3 px-6">Cantidad</th>
+          <th class="text-left py-3 px-6">Product</th>
+          <th class="text-right py-3 px-6">Price</th>
+          <th class="text-right py-3 px-6">Quantity</th>
           <th class="text-right py-3 px-6">Stock</th>
           <th class="text-right py-3 px-6">Total</th>
-          <th class="text-center py-3 px-6" style="min-width: 120px;">Acciones</th>
+          <th class="text-center py-3 px-6" style="min-width: 120px;">Actions</th>
         </tr>
       </thead>
       <tbody data-sales-form-target="productsList">
@@ -180,8 +180,12 @@
 
     <!-- Botones -->
     <div class="mt-6">
-      <%= f.button :submit, "Create Sale", class: "btn btn-sm btn-primary me-2 rounded" %>
-      <%= link_to "Continue", sales_path, class: "btn btn-sm btn-secondary rounded" %>
+      <%= link_to "Cancel", sales_path, class: "btn btn-sm btn-secondary rounded" %>
+      <% if @sale.new_record? %>
+        <%= f.button :submit, "Create Sale", class: "btn btn-sm btn-primary me-2 rounded" %>
+      <% else %>
+        <%= f.button :submit, "Update Sale", class: "btn btn-sm btn-primary me-2 rounded" %>
+      <% end %>
     </div>
   <% end %>
 </div>

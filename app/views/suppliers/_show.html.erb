@@ -1,26 +1,26 @@
 <div class="content">
   <div class="card">
     <div class="card-header">
-      <h2>Detalles del Proveedor</h2>
+      <h2>Supplier Details</h2>
     </div>
     <div class="card-body">
       <div class="row">
         <div class="col-md-6">
-          <p><strong>Nombre de la empresa:</strong> <%= @supplier.company_name %></p>
-          <p><strong>Nombre de contacto:</strong> <%= @supplier.contact_name %></p>
+          <p><strong>Company Name:</strong> <%= @supplier.company_name %></p>
+          <p><strong>Contact Name:</strong> <%= @supplier.contact_name %></p>
           <p><strong>Email:</strong> <%= @supplier.email %></p>
-          <p><strong>Teléfono:</strong> <%= @supplier.phone %></p>
-          <p><strong>Dirección:</strong> <%= @supplier.address %></p>
-          <p><strong>CUIT:</strong> <%= @supplier.tax_id %></p>
+          <p><strong>Phone:</strong> <%= @supplier.phone %></p>
+          <p><strong>Address:</strong> <%= @supplier.address %></p>
+          <p><strong>Tax ID:</strong> <%= @supplier.tax_id %></p>
         </div>
       </div>
     </div>
     <div class="card-footer">
       <%= link_to edit_supplier_path(@supplier), class: "btn btn-sm btn-warning rounded" do %>
-        <i class="fas fa-edit mr-2"></i>Editar
+        <i class="fas fa-edit mr-2"></i>Edit
       <% end %>
       <%= link_to suppliers_path, class: "btn btn-sm btn-secondary rounded" do %>
-        <i class="fas fa-arrow-left mr-2"></i>Volver
+        <i class="fas fa-arrow-left mr-2"></i>Back to Suppliers
       <% end %>
     </div>
   </div>

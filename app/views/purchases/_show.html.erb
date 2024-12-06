@@ -1,25 +1,25 @@
   <div class="content">
     <div class="card">
       <div class="card-header">
-        <h2>Detalles de la Compra</h2>
+        <h2>Purchase Details</h2>
       </div>
       <div class="card-body">
         <div class="row">
           <div class="col-md-6">
-            <p><strong>Fecha de Orden:</strong> <%= @purchase.order_date %></p>
-            <p><strong>Fecha de Entrega Esperada:</strong> <%= @purchase.expected_delivery_date %></p>
-            <p><strong>Precio Total:</strong> <%= number_to_currency(@purchase.total_price) %></p>
-            <p><strong>Proveedor:</strong> <%= @purchase.supplier.company_name %></p>
+            <p><strong>Order Date:</strong> <%= @purchase.order_date %></p>
+            <p><strong>Expected Delivery Date:</strong> <%= @purchase.expected_delivery_date %></p>
+            <p><strong>Total Price:</strong> <%= number_to_currency(@purchase.total_price) %></p>
+            <p><strong>Supplier:</strong> <%= @purchase.supplier.company_name %></p>
           </div>
         </div>
 
-        <h3 class="mt-4">Detalles de Productos</h3>
+        <h3 class="mt-4">Product Details</h3>
         <table class="table">
           <thead>
             <tr>
-              <th>Producto</th>
-              <th>Cantidad</th>
-              <th>Precio Unitario</th>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Unit Price</th>
               <th>Subtotal</th>
             </tr>
           </thead>
@@ -36,8 +36,12 @@
         </table>
       </div>
       <div class="card-footer">
-        <%= link_to "Editar", edit_purchase_path(@purchase), class: "btn btn-warning btn-sm rounded" %>
-        <%= link_to "Continuar", purchases_path, class: "btn btn-secondary btn-sm rounded" %>
+        <%= link_to edit_purchase_path(@purchase), class: "btn btn-sm btn-warning rounded" do %>
+          <i class="fas fa-edit mr-2"></i>Edit
+        <% end %>
+        <%= link_to purchases_path, class: "btn btn-sm btn-secondary rounded" do %>
+          <i class="fas fa-arrow-left mr-2"></i>Back to Purchases
+        <% end %>
       </div>
     </div>
   </div>

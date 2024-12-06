@@ -4,26 +4,36 @@
     action: 'submit->alert#initSweetalert',
     # turbo: 'false',
     'alert-icon-value' => 'warning',
-    'alert-title-value' => '¿Estás seguro?',
-    'alert-html-value' => 'Agregar nuevo cliente.',
-    'alert-confirm-button-text-value' => '¡Sí, Todo bien!',
+    'alert-title-value' => 'Are you sure?',
+    'alert-html-value' => 'Add new customer.',
+    'alert-confirm-button-text-value' => 'Yes, do it!',
     'alert-show-cancel-button-value' => 'true',
-    'alert-cancel-button-text-value' => 'Cancelar'
+    'alert-cancel-button-text-value' => 'Cancel'
   }
   } do |f| %>
   <div class="row">
-    <div class="col-md-6">
-      <%= f.input :first_name %>
-      <%= f.input :last_name %>
-      <%= f.input :email %>
-      <%= f.input :phone %>
-      <%= f.input :address %>
-      <%= f.input :tax_id %>
+    <div class="col-md-12">
+      <%= f.input :first_name,
+          placeholder: "Enter first name" %>
+      <%= f.input :last_name,
+          placeholder: "Enter last name" %>
+      <%= f.input :email,
+          placeholder: "example@email.com" %>
+      <%= f.input :phone,
+          placeholder: "1234567890" %>
+      <%= f.input :address,
+          placeholder: "Enter full address" %>
+      <%= f.input :tax_id,
+          placeholder: "Enter tax ID number" %>
     </div>
   </div>
 
   <div class="form-actions mt-3">
-    <%= f.button :submit, class: 'btn btn-sm btn-primary rounded' %>
-    <%= link_to 'Cancelar', customers_path, class: 'btn btn-sm btn-secondary rounded' %>
+    <%= link_to 'Cancel', customers_path, class: 'btn btn-sm btn-secondary rounded' %>
+    <% if @customer.new_record? %>
+      <%= f.button :submit, "Create Customer", class: 'btn btn-sm btn-primary rounded' %>
+    <% else %>
+      <%= f.button :submit, "Update Customer", class: 'btn btn-sm btn-primary rounded' %>
+    <% end %>
   </div>
 <% end %>
