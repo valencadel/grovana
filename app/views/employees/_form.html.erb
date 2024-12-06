@@ -2,13 +2,13 @@
   <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
     <%= f.input :first_name,
                 required: true,
-                label: 'Nombre',
+                label: 'First Name',
                 disabled: !current_user,
                 input_html: { class: 'form-input' } %>
 
     <%= f.input :last_name,
                 required: true,
-                label: 'Apellido',
+                label: 'Last Name',
                 disabled: !current_user,
                 input_html: { class: 'form-input' } %>
 
@@ -19,15 +19,15 @@
 
     <%= f.input :role,
                 collection: ['Manager', 'Employee'],
-                label: 'Rol',
+                label: 'Role',
                 include_blank: false,
                 disabled: !current_user,
                 input_html: { class: 'form-select' } %>
 
     <%= f.input :status,
                 collection: Employee::VALID_STATUSES,
-                label: 'Estado',
-                label_method: ->(status) { status == 'active' ? 'Activo' : 'Inactivo' },
+                label: 'Status',
+                label_method: ->(status) { status == 'active' ? 'Active' : 'Inactive' },
                 include_blank: false,
                 disabled: !current_user,
                 input_html: { class: 'form-select' } %>

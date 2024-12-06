@@ -1,22 +1,26 @@
 <div class="content">
     <div class="card">
       <div class="card-header">
-        <h2>Detalles del Cliente</h2>
+        <h2>Customer Details</h2>
       </div>
       <div class="card-body">
         <div class="row">
           <div class="col-md-6">
-            <p><strong>Nombre:</strong> <%= "#{@customer.first_name} #{@customer.last_name}" %></p>
+            <p><strong>Name:</strong> <%= "#{@customer.first_name} #{@customer.last_name}" %></p>
             <p><strong>Email:</strong> <%= @customer.email %></p>
-            <p><strong>Teléfono:</strong> <%= @customer.phone %></p>
-            <p><strong>Dirección:</strong> <%= @customer.address %></p>
-            <p><strong>ID Fiscal:</strong> <%= @customer.tax_id %></p>
+            <p><strong>Phone:</strong> <%= @customer.phone %></p>
+            <p><strong>Address:</strong> <%= @customer.address %></p>
+            <p><strong>Tax ID:</strong> <%= @customer.tax_id %></p>
           </div>
         </div>
       </div>
       <div class="card-footer">
-        <%= link_to "Editar", edit_customer_path(@customer), class: "btn btn-sm btn-warning rounded" %>
-        <%= link_to "Volver", customers_path, class: "btn btn-sm btn-secondary rounded" %>
+        <%= link_to edit_customer_path(@customer), class: "btn btn-sm btn-warning rounded" do %>
+          <i class="fas fa-edit mr-2"></i>Edit
+        <% end %>
+        <%= link_to customers_path, class: "btn btn-sm btn-secondary rounded" do %>
+          <i class="fas fa-arrow-left mr-2"></i>Back to Customers
+        <% end %>
       </div>
     </div>
 </div>

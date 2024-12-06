@@ -1,18 +1,18 @@
 <div class="content">
   <div class="card">
     <div class="card-header">
-      <h2>Detalles del Producto</h2>
+      <h2>Product Details</h2>
     </div>
     <div class="card-body">
       <div class="row">
         <div class="col-md-6">
-          <p><strong>Nombre:</strong> <%= @product.name %></p>
+          <p><strong>Name:</strong> <%= @product.name %></p>
           <p><strong>SKU:</strong> <%= @product.sku %></p>
-          <p><strong>Descripción:</strong> <%= @product.description %></p>
-          <p><strong>Categoría:</strong> <%= @product.category %></p>
+          <p><strong>Description:</strong> <%= @product.description %></p>
+          <p><strong>Category:</strong> <%= @product.category %></p>
           <p><strong>Stock:</strong> 
             <%= @product.stock %>
-            <small class="text-muted">(Mín: <%= @product.min_stock %>)</small>
+            <small class="text-muted">(Min: <%= @product.min_stock %>)</small>
             <% case @product.stock_status %>
             <% when 'normal' %>
               <span class="badge bg-success text-white rounded-pill ml-2">
@@ -20,20 +20,20 @@
               </span>
             <% when 'warning' %>
               <span class="badge bg-warning text-dark rounded-pill ml-2">
-                <i class="fas fa-exclamation"></i> Stock Bajo
+                <i class="fas fa-exclamation"></i> Low Stock
               </span>
             <% when 'danger' %>
               <span class="badge bg-danger text-white rounded-pill ml-2">
-                <i class="fas fa-exclamation-triangle"></i> Sin Stock
+                <i class="fas fa-exclamation-triangle"></i> Out of Stock
               </span>
             <% end %>
           </p>
-          <p><strong>Marca:</strong> <%= @product.brand %></p>
-          <p><strong>Estado:</strong> 
+          <p><strong>Brand:</strong> <%= @product.brand %></p>
+          <p><strong>Status:</strong> 
             <% if @product.status %>
-              <span class="badge bg-success text-white">Activo</span>
+              <span class="badge bg-success text-white">Active</span>
             <% else %>
-              <span class="badge bg-danger text-white">Inactivo</span>
+              <span class="badge bg-danger text-white">Inactive</span>
             <% end %>
           </p>
         </div>
@@ -41,9 +41,13 @@
     </div>
     <div class="card-footer">
       <% if policy(@product).edit? %>
-        <%= link_to 'Editar', edit_product_path(@product), class: 'btn btn-sm btn-warning rounded' %>
+        <%= link_to edit_product_path(@product), class: 'btn btn-sm btn-warning rounded' do %>
+          <i class="fas fa-edit mr-2"></i>Edit
+        <% end %>
       <% end %>
-      <%= link_to 'Volver', products_path, class: 'btn btn-sm btn-secondary rounded' %>
+      <%= link_to products_path, class: 'btn btn-sm btn-secondary rounded' do %>
+        <i class="fas fa-arrow-left mr-2"></i>Back to Products
+      <% end %>
     </div>
   </div>
 </div>

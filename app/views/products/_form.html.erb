@@ -10,19 +10,19 @@
               controller: 'alert',
               action: 'submit->alert#initSweetalert',
               'alert-icon-value': 'warning',
-              'alert-title-value': '¿Estás seguro?',
+              'alert-title-value': 'Are you sure?',
               'alert-html-value': submit_message,
-              'alert-confirm-button-text-value': '¡Sí, Todo bien!',
+              'alert-confirm-button-text-value': 'Yes, do it!',
               'alert-show-cancel-button-value': 'true',
-              'alert-cancel-button-text-value': 'Cancelar'
+              'alert-cancel-button-text-value': 'Cancel'
             }
           } do |f| %>
         
         <div class="space-y-6">
           <%= f.input :name,
               required: true,
-              label: "Nombre",
-              placeholder: "Ejemplo: Producto A",
+              label: "Name",
+              placeholder: "Example: Product A",
               wrapper_html: { class: "grid grid-cols-1 gap-2" },
               input_html: { class: "input-field w-full", minlength: 1 },
               label_html: { class: "block text-sm font-medium text-gray-700" },
@@ -31,22 +31,22 @@
           <%= f.input :sku,
               required: true,
               label: "SKU",
-              placeholder: "Ejemplo: SKU123",
+              placeholder: "Example: SKU123",
               wrapper_html: { class: "grid grid-cols-1 gap-2" },
               input_html: { class: "input-field w-full", minlength: 1 },
               label_html: { class: "block text-sm font-medium text-gray-700" },
               error: true %>
 
           <%= f.input :description,
-              label: "Descripción",
-              placeholder: "Ejemplo: Producto A de la marca XYZ de color rojo",
+              label: "Description",
+              placeholder: "Example: Product A of the brand XYZ in red",
               wrapper_html: { class: "grid grid-cols-1 gap-2" },
               input_html: { class: "input-field w-full" },
               label_html: { class: "block text-sm font-medium text-gray-700" } %>
 
           <%= f.input :category,
-              label: "Categoría",
-              placeholder: "Ejemplo: Computadoras",
+              label: "Category",
+              placeholder: "Example: Computers",
               wrapper_html: { class: "grid grid-cols-1 gap-2" },
               input_html: { class: "input-field w-full" },
               label_html: { class: "block text-sm font-medium text-gray-700" } %>
@@ -67,7 +67,7 @@
 
           <%= f.input :min_stock,
               required: true,
-              label: "Stock Mínimo",
+              label: "Minimum Stock",
               wrapper_html: { class: "grid grid-cols-1 gap-2" },
               input_html: { 
                 class: "input-field w-full",
@@ -80,21 +80,21 @@
               error: true %>
 
           <%= f.input :brand,
-              label: "Marca",
-              placeholder: "Marca del producto",
+              label: "Brand",
+              placeholder: "Product brand",
               wrapper_html: { class: "grid grid-cols-1 gap-2" },
               input_html: { class: "input-field w-full" },
               label_html: { class: "block text-sm font-medium text-gray-700" } %>
 
           <%= f.input :status,
               as: :boolean,
-              label: "Activo",
+              label: "Active",
               wrapper_html: { class: "grid grid-cols-1 gap-2" },
               input_html: { class: "form-checkbox h-4 w-4 text-indigo-600" },
               label_html: { class: "block text-sm font-medium text-gray-700" } %>
 
           <div class="flex justify-end gap-3">
-            <%= link_to "Cancelar", products_path, class: "btn btn-secondary" %>
+            <%= link_to "Cancel", products_path, class: "btn btn-secondary" %>
             <%= f.button :submit, submit_text, class: "btn btn-primary" %>
           </div>
         </div>
