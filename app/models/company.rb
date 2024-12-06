@@ -7,6 +7,7 @@ class Company < ApplicationRecord
   has_many :suppliers
   has_many :purchases
   has_many :uploads, dependent: :destroy
+  has_many :sales_uploads, dependent: :destroy
   validates :name, presence: true, uniqueness: true
   validates :name, length: { maximum: 100 }
 end
