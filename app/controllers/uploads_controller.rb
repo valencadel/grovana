@@ -1,6 +1,6 @@
 class UploadsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_upload, only: [:show, :destroy]
+  before_action :set_upload, only: [ :show, :destroy ]
 
   def index
     @uploads = current_company.uploads.order(created_at: :desc)
@@ -11,6 +11,9 @@ class UploadsController < ApplicationController
 
   def new
     @upload = current_company.uploads.build
+    respond_to do |format|
+      format.html { render partial: "form", locals: { upload: @upload } }
+    end
   end
 
   def create
@@ -30,7 +33,7 @@ class UploadsController < ApplicationController
 
   def destroy
     @upload.destroy
-    redirect_to uploads_path, notice: 'Imagen eliminada exitosamente.'
+    redirect_to uploads_path, notice: "Imagen eliminada exitosamente."
   end
 
   private
@@ -38,7 +41,7 @@ class UploadsController < ApplicationController
   def set_upload
     @upload = current_company.uploads.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to uploads_path, alert: 'Imagen no encontrada'
+    redirect_to uploads_path, alert: "Imagen no encontrada"
   end
 
   def current_company
