@@ -421,12 +421,12 @@
     </div>
 
     <!-- Floating Plus Button -->
-    <button type="button" class="floating-button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <button type="button" class="floating-button" data-bs-toggle="modal" data-bs-target="#actionGemini">
       <i class="fas fa-plus"></i>
     </button>
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="actionGemini" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -437,7 +437,7 @@
             <div class="container">
               <div class="row">
                 <div class="col-6 text-center">
-                  <a href="<%= new_upload_path %>" class="action-link">
+                  <a href="<%= new_upload_path %>" class="action-link" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#newUploadModal">
                     <div class="action-block">
                       <i class="fas fa-shopping-cart action-icon"></i>
                       <div class="action-title">New Purchase</div>
@@ -445,6 +445,7 @@
                   </a>
                 </div>
                 <div class="col-6 text-center">
+                  <a href="<%= new_purchase_path %>" class="action-link" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#newSalesModal">
                   <a href="<%= new_sales_upload_path %>" class="action-link">
                     <div class="action-block">
                       <i class="fas fa-file-invoice-dollar action-icon"></i>
@@ -452,21 +453,28 @@
                     </div>
                   </a>
                 </div>
-                <!-- Puedes quitar o comentar este bloque si ya no lo necesitas -->
-                <!--
-                <div class="col-6 text-center">
-                  <a href="<%= new_sales_upload_path %>" class="action-link">
-                    <div class="action-block">
-                      <i class="fas fa-file-invoice action-icon"></i>
-                      <div class="action-title">New Sales Invoice</div>
-                    </div>
-                  </a>
-                </div>
-                -->
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- New Upload Modal -->
+    <div class="modal fade" id="newUploadModal" tabindex="-1" aria-labelledby="newUploadModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="newUploadModalLabel">New Upload</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <%= turbo_frame_tag "new_upload_frame" do %>
+              <%= render 'uploads/form' %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
