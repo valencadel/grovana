@@ -21,6 +21,11 @@ class Product < ApplicationRecord
     update(stock: stock - quantity)
   end
 
+  # Método para actualizar el stock después de una compra
+  def update_stock_after_purchase(quantity)
+    update(stock: stock + quantity)
+  end
+
   def low_stock?
     stock <= min_stock
   end
