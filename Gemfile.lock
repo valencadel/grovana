@@ -179,7 +179,7 @@ GEM
       faraday-typhoeus (~> 1.1)
       googleauth (~> 1.8)
       typhoeus (~> 1.4, >= 1.4.1)
-    geocoder (1.8.3)
+    geocoder (1.8.4)
       base64 (>= 0.1.0)
       csv (>= 3.0.0)
     globalid (1.2.1)
