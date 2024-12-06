@@ -61,9 +61,13 @@
               input_html: { class: "input-field w-full" },
               label_html: { class: "block text-sm font-medium text-gray-700" } %>
 
-          <div class="flex justify-end gap-3">
+          <div class="mt-g">
             <%= link_to "Cancel", suppliers_path, class: "btn btn-secondary" %>
-            <%= f.button :submit, submit_text, class: "btn btn-primary" %>
+            <% if @supplier.new_record? %>
+              <%= f.button :submit, submit_text, class: "btn btn-primary" %>
+            <% else %>
+              <%= f.button :submit, submit_text, class: "btn btn-primary" %>
+            <% end %>
           </div>
         </div>
       <% end %>

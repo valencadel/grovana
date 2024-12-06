@@ -1,0 +1,31 @@
+<div class="content">
+  <div class="card">
+    <div class="card-header">
+      <h2>Employee Details</h2>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>Name:</strong> <%= @employee.full_name %></p>
+          <p><strong>Email:</strong> <%= @employee.email %></p>
+          <p><strong>Role:</strong> <%= @employee.role %></p>
+          <p><strong>Status:</strong>
+            <span class="badge <%= @employee.active? ? 'bg-success' : 'bg-danger' %> text-white">
+              <%= @employee.active? ? 'Active' : 'Inactive' %>
+            </span>
+          </p>
+          <p><strong>Company:</strong> <%= @employee.company.name %></p>
+          <p><strong>Registration Date:</strong> <%= @employee.created_at.strftime("%d/%m/%Y %H:%M") %></p>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <%= link_to edit_employee_path(@employee), class: "btn btn-sm btn-warning rounded" do %>
+        <i class="fas fa-edit mr-2"></i>Edit
+      <% end %>
+      <%= link_to employees_path, class: "btn btn-sm btn-secondary rounded" do %>
+        <i class="fas fa-arrow-left mr-2"></i>Back to Employees
+      <% end %>
+    </div>
+  </div>
+</div> 
