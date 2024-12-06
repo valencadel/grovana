@@ -2,29 +2,32 @@ import { Controller } from "@hotwired/stimulus"
 import { DirectUpload } from "@rails/activestorage"
 
 export default class extends Controller {
-  static targets = ["input", "dropZone", "initialContent", "preview", "placeholder"]
+  static targets = ["input", "dropZone", "initialContent", "preview", "placeholder", "submitButton"]
 
   connect() {
-    this.dropZone.addEventListener("dragover", this.handleDragOver.bind(this))
-    this.dropZone.addEventListener("dragleave", this.handleDragLeave.bind(this))
-    this.dropZone.addEventListener("drop", this.handleDrop.bind(this))
-    this.dropZone.addEventListener("click", () => this.inputTarget.click())
+    this.dropZoneTarget.addEventListener("dragover", this.handleDragOver.bind(this))
+    this.dropZoneTarget.addEventListener("dragleave", this.handleDragLeave.bind(this))
+    this.dropZoneTarget.addEventListener("drop", this.handleDrop.bind(this))
+    this.dropZoneTarget.addEventListener("click", () => this.inputTarget.click())
+    this.previewTarget.classList.add('hidden') // Ensure preview is hidden initially
+    this.placeholderTarget.classList.add('hidden') // Ensure placeholder is hidden initially
+    this.submitButtonTarget.classList.add('hidden') // Ensure submit button is hidden initially
   }
 
   handleDragOver(e) {
     e.preventDefault()
-    this.dropZone.classList.add("dragging")
+    this.dropZoneTarget.classList.add("dragging")
   }
 
   handleDragLeave(e) {
     e.preventDefault()
-    this.dropZone.classList.remove("dragging")
+    this.dropZoneTarget.classList.remove("dragging")
   }
 
   handleDrop(e) {
     e.preventDefault()
     e.stopPropagation()
-    this.dropZone.classList.remove("dragging")
+    this.dropZoneTarget.classList.remove("dragging")
     const file = e.dataTransfer.files[0]
     if (file) {
       this.inputTarget.files = e.dataTransfer.files
@@ -50,6 +53,8 @@ export default class extends Controller {
       previewImage.onload = () => {
         this.placeholderTarget.style.display = 'none'
         this.previewTarget.classList.remove('hidden')
+        this.dropZoneTarget.classList.add('hidden')
+        this.submitButtonTarget.classList.remove('hidden')
       }
     }
     reader.readAsDataURL(file)
@@ -68,9 +73,5 @@ export default class extends Controller {
         this.element.closest('form').appendChild(hiddenField)
       }
     })
-  }
-
-  get dropZone() {
-    return this.dropZoneTarget
   }
 }

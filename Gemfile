@@ -65,16 +65,13 @@ gem "font-awesome-sass", "~> 6.1"
 gem "simple_form", github: "heartcombo/simple_form"
 gem "sassc-rails"
 
-#gem "dotenv-rails"
+# gem "dotenv-rails"
 gem "cloudinary"
 gem "devise"
 
 gem "geocoder"
 gem "pg_search"
 
-gem "omniauth"
-gem "omniauth-google-oauth2"
-gem "omniauth-rails_csrf_protection"
 gem "kaminari"
 gem "bootstrap4-kaminari-views"
 
@@ -85,8 +82,8 @@ gem "axlsx_rails"
 gem "chartkick"
 gem "groupdate"
 gem "gemini-ai", "~> 4.2.0"
-gem 'dotenv-rails', groups: [:development, :test]
+gem "dotenv-rails", groups: [ :development, :test ]
 
 gem "active_storage_validations"
 
-gem 'activestorage-cloudinary-service'
+gem "activestorage-cloudinary-service"
