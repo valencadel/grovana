@@ -46,4 +46,5 @@ Rails.application.routes.draw do
   end
 
   resources :uploads
+  resources :sales_uploads
 end

@@ -446,12 +446,24 @@
                 </div>
                 <div class="col-6 text-center">
                   <a href="<%= new_purchase_path %>" class="action-link" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#newPurchaseModal">
+                  <a href="<%= new_sales_upload_path %>" class="action-link">
                     <div class="action-block">
-                      <i class="fas fa-cogs action-icon"></i>
+                      <i class="fas fa-file-invoice-dollar action-icon"></i>
                       <div class="action-title">New Sell</div>
                     </div>
                   </a>
                 </div>
+                <!-- Puedes quitar o comentar este bloque si ya no lo necesitas -->
+                <!--
+                <div class="col-6 text-center">
+                  <a href="<%= new_sales_upload_path %>" class="action-link">
+                    <div class="action-block">
+                      <i class="fas fa-file-invoice action-icon"></i>
+                      <div class="action-title">New Sales Invoice</div>
+                    </div>
+                  </a>
+                </div>
+                -->
               </div>
             </div>
           </div>

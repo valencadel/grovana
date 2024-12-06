@@ -1,24 +1,24 @@
   <div class="content">
     <div class="card">
       <div class="card-header">
-        <h2>Detalles de la Venta</h2>
+        <h2>Sale Details</h2>
       </div>
       <div class="card-body">
         <div class="row">
           <div class="col-md-6">
-            <p><strong>Fecha:</strong> <%= @sale.sale_date %></p>
-            <p><strong>Cliente:</strong> <%= "#{@sale.customer.first_name} #{@sale.customer.last_name}" %></p>
+            <p><strong>Date:</strong> <%= @sale.sale_date %></p>
+            <p><strong>Customer:</strong> <%= "#{@sale.customer.first_name} #{@sale.customer.last_name}" %></p>
             <p><strong>Total:</strong> <%= number_to_currency(@sale.total_price) %></p>
           </div>
         </div>
 
-        <h3 class="mt-4">Productos Vendidos</h3>
+        <h3 class="mt-4">Sold Products</h3>
         <table class="table">
           <thead>
             <tr>
-              <th>Producto</th>
-              <th>Cantidad</th>
-              <th>Precio Unitario</th>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Unit Price</th>
               <th>Subtotal</th>
             </tr>
           </thead>
@@ -35,8 +35,12 @@
         </table>
       </div>
       <div class="card-footer">
-        <%= link_to "Editar", edit_sale_path(@sale), class: "btn btn-sm btn-warning rounded" %>
-        <%= link_to "Continuar", sales_path, class: "btn btn-sm btn-secondary rounded" %>
+        <%= link_to edit_sale_path(@sale), class: "btn btn-sm btn-warning rounded" do %>
+          <i class="fas fa-edit mr-2"></i>Edit
+        <% end %>
+        <%= link_to sales_path, class: "btn btn-sm btn-secondary rounded" do %>
+          <i class="fas fa-arrow-left mr-2"></i>Back to Sales
+        <% end %>
       </div>
     </div>
   </div>

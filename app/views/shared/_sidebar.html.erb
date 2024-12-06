@@ -31,8 +31,35 @@
       <% end %>
     </li>
     <li class="nav-item">
-      <%= link_to uploads_path, class: "nav-link" do %>
-        <i class="fa-solid fa-file-invoice"></i> Invoices
+      <%= link_to uploads_path, class: "nav-link #{'active' if controller_name == 'uploads' && action_name == 'index'}" do %>
+        <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+          <i class="fas fa-file-invoice text-dark"></i>
+        </div>
+        <span class="nav-link-text ms-1">Purchase Invoices</span>
+      <% end %>
+    </li>
+    <li class="nav-item">
+      <%= link_to new_upload_path, class: "nav-link #{'active' if controller_name == 'uploads' && action_name == 'new'}" do %>
+        <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+          <i class="fas fa-upload text-dark"></i>
+        </div>
+        <span class="nav-link-text ms-1">Upload Purchase Invoice</span>
+      <% end %>
+    </li>
+    <li class="nav-item mt-3">
+      <%= link_to sales_uploads_path, class: "nav-link #{'active' if controller_name == 'sales_uploads' && action_name == 'index'}" do %>
+        <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+          <i class="fas fa-file-invoice-dollar text-dark"></i>
+        </div>
+        <span class="nav-link-text ms-1">Sales Invoices</span>
+      <% end %>
+    </li>
+    <li class="nav-item">
+      <%= link_to new_sales_upload_path, class: "nav-link #{'active' if controller_name == 'sales_uploads' && action_name == 'new'}" do %>
+        <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+          <i class="fas fa-upload text-dark"></i>
+        </div>
+        <span class="nav-link-text ms-1">Upload Sales Invoice</span>
       <% end %>
     </li>
     <% if user_signed_in? || (employee_signed_in? && current_employee.role == 'Manager') %>
@@ -45,12 +72,6 @@
     <li class="nav-item">
       <%= link_to (current_user ? profile_users_path : profile_employees_path), class: "nav-link" do %>
         <i class="fa-solid fa-user"></i> My profile
-      <% end %>
-    </li>
-    <li class="nav-item">
-      <%= link_to new_upload_path, class: "flex items-center" do  %>
-        <i class="fas fa-upload"></i>
-        <span>Upload Image</span>
       <% end %>
     </li>
   </ul>
