@@ -17,7 +17,7 @@ class Purchase < ApplicationRecord
   def expected_delivery_date_after_order_date
     return unless expected_delivery_date && order_date
     if expected_delivery_date < order_date
-      errors.add(:expected_delivery_date, "debe ser posterior a la fecha de pedido")
+      errors.add(:expected_delivery_date, "must be after the order date")
     end
   end
 end

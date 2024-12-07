@@ -13,7 +13,7 @@ class SaleDetail < ApplicationRecord
   def stock_availability
     return unless quantity_changed? && product
     if quantity > product.stock
-      errors.add(:quantity, "Excede el stock disponible (#{product.stock} disponible)")
+      errors.add(:quantity, "Exceeds the available stock (#{product.stock} available)")
     end
   end
 
