@@ -425,7 +425,7 @@
       <i class="fas fa-plus"></i>
     </button>
 
-    <!-- Modal -->
+    <!-- Modal principal de acciones -->
     <div class="modal fade" id="actionGemini" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -445,11 +445,10 @@
                   </a>
                 </div>
                 <div class="col-6 text-center">
-                  <a href="<%= new_purchase_path %>" class="action-link" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#newSalesModal">
-                  <a href="<%= new_sales_upload_path %>" class="action-link">
+                  <a href="<%= new_sales_upload_path %>" class="action-link" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#newSalesUploadModal">
                     <div class="action-block">
                       <i class="fas fa-file-invoice-dollar action-icon"></i>
-                      <div class="action-title">New Sell</div>
+                      <div class="action-title">New Sale</div>
                     </div>
                   </a>
                 </div>
@@ -460,17 +459,34 @@
       </div>
     </div>
 
-    <!-- New Upload Modal -->
+    <!-- Modal para Purchase Upload -->
     <div class="modal fade" id="newUploadModal" tabindex="-1" aria-labelledby="newUploadModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="newUploadModalLabel">New Upload</h5>
+            <h5 class="modal-title" id="newUploadModalLabel">New Purchase Invoice</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <%= turbo_frame_tag "new_upload_frame" do %>
-              <%= render 'uploads/form' %>
+              <%= render 'uploads/form', upload: Upload.new %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para Sales Upload -->
+    <div class="modal fade" id="newSalesUploadModal" tabindex="-1" aria-labelledby="newSalesUploadModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="newSalesUploadModalLabel">New Sales Invoice</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <%= turbo_frame_tag "new_sales_upload_frame" do %>
+              <%= render 'sales_uploads/form', sales_upload: SalesUpload.new %>
             <% end %>
           </div>
         </div>
