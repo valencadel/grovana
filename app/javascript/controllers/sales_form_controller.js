@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import Swal from 'sweetalert2'
 
 export default class extends Controller {
   static targets = [
@@ -34,7 +35,13 @@ export default class extends Controller {
     // Actualizar el total inicial
     this.updateTotal()
   }
-
+  showAlert(text) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: text,
+    })
+  }
   updateUnitPrice() {
     const selectedOption = this.productSelectTarget.selectedOptions[0]
     if (selectedOption && selectedOption.value !== "") {
@@ -61,7 +68,8 @@ export default class extends Controller {
     const selectedOption = productSelect.selectedOptions[0]
 
     if (!selectedOption || !selectedOption.value) {
-      alert("Por favor seleccione un producto")
+      console.log("Por favor seleccione un producto")
+      this.showAlert("Por favor seleccione un producto")
       return
     }
 
@@ -72,12 +80,14 @@ export default class extends Controller {
     const quantity = parseInt(quantityInput.value)
 
     if (isNaN(quantity) || quantity <= 0) {
-      alert("Por favor ingrese una cantidad válida")
+      console.log('Por favor ingrese una cantidad válida')
+      this.showAlert('Por favor ingrese una cantidad válida')
       return
     }
 
     if (quantity > stock) {
-      alert(`Stock insuficiente. Stock disponible: ${stock}`)
+      console.log('Stock insuficiente.')
+      this.showAlert(`Stock insuficiente. Stock disponible: ${stock}`)
       return
     }
 
