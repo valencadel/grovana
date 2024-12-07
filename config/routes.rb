@@ -20,6 +20,9 @@ Rails.application.routes.draw do
     member do
       get :price
     end
+    collection do
+      get :search
+    end
   end
 
   resources :suppliers, except: [ :destroy ]
