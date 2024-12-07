@@ -170,36 +170,10 @@ class PagesController < ApplicationController
   end
 
   def doc_gemini
-    client = Gemini.new(
-      credentials: {
-        service: "generative-language-api",
-        api_key: ENV["GEMINI_API_KEY"]
-      },
-      options: { model: "gemini-1.5-flash", server_sent_events: true }
-    )
-    
-    result = client.stream_generate_content(
-      { contents: [
-        { role: 'user', parts: [
-          { text: gemini_prompt },
-          { inline_data: {
-            mime_type: 'image/jpeg',
-            data: Base64.strict_encode64(File.read('factura_4.jpg'))
-          } }
-        ] }
-      ] }
-    )
-
-    response_text = result.flat_map do |entry|
-      entry["candidates"].flat_map do |candidate|
-        candidate["content"]["parts"].map { |part| part["text"] }
-      end
-    end.join
-
-    cleaned_text = response_text.gsub(/```json\s*|\s*```/, '').strip
-
+    @upload = Upload.find(params[:id])
+    # @upload = Upload.new
     begin
-      @content = JSON.parse(cleaned_text)
+      @content = @upload.gemini(gemini_prompt)
       products_to_process = []
       products_created = 0
       products_updated = 0
@@ -207,7 +181,7 @@ class PagesController < ApplicationController
       @content["products"].each do |product_data|
         sanitized_sku = sanitize_sku(product_data["SKU"])
         product = Product.find_by(sku: sanitized_sku, company_id: current_company.id)
-        
+
         products_to_process << {
           product: product,
           data: product_data,
@@ -276,7 +250,7 @@ class PagesController < ApplicationController
       end
 
       if purchase.save
-        redirect_to purchase_path(purchase), 
+        redirect_to purchase_path(purchase),
                     notice: "Proceso completado: #{products_created} productos creados, #{products_updated} productos actualizados"
       else
         raise StandardError.new("Error al crear la compra: #{purchase.errors.full_messages.join(', ')}")
@@ -383,7 +357,7 @@ class PagesController < ApplicationController
 
   def calculate_min_stock(quantity)
     return 1 if quantity.nil? || quantity <= 0
-    
+
     case quantity
     when 1..10
       1
@@ -398,10 +372,10 @@ class PagesController < ApplicationController
 
   def sanitize_sku(sku)
     return nil if sku.nil?
-    
+
     # Eliminar caracteres especiales y espacios
-    sanitized = sku.to_s.gsub(/[^\w\d]/, '')
-    
+    sanitized = sku.to_s.gsub(/[^\w\d]/, "")
+
     # Limitar longitud a 15 caracteres
     sanitized[0...15]
   end

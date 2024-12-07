@@ -1,5 +1,5 @@
-<%= form_with(model: @upload, local: true) do |f| %>
-  <div class="mx-auto" data-controller="upload">
+<%= form_with(model: @upload, url: uploads_path, local: true, data: { controller: "upload", upload_target: "form" }) do |f| %>
+  <div class="mx-auto">
     <!-- Drop Zone - Lado izquierdo -->
     <div>
       <div class="upload-zone relative rounded-lg border-2 border-dashed border-gray-300 w-100 flex justify-center py-8"
@@ -44,7 +44,7 @@
 
       <!-- Botón de subir -->
       <div class="d-flex justify-content-center mt-3">
-        <button type="submit" class="btn btn-primary rounded hidden" data-upload-target="submitButton">
+        <button type="button" class="btn btn-primary rounded hidden" data-upload-target="submitButton" data-action="upload#submitFormAndRedirect" >
           Upload Image
         </button>
       </div>
