@@ -1,5 +1,6 @@
 <%= render "shared/sidebar" %>
 <%= turbo_frame_tag :purchase do %>
-
-<%= render partial: 'index', locals: { purchases: @purchases } %>
+  <div class="content">
+    <%= render partial: 'index', locals: { purchases: @purchases } %>
+  </div>
 <% end %>

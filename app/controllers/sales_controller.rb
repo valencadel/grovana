@@ -51,6 +51,25 @@ class SalesController < ApplicationController
     end
   end
 
+  def search
+    @sales = current_company.sales
+                           .joins(:customer)
+                           .where("LOWER(customers.first_name || ' ' || customers.last_name) ILIKE :query
+                                  OR TO_CHAR(sales.sale_date, 'YYYY-MM-DD') LIKE :query",
+                                 query: "%#{params[:query]}%")
+                           .limit(5)
+                           .includes(:customer)
+
+    render json: @sales.map { |sale|
+      {
+        id: sale.id,
+        client_name: sale.customer.name,
+        sale_date: sale.sale_date.strftime('%Y-%m-%d'),
+        total_price: number_to_currency(sale.total_price)
+      }
+    }
+  end
+
   private
 
   def current_company

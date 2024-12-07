@@ -61,6 +61,17 @@ class PurchasesController < ApplicationController
     end
   end
 
+  def search
+    @purchases = current_company.purchases
+                              .joins(:supplier)
+                              .where("suppliers.name ILIKE :query OR purchases.order_date::text LIKE :query",
+                                    query: "%#{params[:query]}%")
+                              .limit(5)
+                              .select('purchases.*, suppliers.name as supplier_name')
+
+    render json: @purchases
+  end
+
   private
 
   def current_company

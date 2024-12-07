@@ -18,6 +18,23 @@
           <i class="fa-solid fa-download"></i> Download as Excel
         <% end %>
       </div>
+    <!-- Barra de búsqueda -->
+    <div class="relative mb-3" data-controller="customer-search">
+      <input type="text"
+             placeholder="Search by name or address..."
+             class="form-control px-4 py-2 w-64 rounded-lg border border-gray-300
+                    shadow-sm hover:shadow
+                    focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 focus:shadow-md
+                    placeholder-gray-400 transition-all duration-150 ease-in-out"
+             data-customer-search-target="input"
+             data-action="input->customer-search#search keydown->customer-search#navigate"
+             autocomplete="off">
+
+      <div data-customer-search-target="suggestions"
+           class="absolute w-full z-50 hidden mt-2 overflow-hidden bg-white rounded-lg shadow-lg
+                  border border-gray-200 max-h-60 overflow-y-auto">
+      </div>
+    </div>
     <table class="table">
       <thead>
         <tr>
