@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   root to: "pages#home"
   get "dashboard", to: "pages#dashboard", as: :dashboard
   get "doc_gemini", to: "pages#doc_gemini", as: :doc_gemini
+  get "sale_upload", to: "pages#sale_upload", as: :sale_upload
 
   resources :users do
     collection do
