@@ -267,44 +267,18 @@ class PagesController < ApplicationController
     end
   end
 
-  def sale_upload
-    client = Gemini.new(
-      credentials: {
-        service: "generative-language-api",
-        api_key: ENV["GEMINI_API_KEY"]
-      },
-      options: { model: "gemini-1.5-flash", server_sent_events: true }
-    )
-    
-    result = client.stream_generate_content(
-      { contents: [
-        { role: 'user', parts: [
-          { text: gemini_prompt_sales },
-          { inline_data: {
-            mime_type: 'image/jpeg',
-            data: Base64.strict_encode64(File.read('boleta_1.jpg'))
-          } }
-        ] }
-      ] }
-    )
-
-    response_text = result.flat_map do |entry|
-      entry["candidates"].flat_map do |candidate|
-        candidate["content"]["parts"].map { |part| part["text"] }
-      end
-    end.join
-
-    cleaned_text = response_text.gsub(/```json\s*|\s*```/, '').strip
+  def sale_gemini
+    @sales_upload = SalesUpload.find(params[:id])
 
     begin
-      @content = JSON.parse(cleaned_text)
+      @content = @sales_upload.gemini(gemini_prompt_sales)
       products_to_process = []
       customer_created = false
 
       @content["products"].each do |product_data|
         sanitized_sku = sanitize_sku(product_data["SKU"])
         product = Product.find_by(sku: sanitized_sku, company_id: current_company.id)
-        
+
         products_to_process << {
           product: product,
           data: product_data,
@@ -347,8 +321,8 @@ class PagesController < ApplicationController
       end
 
       if sale.save
-        notice_message = customer_created ? 
-          "Venta creada exitosamente para nuevo cliente: #{customer.first_name} #{customer.last_name}" : 
+        notice_message = customer_created ?
+          "Venta creada exitosamente para nuevo cliente: #{customer.first_name} #{customer.last_name}" :
           "Venta creada exitosamente para cliente existente: #{customer.first_name} #{customer.last_name}"
         redirect_to sale_path(sale), notice: notice_message
       else
@@ -518,7 +492,7 @@ class PagesController < ApplicationController
         productTotal: 100.000,00
         totalProducts: 35
         totalPaid: 1.500.000,00
-        customer: 
+        customer:
           First Name: John
           Last Name: Doe
           Email: john.doe@example.com

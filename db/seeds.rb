@@ -390,9 +390,9 @@ created_companies.each do |company|
     Employee.create!(
       email: "empleado#{i+1}@#{company.name.downcase}.com",
       password: "123456",
-      first_name: ["Juan", "María", "Carlos", "Ana", "Luis"][i],
-      last_name: ["Pérez", "González", "Rodríguez", "Martínez", "García"][i],
-      role: ["Manager", "Employee"].sample,
+      first_name: [ "Juan", "María", "Carlos", "Ana", "Luis" ][i],
+      last_name: [ "Pérez", "González", "Rodríguez", "Martínez", "García" ][i],
+      role: [ "Manager", "Employee" ].sample,
       status: "active",
       company_id: company.id
     )
@@ -417,8 +417,8 @@ direcciones_caba = [
 created_companies.each do |company|
   10.times do |i|
     Customer.create!(
-      first_name: ["Roberto", "Ana", "Diego", "Julia", "Martín", "Federico", "Valentina", "Santiago", "Carolina", "Gonzalo"][i],
-      last_name: ["López", "Martínez", "García", "Rodríguez", "Fernández", "Alvarez", "Torres", "Morales", "Paz", "Vargas"][i],
+      first_name: [ "Roberto", "Ana", "Diego", "Julia", "Martín", "Federico", "Valentina", "Santiago", "Carolina", "Gonzalo" ][i],
+      last_name: [ "López", "Martínez", "García", "Rodríguez", "Fernández", "Alvarez", "Torres", "Morales", "Paz", "Vargas" ][i],
       email: "cliente#{i+1}@example.com",
       phone: "11-#{rand(1000..9999)}-#{rand(1000..9999)}",
       address: direcciones_caba[i],
@@ -433,8 +433,8 @@ puts "Creando proveedores..."
 created_companies.each do |company|
   5.times do |i|
     Supplier.create!(
-      company_name: ["TechSupplies", "Electrónica Mayorista", "Importadora TecnoPartes", "Soluciones IT", "Distribuidora Digital"][i],
-      contact_name: ["Juan Pérez", "María García", "Carlos Rodríguez", "Ana Martínez", "Luis González"][i],
+      company_name: [ "TechSupplies", "Electrónica Mayorista", "Importadora TecnoPartes", "Soluciones IT", "Distribuidora Digital" ][i],
+      contact_name: [ "Juan Pérez", "María García", "Carlos Rodríguez", "Ana Martínez", "Luis González" ][i],
       email: "proveedor#{i+1}@example.com",
       phone: "11-#{rand(1000..9999)}-#{rand(1000..9999)}",
       address: "Av. #{rand(100..9999)}, CABA",
@@ -554,7 +554,7 @@ monthly_distribution = {
   12 => 12  # Diciembre
 }
 
-payment_methods = %w[Efectivo tarjeta_credito transferencia]
+payment_methods = %w[cash credit_card transfer]
 
 # Verificar y actualizar stock inicial
 puts "Verificando stock inicial..."
@@ -593,7 +593,7 @@ created_companies.each do |company|
         next unless product && product.stock > 0
 
         # Asegurar que no excedemos el stock disponible
-        max_quantity = [product.stock, 3].min
+        max_quantity = [ product.stock, 3 ].min
         quantity = rand(1..max_quantity)
 
         base_price = product.price.to_i

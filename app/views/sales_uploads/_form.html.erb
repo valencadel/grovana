@@ -1,5 +1,6 @@
-<%= form_with(model: sales_upload, local: true) do |f| %>
-  <div class="mx-auto" data-controller="sales-upload">
+<%= form_with(model: @sales_upload, url: sales_uploads_path, local: true, data: { controller: "sales-upload", sales_upload_target: "form" }) do |f| %>
+
+  <div class="mx-auto">
     <!-- Drop Zone - Lado izquierdo -->
     <div>
       <div class="upload-zone relative rounded-lg border-2 border-dashed border-gray-300 w-100 flex justify-center py-8"
@@ -18,12 +19,16 @@
           <svg class="mx-auto h-50 w-50 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
           </svg>
-          <p class="text-gray-600">Drag your sales invoice here</p>
+          <p class="text-gray-600">Drag your photo here</p>
           <p class="text-gray-600">or select PNG, JPG (5MB)</p>
         </div>
+      </div>
+    </div>
 
-        <!-- Preview y Placeholder dentro de la drop zone -->
-        <div class="w-full h-full bg-gray-50 rounded-lg">
+    <!-- Preview - Lado derecho -->
+    <div>
+      <div class="w-full h-full bg-gray-50 rounded-lg border border-gray-200 flex flex-col items-center justify-center">
+        <div class="relative h-full w-full flex flex-col items-center justify-center">
           <!-- Solo el preview -->
           <div class="hidden absolute inset-0 p-4 w-full h-full flex items-center justify-center" data-sales-upload-target="preview">
             <img src="" alt="Preview" class="w-100 rounded-lg object-contain">
@@ -37,13 +42,13 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Botón de subir -->
-    <div class="d-flex justify-content-center mt-3">
-      <button type="submit" class="btn btn-primary rounded hidden" data-sales-upload-target="submitButton">
-        Upload Sales Invoice
-      </button>
+      <!-- Botón de subir -->
+      <div class="d-flex justify-content-center mt-3">
+        <button type="button" class="btn btn-primary rounded hidden" data-sales-upload-target="submitButton" data-action="sales-upload#submitFormAndRedirect" >
+          Upload Image
+        </button>
+      </div>
     </div>
   </div>
 <% end %>
