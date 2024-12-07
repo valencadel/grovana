@@ -11,6 +11,9 @@ class SalesUploadsController < ApplicationController
 
   def new
     @sales_upload = current_company.sales_uploads.build
+    respond_to do |format|
+      format.html { render partial: "form", locals: { sales_upload: @sales_upload } }
+    end
   end
 
   def create
@@ -54,4 +57,4 @@ class SalesUploadsController < ApplicationController
   def sales_upload_params
     params.require(:sales_upload).permit(:image)
   end
-end 
+end
