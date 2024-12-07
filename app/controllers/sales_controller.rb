@@ -8,6 +8,7 @@ class SalesController < ApplicationController
                  .where(customers: { company_id: current_company.id })
                  .includes(:customer)
 
+    @sales = @sales.order(sale_date: :desc)
     respond_to do |format|
       format.html
       format.xlsx

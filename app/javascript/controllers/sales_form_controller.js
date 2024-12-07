@@ -75,7 +75,7 @@ export default class extends Controller {
 
     const productId = selectedOption.value
     const productName = selectedOption.text
-    const price = parseFloat(selectedOption.dataset.price)
+    const price = parseFloat(this.unitPriceDisplayTarget.value.replace('$', ''))
     const stock = parseInt(selectedOption.dataset.stock)
     const quantity = parseInt(quantityInput.value)
 
