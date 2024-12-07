@@ -282,7 +282,7 @@ class PagesController < ApplicationController
           { text: gemini_prompt_sales },
           { inline_data: {
             mime_type: 'image/jpeg',
-            data: Base64.strict_encode64(File.read('factura_5.jpg'))
+            data: Base64.strict_encode64(File.read('boleta_1.jpg'))
           } }
         ] }
       ] }
