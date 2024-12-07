@@ -67,7 +67,7 @@
                 class="border border-gray-300 p-1.5 rounded-sm"
                 style="width: 200px;">
           <option value="">Select category</option>
-          <% Product.distinct.pluck(:category).each do |category| %>
+          <% current_company.products.distinct.pluck(:category).each do |category| %>
             <option value="<%= category %>"><%= category %></option>
           <% end %>
         </select>
@@ -103,7 +103,6 @@
       <div style="display: inline-block; margin-right: 15px;">
         <label style="display: inline-block; margin-right: 5px;">Unit price *</label>
         <input type="text"
-               readonly
                class="border border-gray-300 p-1.5 rounded-sm bg-gray-50"
                style="width: 100px;"
                data-sales-form-target="unitPriceDisplay">

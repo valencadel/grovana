@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
-  helper_method :policy, :pundit_policy_scope
+  helper_method :policy, :pundit_policy_scope, :current_company
 
   allow_browser versions: :modern
 
@@ -9,6 +9,13 @@ class ApplicationController < ActionController::Base
 
 
   protected
+  def current_company
+    @current_company ||= if current_user
+                           current_user.companies.first
+    elsif current_employee
+                           current_employee.company
+    end
+  end
 
   def authenticate_any!
     unless current_user || current_employee

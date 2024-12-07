@@ -3,7 +3,7 @@
     <div class="px-4 py-5 sm:p-6">
       <h1 class="text-lg font-medium leading-6 text-gray-900 mb-6"><%= title %></h1>
 
-      <%= simple_form_for @product, 
+      <%= simple_form_for @product,
           html: {
             class: "mt-5",
             data: {
@@ -17,7 +17,7 @@
               'alert-cancel-button-text-value': 'Cancel'
             }
           } do |f| %>
-        
+
         <div class="space-y-6">
           <%= f.input :name,
               required: true,
@@ -51,11 +51,18 @@
               input_html: { class: "input-field w-full" },
               label_html: { class: "block text-sm font-medium text-gray-700" } %>
 
+          <%= f.input :price,
+              label: "Sell Price",
+              placeholder: "Example: 980",
+              wrapper_html: { class: "grid grid-cols-1 gap-2" },
+              input_html: { class: "input-field w-full" },
+              label_html: { class: "block text-sm font-medium text-gray-700" } %>
+
           <%= f.input :stock,
               required: true,
               label: "Stock",
               wrapper_html: { class: "grid grid-cols-1 gap-2" },
-              input_html: { 
+              input_html: {
                 class: "input-field w-full",
                 type: 'number',
                 min: 1,
@@ -69,7 +76,7 @@
               required: true,
               label: "Minimum Stock",
               wrapper_html: { class: "grid grid-cols-1 gap-2" },
-              input_html: { 
+              input_html: {
                 class: "input-field w-full",
                 type: 'number',
                 min: 1,
@@ -94,11 +101,11 @@
               label_html: { class: "block text-sm font-medium text-gray-700" } %>
 
           <div class="flex justify-end gap-3">
-            <%= link_to "Cancel", products_path, class: "btn btn-secondary" %>
-            <%= f.button :submit, submit_text, class: "btn btn-primary" %>
+            <%= link_to "Cancel", products_path, class: "btn btn-secondary rounded" %>
+            <%= f.button :submit, submit_text, class: "btn btn-primary rounded" %>
           </div>
         </div>
       <% end %>
     </div>
   </div>
-</div> 
+</div>
