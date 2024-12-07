@@ -21,9 +21,9 @@ class UploadsController < ApplicationController
 
     if @upload.save
       render json: {
-        success: true,
         image_url: url_for(@upload.image),
-        id: @upload.id
+        id: @upload.id,
+        success: true
       }
     else
       render json: {

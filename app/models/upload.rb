@@ -21,7 +21,7 @@ class Upload < ApplicationRecord
           { text: gemini_prompt },
           { inline_data: {
             mime_type: "image/jpeg",
-            data: Base64.strict_encode64(File.read(image_path)) # image_path # "factura_4.jpg"
+            data: Base64.strict_encode64(image.download) # image_path # "factura_4.jpg"
           } }
         ] }
       ] }
