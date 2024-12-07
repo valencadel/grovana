@@ -32,17 +32,7 @@ export default class extends Controller {
   }
 
   updateUnitPrice() {
-    const selectedOption = this.productSelectTarget.selectedOptions[0]
-    if (selectedOption && selectedOption.value !== "") {
-      const price = selectedOption.dataset.price
-      if (price) {
-        this.unitPriceDisplayTarget.value = `$${parseFloat(price).toFixed(2)}`
-      } else {
-        this.unitPriceDisplayTarget.value = ''
-      }
-    } else {
-      this.unitPriceDisplayTarget.value = ''
-    }
+    this.unitPriceDisplayTarget.value = ''
   }
 
   addProduct(event) {
@@ -59,7 +49,7 @@ export default class extends Controller {
 
     const productId = selectedOption.value
     const productName = selectedOption.text
-    const price = parseFloat(selectedOption.dataset.price)
+    const price = parseFloat(this.unitPriceDisplayTarget.value.replace('$', ''))
     const quantity = parseInt(quantityInput.value)
 
     if (isNaN(quantity) || quantity <= 0) {
