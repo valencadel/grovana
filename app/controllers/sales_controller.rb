@@ -50,6 +50,96 @@ class SalesController < ApplicationController
     end
   end
 
+  def sale_upload
+    client = Gemini.new(
+      credentials: {
+        service: "generative-language-api",
+        api_key: ENV["GEMINI_API_KEY"]
+      },
+      options: { model: "gemini-1.5-flash", server_sent_events: true }
+    )
+    
+    result = client.stream_generate_content(
+      { contents: [
+        { role: 'user', parts: [
+          { text: gemini_prompt },
+          { inline_data: {
+            mime_type: 'image/jpeg',
+            data: Base64.strict_encode64(File.read('factura_4.jpg'))
+          } }
+        ] }
+      ] }
+    )
+
+    response_text = result.flat_map do |entry|
+      entry["candidates"].flat_map do |candidate|
+        candidate["content"]["parts"].map { |part| part["text"] }
+      end
+    end.join
+
+    cleaned_text = response_text.gsub(/```json\s*|\s*```/, '').strip
+
+    begin
+      @content = JSON.parse(cleaned_text)
+      products_to_process = []
+      products_created = 0
+      products_updated = 0
+
+      @content["products"].each do |product_data|
+        sanitized_sku = sanitize_sku(product_data["SKU"])
+        product = Product.find_by(sku: sanitized_sku, company_id: current_company.id)
+        
+        products_to_process << {
+          product: product,
+          data: product_data,
+          action: product ? :update : :create
+        }
+      end
+
+      customer = Customer.find_or_create_by!(
+        company_id: current_company.id,
+        email: "pendiente@ejemplo.com"
+      ) do |c|
+        c.first_name = @content["company"]
+        c.last_name = "Pendiente"
+        c.phone = "1181539563"
+        c.address = "Pendiente 1234"
+        c.tax_id = "1234567890"
+      end
+
+      sale = Sale.new(
+        sale_date: Date.parse(@content["purchaseDate"]),
+        customer_id: customer.id,
+        payment_method: "cash",
+        total_price: @content["totalPaid"].to_f
+      )
+
+      products_to_process.each do |item|
+        sale.sale_details.build(
+          product_id: item[:product].id,
+          quantity: item[:data]["quantity"].to_i,
+          unit_price: item[:data]["price"].to_f
+        )
+      end
+
+      if sale.save
+        redirect_to sale_path(sale), 
+                    notice: "Proceso completado: #{products_created} productos creados, #{products_updated} productos actualizados"
+      else
+        raise StandardError.new("Error al crear la venta: #{sale.errors.full_messages.join(', ')}")
+      end
+
+    rescue JSON::ParserError => e
+      Rails.logger.error "Error parseando JSON: #{e.message}"
+      flash.now[:alert] = "Error al procesar la respuesta: formato inválido"
+      render :doc_gemini, status: :unprocessable_entity
+    rescue StandardError => e
+      Rails.logger.error "Error procesando documento: #{e.message}"
+      flash.now[:alert] = "Error al procesar el documento: #{e.message}"
+      render :doc_gemini, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def current_company
@@ -90,5 +180,17 @@ class SalesController < ApplicationController
     unless current_user || current_employee
       redirect_to root_path, alert: "Debe iniciar sesión para acceder a esta sección."
     end
+  end
+
+  def gemini_prompt
+    @gemini_prompt ||= "Features to Extract:
+      # ... (mismo contenido que en pages_controller)
+    "
+  end
+
+  def sanitize_sku(sku)
+    return nil if sku.nil?
+    sanitized = sku.to_s.gsub(/[^\w\d]/, '')
+    sanitized[0...15]
   end
 end
