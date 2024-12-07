@@ -2,21 +2,46 @@
 <%= turbo_frame_tag :product do %>
   <div class="content">
     <div class="sm:flex-auto">
-        <h1 class="text-2xl font-semibold text-gray-900">Products</h1>
-        <p class="mt-2 text-sm text-gray-700">
-          Total products: <%= @products.count %>
-        </p>
+      <h1 class="text-2xl font-semibold text-gray-900">Products</h1>
+      <p class="mt-2 text-sm text-gray-700">
+        Total products: <%= @products.count %>
+      </p>
     </div>
-    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-3">
-        <%= link_to new_product_path,
-                    class: "btn btn-sm btn-primary mb-3 mr-3 rounded" do %>
-          <i class="fas fa-plus mr-2"></i>New Product
-        <% end %>
-        <%= link_to products_path(format: :xlsx),
-                    class: "btn btn-sm btn-success mb-3 rounded" do %>
-          <i class="fa-solid fa-download"></i> Download as Excel
-        <% end %>
+
+    <!-- Barra de búsqueda y botones -->
+    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-3 flex items-center justify-end gap-3">
+      <%= link_to new_product_path,
+                  class: "btn btn-sm btn-primary mb-3 rounded" do %>
+        <i class="fas fa-plus mr-2"></i>New Product
+      <% end %>
+
+      <%= link_to products_path(format: :xlsx),
+                  class: "btn btn-sm btn-success mb-3 rounded" do %>
+        <i class="fa-solid fa-download"></i> Download as Excel
+      <% end %>
+
+      <!-- Barra de búsqueda -->
+      <div class="relative" data-controller="product-search">
+        <div class="relative">
+          <input type="text"
+                 placeholder="Search products..."
+                 class="form-control px-4 py-2 w-64 rounded-lg border border-gray-300
+                        shadow-sm hover:shadow
+                        focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 focus:shadow-md
+                        placeholder-gray-400 transition-all duration-150 ease-in-out"
+                 data-product-search-target="input"
+                 data-action="input->product-search#search keydown->product-search#navigate"
+                 autocomplete="off">
+
+          <!-- Contenedor de sugerencias -->
+          <div data-product-search-target="suggestions"
+               class="absolute w-full z-50 hidden mt-2 overflow-hidden bg-white rounded-lg shadow-lg
+                      border border-gray-200 max-h-60 overflow-y-auto">
+          </div>
+        </div>
+      </div>
     </div>
+
     <table class="table">
       <thead>
         <tr>

@@ -3,11 +3,10 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [ :show, :edit, :update, :price ]
 
   def index
-    company_id = current_user&.companies&.first&.id || current_employee&.company_id
-    @products = Product.where(company_id: company_id)
-    respond_to do |format|
-      format.html
-      format.xlsx
+    @products = if params[:query].present?
+      current_company.products.where("name ILIKE ?", "%#{params[:query]}%")
+    else
+      current_company.products
     end
   end
 
@@ -60,6 +59,15 @@ class ProductsController < ApplicationController
       price: @product.price,
       stock: @product.stock
     }
+  end
+
+  def search
+    @products = current_company.products
+                             .where("name ILIKE ?", "%#{params[:query]}%")
+                             .limit(5)
+                             .select(:id, :name, :stock)
+
+    render json: @products
   end
 
   private

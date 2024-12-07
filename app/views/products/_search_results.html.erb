@@ -1,0 +1,19 @@
+<div class="absolute w-full bg-white shadow-lg rounded-lg border border-gray-200 mt-1">
+  <% if products.any? %>
+    <% products.each do |product| %>
+      <%= link_to product_path(product),
+          class: "block px-4 py-2 hover:bg-gray-100 text-gray-700" do %>
+        <div class="flex justify-between items-center">
+          <span><%= product.name %></span>
+          <span class="text-sm text-gray-500">
+            Stock: <%= product.stock %>
+          </span>
+        </div>
+      <% end %>
+    <% end %>
+  <% else %>
+    <div class="px-4 py-3 text-sm text-gray-500">
+      No products found
+    </div>
+  <% end %>
+</div> 
