@@ -46,6 +46,22 @@ class CustomersController < ApplicationController
     end
   end
 
+  def search
+    @customers = current_company.customers
+                              .where("LOWER(first_name || ' ' || last_name) ILIKE :query
+                                     OR LOWER(address) ILIKE :query",
+                                     query: "%#{params[:query]}%")
+                              .limit(5)
+
+    render json: @customers.map { |customer|
+      {
+        id: customer.id,
+        name: customer.name,
+        address: customer.address
+      }
+    }
+  end
+
   private
 
   def current_company

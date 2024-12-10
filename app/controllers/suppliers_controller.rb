@@ -51,6 +51,15 @@ class SuppliersController < ApplicationController
     end
   end
 
+  def search
+    @suppliers = current_company.suppliers
+                              .where("name ILIKE ?", "%#{params[:query]}%")
+                              .limit(5)
+                              .select(:id, :name, :email)
+
+    render json: @suppliers
+  end
+
   private
 
   def set_supplier

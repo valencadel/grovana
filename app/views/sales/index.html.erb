@@ -8,16 +8,37 @@
       Total sales: <%= @sales.count %>
     </p>
   </div>
-  <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-3">
-        <%= link_to new_sale_path,
-                    class: "btn btn-sm btn-primary mb-3 mr-3 rounded" do %>
-          <i class="fas fa-plus mr-2"></i>New Sale
-        <% end %>
-        <%= link_to sales_path(format: :xlsx),
-                    class: "btn btn-sm btn-success mb-3 rounded" do %>
-          <i class="fa-solid fa-download"></i> Download as Excel
-      <% end %>
+
+  <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-3 flex items-center gap-3">
+    <%= link_to new_sale_path,
+                class: "btn btn-sm btn-primary mb-3 rounded" do %>
+      <i class="fas fa-plus mr-2"></i>New Sale
+    <% end %>
+
+    <%= link_to sales_path(format: :xlsx),
+                class: "btn btn-sm btn-success mb-3 rounded" do %>
+      <i class="fa-solid fa-download"></i> Download as Excel
+    <% end %>
+
+    <!-- Barra de búsqueda -->
+    <div class="relative" data-controller="sale-search">
+      <input type="text"
+             placeholder="Search by client or date..."
+             class="form-control px-4 py-2 w-64 rounded-lg border border-gray-300
+                    shadow-sm hover:shadow
+                    focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 focus:shadow-md
+                    placeholder-gray-400 transition-all duration-150 ease-in-out"
+             data-sale-search-target="input"
+             data-action="input->sale-search#search keydown->sale-search#navigate"
+             autocomplete="off">
+
+      <div data-sale-search-target="suggestions"
+           class="absolute w-full z-50 hidden mt-2 overflow-hidden bg-white rounded-lg shadow-lg
+                  border border-gray-200 max-h-60 overflow-y-auto">
+      </div>
+    </div>
   </div>
+
   <table class="table">
     <thead>
       <tr>
