@@ -436,7 +436,7 @@ end
 puts "Creando proveedores..."
 created_companies.each do |company|
   5.times do |i|
-    company_name = [ "TechSupplies", "Electrónica Mayorista", "Importadora TecnoPartes", "Soluciones IT", "Distribuidora Digital" ][i]
+    company_name = [ "TechSupplies", "Electronica Mayorista", "Importadora TecnoPartes", "Soluciones IT", "Distribuidora Digital" ][i]
     Supplier.create!(
       company_name: company_name,
       contact_name: [ "Juan Pérez", "María García", "Carlos Rodríguez", "Ana Martínez", "Luis González" ][i],
