@@ -416,10 +416,14 @@ direcciones_caba = [
 
 created_companies.each do |company|
   10.times do |i|
+    first_name = [ "Roberto", "Ana", "Diego", "Julia", "Martín", "Federico", "Valentina", "Santiago", "Carolina", "Gonzalo" ][i]
+    last_name = [ "López", "Martínez", "García", "Rodríguez", "Fernández", "Alvarez", "Torres", "Morales", "Paz", "Vargas" ][i]
+    email = "#{first_name}#{last_name}".downcase.gsub(/[áéíóúñ]/, 'a' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ñ' => 'n') + "@example.com"
+    
     Customer.create!(
-      first_name: [ "Roberto", "Ana", "Diego", "Julia", "Martín", "Federico", "Valentina", "Santiago", "Carolina", "Gonzalo" ][i],
-      last_name: [ "López", "Martínez", "García", "Rodríguez", "Fernández", "Alvarez", "Torres", "Morales", "Paz", "Vargas" ][i],
-      email: "cliente#{i+1}@example.com",
+      first_name: first_name,
+      last_name: last_name,
+      email: email,
       phone: "11-#{rand(1000..9999)}-#{rand(1000..9999)}",
       address: direcciones_caba[i],
       tax_id: "20-#{rand(10000000..99999999)}-#{rand(0..9)}",
