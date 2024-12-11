@@ -460,7 +460,7 @@ monthly_distribution = {
   9 => 4,  # Septiembre
   10 => 5, # Octubre
   11 => 7, # Noviembre
-  12 => 8  # Diciembre
+  12 => 3  # Diciembre (reducido porque solo son 10 días)
 }
 
 # Ajuste de inflación mensual (estimado 2024)
@@ -475,7 +475,11 @@ created_companies.each do |company|
 
   monthly_distribution.each do |month, quantity|
     quantity.times do
-      date = Date.new(2024, month, rand(1..28))
+      date = if month == 12
+        Date.new(2024, 12, rand(1..10))  # En diciembre, solo del 1 al 10
+      else
+        Date.new(2024, month, rand(1..28))
+      end
       supplier = suppliers.sample
 
       selected_products = []
@@ -551,7 +555,7 @@ monthly_distribution = {
   9 => 6,   # Septiembre
   10 => 8,  # Octubre
   11 => 9,  # Noviembre
-  12 => 12  # Diciembre
+  12 => 4   # Diciembre (reducido porque solo son 10 días)
 }
 
 payment_methods = %w[cash credit_card transfer]
@@ -573,7 +577,11 @@ created_companies.each do |company|
 
   monthly_distribution.each do |month, quantity|
     quantity.times do
-      proposed_date = Date.new(2024, month, rand(1..28))
+      proposed_date = if month == 12
+        Date.new(2024, 12, rand(1..10))  # En diciembre, solo del 1 al 10
+      else
+        Date.new(2024, month, rand(1..28))
+      end
       next if proposed_date > Date.today
 
       customer = customers.sample
