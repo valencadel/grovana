@@ -416,10 +416,14 @@ direcciones_caba = [
 
 created_companies.each do |company|
   10.times do |i|
+    first_name = [ "Roberto", "Ana", "Diego", "Julia", "Martín", "Federico", "Valentina", "Santiago", "Carolina", "Gonzalo" ][i]
+    last_name = [ "López", "Martínez", "García", "Rodríguez", "Fernández", "Alvarez", "Torres", "Morales", "Paz", "Vargas" ][i]
+    email = "#{first_name}#{last_name}".downcase.gsub(/[áéíóúñ]/, 'a' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ñ' => 'n') + "@example.com"
+    
     Customer.create!(
-      first_name: [ "Roberto", "Ana", "Diego", "Julia", "Martín", "Federico", "Valentina", "Santiago", "Carolina", "Gonzalo" ][i],
-      last_name: [ "López", "Martínez", "García", "Rodríguez", "Fernández", "Alvarez", "Torres", "Morales", "Paz", "Vargas" ][i],
-      email: "cliente#{i+1}@example.com",
+      first_name: first_name,
+      last_name: last_name,
+      email: email,
       phone: "11-#{rand(1000..9999)}-#{rand(1000..9999)}",
       address: direcciones_caba[i],
       tax_id: "20-#{rand(10000000..99999999)}-#{rand(0..9)}",
@@ -432,10 +436,11 @@ end
 puts "Creando proveedores..."
 created_companies.each do |company|
   5.times do |i|
+    company_name = [ "TechSupplies", "Electronica Mayorista", "Importadora TecnoPartes", "Soluciones IT", "Distribuidora Digital" ][i]
     Supplier.create!(
-      company_name: [ "TechSupplies", "Electrónica Mayorista", "Importadora TecnoPartes", "Soluciones IT", "Distribuidora Digital" ][i],
+      company_name: company_name,
       contact_name: [ "Juan Pérez", "María García", "Carlos Rodríguez", "Ana Martínez", "Luis González" ][i],
-      email: "proveedor#{i+1}@example.com",
+      email: "#{company_name.downcase.gsub(' ', '')}@example.com",
       phone: "11-#{rand(1000..9999)}-#{rand(1000..9999)}",
       address: "Av. #{rand(100..9999)}, CABA",
       tax_id: "30-#{rand(10000000..99999999)}-#{rand(0..9)}",
