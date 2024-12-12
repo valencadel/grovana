@@ -116,6 +116,8 @@ class PagesController < ApplicationController
                           .group("DATE_TRUNC('month', sales.sale_date)")
                           .sum("sale_details.unit_price * sale_details.quantity")
                           .transform_keys { |k| k.strftime("%B %Y") }
+                          .sort_by { |date_str, _| Date.strptime(date_str, "%B %Y") }
+                          .to_h
 
     @purchases_by_month = Purchase.joins(:supplier, :purchase_details)
                                  .where(suppliers: { company_id: current_company.id })
@@ -123,6 +125,8 @@ class PagesController < ApplicationController
                                  .group("DATE_TRUNC('month', purchases.order_date)")
                                  .sum("purchase_details.unit_price * purchase_details.quantity")
                                  .transform_keys { |k| k.strftime("%B %Y") }
+                                 .sort_by { |date_str, _| Date.strptime(date_str, "%B %Y") }
+                                 .to_h
 
     # Ventas por método de pago
     @sales_by_payment = Sale.joins(:customer)
