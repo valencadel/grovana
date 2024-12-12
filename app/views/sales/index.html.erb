@@ -51,7 +51,7 @@
     <tbody>
       <% @sales.each do |sale| %>
         <tr>
-          <td><%= sale.sale_date %></td>
+          <td><%= sale.sale_date.strftime("%d/%m/%Y") %></td>
           <td><%= "#{sale.customer.first_name} #{sale.customer.last_name}" %></td>
           <td><%= number_to_currency(sale.total_price) %></td>
           <td class="d-flex gap-2">

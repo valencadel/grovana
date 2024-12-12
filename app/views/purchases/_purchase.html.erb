@@ -1,7 +1,7 @@
 <%= turbo_frame_tag purchase do %>
 <tr>
-  <td><%= purchase.order_date %></td>
-  <td><%= purchase.expected_delivery_date %></td>
+  <td><%= purchase.order_date.strftime("%d/%m/%Y") %></td>
+  <td><%= purchase.expected_delivery_date.strftime("%d/%m/%Y") %></td>
   <td><%= number_to_currency(purchase.total_price) %></td>
   <td><%= purchase.supplier.company_name %></td>
   <td class="d-flex gap-2">
