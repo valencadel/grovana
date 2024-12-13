@@ -512,7 +512,7 @@ created_companies.each do |company|
       # Crear la purchase con el total_price calculado
       purchase = Purchase.create!(
         order_date: date,
-        expected_delivery_date: date + rand(5..15).days,
+        expected_delivery_date: [date + rand(5..15).days, Date.new(2024, 12, 11)].min,
         supplier_id: supplier.id,
         company_id: company.id,
         total_price: total_price
