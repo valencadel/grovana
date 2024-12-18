@@ -170,8 +170,13 @@ GEM
     faraday-typhoeus (1.1.0)
       faraday (~> 2.0)
       typhoeus (~> 1.4)
-    ffi (1.17.0)
-    font-awesome-sass (6.5.2)
+    ffi (1.17.0-aarch64-linux-gnu)
+    ffi (1.17.0-arm-linux-gnu)
+    ffi (1.17.0-arm64-darwin)
+    ffi (1.17.0-x86-linux-gnu)
+    ffi (1.17.0-x86_64-darwin)
+    ffi (1.17.0-x86_64-linux-gnu)
+    font-awesome-sass (6.7.2)
       sassc (~> 2.0)
     gemini-ai (4.2.0)
       event_stream_parser (~> 1.0)
@@ -445,7 +450,7 @@ DEPENDENCIES
   devise
   dotenv-rails
   error_highlight (>= 0.4.0)
-  font-awesome-sass (~> 6.1)
+  font-awesome-sass (~> 6.7)
   gemini-ai (~> 4.2.0)
   geocoder
   groupdate
